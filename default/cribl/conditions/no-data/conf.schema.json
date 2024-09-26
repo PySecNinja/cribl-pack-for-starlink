@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Source name",
+      "description": "The name of the source to produce notifications"
+    },
+    "timeWindow": {
+      "type": "string",
+      "duration": {"min": "60s"},
+      "title": "Time window",
+      "description": "Time window for notifications to potentially be sent out over",
+      "default": "60s"
+    },
+    "notifyOnResolution": {
+      "type": "boolean",
+      "title": "Only notify on start and resolution",
+      "description": "Send notifications only when condition starts and resolves. Disable to send notifications for every event.",
+      "default": true
+    }
+  }
+}

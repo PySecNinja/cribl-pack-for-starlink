@@ -1,0 +1,42 @@
+A directory of conditions. Each condition is encapsulated in a directory with the condition name. The entry point for the condition is index.js in its directory.
+
+Conditions are constructed from three parts:
+
+- the configuration
+- the filter
+- the pipeline
+
+The configuration values can influence how the filter or pipeline work, and may contain variables like 'timeWindow', '__workerGroup', etc. 
+Any events matching the filter are sent through the condition's pipeline. 
+The pipeline performs transformations or calculations that determine if a notification event should be triggered. Any event exiting the condition's pipeline is a notification event which will be sent verbatim to the notification targets. For this reason, most condition pipelines will contain a drop function.
+
+The following methods are expected to be exported: `init` and `build`. See examples:
+
+```
+exports.init = (opt) => {
+  // opt.conf - will contain contents of conf.json if present in condition's dir
+}
+```
+
+Where `init` saves any configuration items needed by the filter/pipeline. 
+
+```
+exports.build = () => {
+  return {
+    filter,   // <js expression used as a route filter>,
+    pipeline, // <a Cribl pipeline config>
+  };
+}
+```
+
+Where `build` constructs the condition's filter and the condition's pipeline.
+
+Conditions also require the following properties: `name`, `type`, and `category`.
+
+Name is the human friendly name of the condition.
+Type is the type of data the condition leverages, at the time of this writing, that's 'metric' or 'message'. 'metric' leverages Cribl internal metrics (as events), and 'message' uses the Cribl system messages (found in messages.yml) as events.
+Category is a property leveraged by the frontend to ensure it filters out unrelated conditions while configuring notifications within a certain context. For example, 'destinations' category will show up when configuring notifications on a destination.
+
+Category Mappings:
+'destinations' -> shows up in destination-specific notification UI
+'license' -> shows up in the license page

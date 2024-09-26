@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "title": "Lake export Configuration",
+  "additionalProperties": false,
+  "required": ["dataset", "searchJobId"],
+  "properties": {
+    "searchJobId": {
+      "title": "Search Job Id",
+      "description": "Id of the search job this function is running on.",
+      "type": "string"
+    },
+    "dataset": {
+      "title": "Dataset Name",
+      "description": "Name of the dataset",
+      "type": "string"
+    },
+    "lake": {
+      "title": "Lake Name",
+      "description": "Name of the lake",
+      "type": "string",
+      "default": "default"
+    },
+    "tee": {
+      "title": "Tee",
+      "description": "Tee results to search. When set to true results will be shipped instead of stats",
+      "type": "string",
+      "default": false
+    },
+    "flushMs": {
+      "title": "Flush period",
+      "description": "How often are stats flushed in ms",
+      "type": "number",
+      "default":1000
+    },
+    "suppressPreviews": {
+      "type": "boolean",
+      "title": "Suppress periodic stats",
+      "description": "Disables generation of intermediate stats. When true stats will be emitted only on end"
+    }
+  }
+}

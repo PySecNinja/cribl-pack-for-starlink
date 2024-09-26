@@ -1,0 +1,250 @@
+{
+  "title": "",
+  "type": "object",
+  "required": ["mode", "type"],
+  "definitions": {
+    "dstField": {
+      "title": "Destination field",
+      "description": "Name of the field to add fields to. Extract mode only.",
+      "type": "string"
+    },
+    "fields": {
+      "title": "List of fields",
+      "description": "The fields to be extracted, listed in order. Will auto-generate if empty.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "keep": {
+      "title": "Fields to keep",
+      "description": "List of fields to keep. Supports wildcards (*). Takes precedence over 'Fields to Remove'.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "remove": {
+      "title": "Fields to remove",
+      "description": "List of fields to remove. Supports wildcards (*). Cannot remove fields that match 'Fields to Keep'.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "fieldFilterExpr": {
+      "title": "Fields filter expression",
+      "description": "Expression evaluated against {index, name, value} context. Return truthy to keep a field, or falsy to remove it.",
+      "type": "string",
+      "jsExpression": true,
+      "fieldFilterExpr": true
+    }
+  },
+  "properties": {
+    "mode": {
+      "title": "Operation mode",
+      "type": "string",
+      "description": "Extract creates new fields. Reserialize extracts and filters fields, and then reserializes.",
+      "enum": ["extract", "reserialize"],
+      "enumNames": ["Extract", "Reserialize"],
+      "default": "extract",
+      "validationExpressions": [
+        {
+          "expression": "(mode === 'extract') || (mode === 'reserialize' && type !== 'grok' && type !== 'regex')",
+          "errorMessage": "Reserialize is not supported for grok and regex"
+        }
+      ]
+    },
+    "type": {
+      "title": "Type",
+      "description": "Parser or formatter type to use",
+      "type": "string",
+      "enum": ["csv", "elff", "clf", "kvp", "json", "delim", "regex", "grok"],
+      "enumNames": [
+        "CSV",
+        "Extended Log File Format",
+        "Common Log Format",
+        "Key=Value Pairs",
+        "JSON Object",
+        "Delimited values",
+        "Regular Expression",
+        "Grok"
+      ],
+      "default": "csv"
+    },
+    "delimChar": {},
+    "quoteChar": {},
+    "escapeChar": {},
+    "nullValue": {},
+    "srcField": {
+      "title": "Source field",
+      "description": "Field containing text to be parsed",
+      "type": "string",
+      "default": "_raw"
+    },
+    "dstField": {},
+    "cleanFields": {}
+  },
+  "dependencies": {
+    "type": {
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "enum": ["kvp"]
+            },
+            "dstField": { "$ref": "#/definitions/dstField" },
+            "fields": { "$ref": "#/definitions/fields" },
+            "keep": { "$ref": "#/definitions/keep" },
+            "remove": { "$ref": "#/definitions/remove" },
+            "fieldFilterExpr": { "$ref": "#/definitions/fieldFilterExpr" },
+            "cleanFields": {
+              "type": "boolean",
+              "default": false,
+              "title": "Clean fields",
+              "description": "Whether to clean field names by replacing non [a-zA-Z0-9] characters with _"
+            },
+            "allowedKeyChars": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": [],
+              "title": "Allowed key characters",
+              "description": "A list of characters that may be present in a key name, even though they are normally separator or control characters"
+            },
+            "allowedValueChars": {
+              "type": "array",
+              "items": { "type": "string" },
+              "default": [],
+              "title": "Allowed value characters",
+              "description": "A list of characters that may be present in a value, even though they are normally separator or control characters"
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": ["delim"]
+            },
+            "dstField": { "$ref": "#/definitions/dstField" },
+            "fields": { "$ref": "#/definitions/fields" },
+            "keep": { "$ref": "#/definitions/keep" },
+            "remove": { "$ref": "#/definitions/remove" },
+            "fieldFilterExpr": { "$ref": "#/definitions/fieldFilterExpr" },
+            "delimChar": {
+              "type": "string",
+              "default": ",",
+              "title": "Delimiter",
+              "minLength": 1,
+              "description": "Delimiter character to use to split values"
+            },
+            "quoteChar": {
+              "type": "string",
+              "default": "\"",
+              "title": "Quote char",
+              "minLength": 1,
+              "description": "Character used to quote literal values"
+            },
+            "escapeChar": {
+              "type": "string",
+              "default": "\\",
+              "title": "Escape char",
+              "minLength": 1,
+              "description": "Escape character used to escape delimiter or quote character"
+            },
+            "nullValue": {
+              "type": "string",
+              "default": "-",
+              "title": "Null value",
+              "description": "Field value representing the null value. Null fields will be omitted."
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum": ["csv", "elff", "clf", "json"]
+            },
+            "dstField": { "$ref": "#/definitions/dstField" },
+            "fields": { "$ref": "#/definitions/fields" },
+            "keep": { "$ref": "#/definitions/keep" },
+            "remove": { "$ref": "#/definitions/remove" },
+            "fieldFilterExpr": { "$ref": "#/definitions/fieldFilterExpr" }
+          }
+        },
+        {
+          "required": ["regex"],
+          "properties": {
+            "type": {
+              "enum": ["regex"]
+            },
+            "regex": {
+              "type": "string",
+              "title": "Regex",
+              "description": "Regex literal with named capturing groups – e.g., (?<foo>bar) – or _NAME_ and _VALUE_ capturing groups, e.g.: (?<_NAME_0>[^ =]+)=(?<_VALUE_0>[^,]+).",
+              "regexp": true
+            },
+            "regexList": {
+              "type": "array",
+              "title": "Additional regex",
+              "items": {
+                "type": "object",
+                "required": ["regex"],
+                "properties": {
+                  "regex": {
+                    "type": "string",
+                    "title": "Regex",
+                    "description": "Regex literal with named capturing groups – e.g., (?<foo>bar) – or _NAME_ and _VALUE_ capturing groups, e.g.: (?<_NAME_0>[^ =]+)=(?<_VALUE_0>[^,]+).",
+                    "minLength": 1,
+                    "regexp": true
+                  }
+                }
+              }
+            },
+            "iterations": {
+              "type": "number",
+              "title": "Max exec",
+              "description": "The maximum number of times to apply regex to source field when the global flag is set, or when using _NAME_ and _VALUE_ capturing groups.",
+              "default": 100,
+              "minimum": 1
+            },
+            "fieldNameExpression": {
+              "title": "Field name format expression",
+              "description": "JS expression to format field names when _NAME_n and _VALUE_n capturing groups are used. Original field name is in global variable 'name'. E.g., to append XX to all field names: `${name}_XX` (backticks are literal). If empty, names will be sanitized using this regex: /^[_0-9]+|[^a-zA-Z0-9_]+/g.  You can access other fields' values via __e.<fieldName>.",
+              "type": "string",
+              "jsExpression": true
+            },
+            "overwrite": {
+              "type": "boolean",
+              "title": "Overwrite existing fields",
+              "description": "Overwrite existing event fields with extracted values. If set to No, existing fields will be converted to an array.",
+              "default": false
+            }
+          }
+        },
+        {
+          "required": ["pattern"],
+          "properties": {
+            "type": {
+              "enum": ["grok"]
+            },
+            "pattern": {
+              "type": "string",
+              "title": "Pattern",
+              "description": "Grok pattern to extract fields. Syntax supported: %{PATTERN_NAME:FIELD_NAME}"
+            },
+            "patternList": {
+              "type": "array",
+              "title": "Additional Grok patterns",
+              "default": [],
+              "items": {
+                "type": "object",
+                "required": ["pattern"],
+                "properties": {
+                  "pattern": {
+                    "type": "string",
+                    "title": "Pattern",
+                    "description": "Grok pattern to extract fields. Syntax supported: %{PATTERN_NAME:FIELD_NAME}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

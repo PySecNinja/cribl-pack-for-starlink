@@ -1,0 +1,78 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["rules"],
+  "properties": {
+    "rules": {
+      "type": "array",
+      "title": "Masking Rules",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["matchRegex", "replaceExpr"],
+        "properties": {
+          "matchRegex": {
+            "type": "string",
+            "title": "Match Regex",
+            "description": "Pattern to replace, remember to use /g to replace all matches",
+            "minLength": 1,
+            "regexp": true
+          },
+          "replaceExpr": {
+            "type": "string",
+            "title": "Replace Expression",
+            "description": "A JavaScript expression or literal to replace the matching content. Match Regex capturing groups can be referenced as g1, g2 etc, and event's fields as event.<fieldName>.",
+            "jsExpression": true
+          },
+          "disabled": {
+            "type": "boolean",
+            "default": false,
+            "description": "Set to No to disable the evaluation of an individual rule"
+          }
+        }
+      }
+    },
+    "fields": {
+      "type": "array",
+      "title": "Apply to Fields",
+      "description": "Fields where to apply the masking rules. Supports * wildcards, except when used on internal fields.",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!__.*\\*).*$",
+        "errorMessage": {
+           "pattern": "Internal fields cannot be used with wildcards"
+        }
+      },
+      "default": ["_raw"]
+    },
+    "depth": {
+      "type": "integer",
+      "title": "Depth",
+      "description": "Depth to which the mask function will search for fields to mask.",
+      "default": 5,
+      "minimum": 1
+    },
+    "flags": {
+      "title": "Evaluate Fields",
+      "description": "Field(s) to evaluate if one or more Masking Rules are matched.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["value"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Field Name"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value Expression",
+            "description": "JavaScript expression to compute the value (can be constant)",
+            "jsExpression": true
+          }
+        }
+      }
+    }
+  }
+}

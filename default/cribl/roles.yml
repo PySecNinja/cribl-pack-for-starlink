@@ -1,0 +1,168 @@
+admin:
+  title: Admin
+  description: 'Organization Admin can do anything and everything in the system.'
+  policy:
+    - '* *'
+reader_all:
+  title: Read Only
+  description: 'User has read access to everything in the system.'
+  policy:
+    - GroupRead *
+    - Product * GET
+    - POST /m/*/edge/search/file
+    - POST /w/*/edge/search/file
+    - Licenses
+collect_all:
+  description: 'Users with collect_all role can run existing collection jobs of all Worker Groups'
+  policy:
+    - Product * GET
+    - GroupCollect *
+editor_all:
+  description: 'Users with editor_all role get read/write access to all Worker Groups.'
+  policy:
+    - Product * GET
+    - GroupEdit *
+owner_all:
+  description: 'Users with owner_all role get read/write access as well as Deploy permissions to all Worker Groups.'
+  policy:
+    - Product * GET
+    - GroupFull *
+    - Licenses
+notification_admin:
+  description: 'Users with notification_admin role get read/write access to all Notifications.'
+  policy:
+    - Product stream GET
+    - Product edge GET
+    - '* /notifications'
+    - '* /notifications/*'
+    - '* /notification-targets'
+    - '* /notification-targets/*'
+    - '* /system/messages'
+    - '* /system/messages/*'
+gitops:
+  description: 'Users with the gitops role are able to sync the Cribl deployment with a remote repo.'
+  policy:
+    - Product * GET
+    - POST /version/sync
+user:
+  description: 'The user role allows users to see the system info along with their own profile settings. This is a legacy role, deprecated by more granular roles like "stream_user" or "edge_user".'
+  policy:
+    - Product stream GET
+    - Product edge GET
+stream_user:
+  tags: [product, stream]
+  policy:
+    - Product stream GET
+  title: User
+  description: "User can receive access to Stream Groups"
+stream_reader:
+  tags: [product, stream]
+  policy:
+    - ProductUser stream GET
+    - Monitor
+    - POST /system/metrics/query
+    - POST /m/*/system/metrics/query
+    - POST /w/*/system/metrics/query
+    - GET /w/*
+    - GET /system/settings
+    - GET /system/settings/auth
+    - GET /system/roles
+    - GET /system/roles/*
+    - GET /system/users
+    - GET /system/certificates
+    - GET /system/instance/*
+    - GET /security/kms/config
+    - GET /security/kms/health
+    - GET /system/scripts
+    - GET /system/app-limits
+    - GET /system/diag
+    - GET /system/diag/*
+    - POST /system/diag/download
+    - GET /settings/features
+    - GET /system/processes
+    - GET /system/services-limits
+    - GET /system/logger
+    - GET /system/policies
+    - GET /system/settings/git-settings
+    - GET /version/branch
+  title: Read Only
+  description: "User has read only access to all Stream resources"
+stream_editor:
+  tags: [product, stream]
+  policy:
+    - ProductUser stream *
+    - LakeDatasetAccess default *
+    - Monitor
+    - '* /w/*'
+  title: Editor
+  description: "Editor can create, read and modify all Stream resources"
+stream_admin:
+  tags: [product, stream]
+  policy:
+    - ProductAdmin stream
+    - LakeDatasetAccess default *
+  title: Admin
+  description: "Admin can do anything within Stream"
+edge_user:
+  tags: [product, edge]
+  policy:
+    - Product edge GET
+  title: User
+  description: "User can receive access to Search Groups"
+edge_reader:
+  tags: [product, edge]
+  policy:
+    - ProductUser edge GET
+    - Monitor
+    - POST /system/metrics/query
+    - POST /edge/metrics/query
+    - GET /w/*
+    - POST /m/*/edge/search/file
+    - POST /w/*/edge/search/file
+    - POST /m/*/edge/metrics/query
+    - POST /m/*/system/metrics/query
+    - POST /w/*/edge/metrics/query
+    - POST /w/*/system/metrics/query
+    - POST /products/edge/map/query
+    - GET /system/settings
+    - GET /system/settings/auth
+    - GET /system/roles
+    - GET /system/roles/*
+    - GET /system/users
+    - GET /system/certificates
+    - GET /system/instance/*
+    - GET /security/kms/config
+    - GET /security/kms/health
+    - GET /system/scripts
+    - GET /system/app-limits
+    - GET /system/diag
+    - GET /system/diag/*
+    - POST /system/diag/download
+    - GET /settings/features
+    - GET /system/processes
+    - GET /system/services-limits
+    - GET /system/logger
+    - GET /system/policies
+    - GET /system/settings/git-settings
+    - GET /version/branch
+  title: Read Only
+  description: "User has read only access to all Edge resources"
+edge_editor:
+  tags: [product, edge]
+  policy:
+    - ProductUser edge *
+    - Monitor
+    - POST /edge/metrics/query
+    - POST /products/edge/map/query
+    - POST /m/*/edge/search/file
+    - '* /w/*'
+  title: Editor
+  description: "Editor can create, read and modify all Edge resources"
+edge_admin:
+  tags: [product, edge]
+  policy:
+    - ProductAdmin edge
+    - POST /products/edge/map/query
+    - POST /m/*/edge/search/file
+  title: Admin
+  description: "Admin can do anything within Edge"

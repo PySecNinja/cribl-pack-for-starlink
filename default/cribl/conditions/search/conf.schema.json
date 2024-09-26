@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["savedQueryId", "message"],
+  "properties": {
+    "savedQueryId": {
+      "type": "string",
+      "title": "Saved query id",
+      "description": "Id of the saved search this notification belongs to"
+    },
+    "trigger": {
+      "type": "string",
+      "title": "Notification trigger",
+      "description": "Kusto expression that triggers the notification, evaluated over the search results"
+    },
+    "triggerType": {
+      "type":"string",
+      "title": "Trigger type",
+      "description": "Type of the trigger condition. custom applies a kusto expression over the results, and results count applies a comparison over results count",
+      "enum": ["custom", "resultsCount"],
+      "enumNames": ["Where", "Count of Results"]
+    },
+    "triggerComparator": {
+      "type":"string",
+      "title": "Count comparator",
+      "description": "Operation to be applied over the results count",
+      "enum": [">", "<", "===", "!==", ">=", "<="]
+    },
+    "triggerCount": {
+      "title": "Trigger Count",
+      "description": "Number of events that need to match the condition before a notification is sent.",
+      "type": "number",
+      "default": "0"
+    },
+    "message": {
+      "type": "string",
+      "title": "Message",
+      "description": "Text to be used as notification message",
+      "maxLength": 1000
+    }
+  }
+}

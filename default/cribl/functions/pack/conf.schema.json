@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["unpackedFields"],
+  "properties": {
+    "unpackedFields": {
+      "title": "Unpacked fields",
+      "description": "List of fields to keep, everything else will be packed",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "target": {
+      "type": "string",
+      "title": "Packed target Field",
+      "description": "Name of the (packed) target field",
+      "default": "_pack"
+    }
+  }
+}

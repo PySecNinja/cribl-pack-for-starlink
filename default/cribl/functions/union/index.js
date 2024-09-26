@@ -1,0 +1,1 @@
+exports.name="union";exports.version="0.0.1";exports.disabled=false;exports.handleSignals=true;exports.group=C.INTERNAL_FUNCTION_GROUP;exports.sync=true;let unionProvider;exports.init=e=>{const o=e.conf;unionProvider=C.internal.kusto.createUnion(o)};exports.process=e=>unionProvider.process(e);exports.unload=()=>{unionProvider=undefined};

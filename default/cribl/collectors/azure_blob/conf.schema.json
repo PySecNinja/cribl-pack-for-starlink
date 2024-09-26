@@ -1,0 +1,194 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["containerName"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["azure_blob"],
+      "flag": {
+        "prefix": "collector",
+        "modes": ["single", "worker"]
+      }
+    },
+    "outputName": {
+      "type": "string",
+      "title": "Auto-populate from",
+      "description": "The name of the predefined Destination that will be used to auto-populate collector settings."
+    },
+    "authType": {
+      "title": "Authentication method",
+      "type": "string",
+      "enum": ["manual", "secret", "clientSecret", "clientCert"],
+      "default": "manual",
+      "description": "Enter authentication data directly, or select a secret referencing your auth data"
+    },
+    "containerName": {
+      "type": "string",
+      "title": "Container name",
+      "minLength": 1,
+      "description": "Name of the container to collect from. This value can be a constant or a JavaScript expression that can only be evaluated at init time. E.g. referencing a Global Variable: `myBucket-${C.vars.myVar}`.",
+      "jsExpression": "warning"
+    },
+    "path": {
+      "type": "string",
+      "title": "Path",
+      "description": "The directory from which to collect data. Templating is supported, e.g.: myDir/${datacenter}/${host}/${app}/. Time-based tokens are also supported, e.g.: myOtherDir/${_time:%Y}/${_time:%m}/${_time:%d}/",
+      "minLength": 1,
+      "templated": true
+    },
+    "extractors": {
+      "type": "array",
+      "uniqueFields": ["key"],
+      "title": "Path extractors",
+      "additionalProperties": false,
+      "items": {
+        "type": "object",
+        "required": ["key", "expression"],
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Token",
+            "description": "A token from the template path, e.g.: epoch"
+          },
+          "expression": {
+            "type": "string",
+            "title": "Extractor expression",
+            "description": "JS expression that receives token under \"value\" variable, and evaluates to populate event fields, e.g.: {date: new Date(+value*1000)}"
+          }
+        }
+      },
+      "description": "Allows using template tokens as context for expressions that enrich discovery results. E.g.: given a template /path/${epoch}, an extractor under key \"epoch\" with an expression {date: new Date(+value*1000)}, will enrich discovery results with a human readable \"date\" field"
+    },
+    "recurse": {
+      "type": "boolean",
+      "title": "Recursive",
+      "description": "Whether to recurse through subdirectories.",
+      "default": true
+    },
+    "includeMetadata": {
+      "type": "boolean",
+      "title": "Include Metadata",
+      "description": "Include Azure Blob metadata in collected events. In each event, metadata will be located at: __collectible.metadata.",
+      "default": true
+    },
+    "includeTags": {
+      "type": "boolean",
+      "title": "Include Tags",
+      "description": "Include Azure Blob tags in collected events. In each event, tags will be located at: __collectible.tags. Disable this feature when using a Shared Access Signature Connection String, to prevent errors.",
+      "default": true
+    },
+    "maxBatchSize": {
+      "type": "number",
+      "title": "Max Batch Size (objects)",
+      "description": "Maximum number of metadata objects to batch before recording as results.",
+      "minimum": 1,
+      "default": 10
+    },
+    "parquetChunkSizeMB": {
+      "type": "number",
+      "title": "Max Parquet chunk size (MB)",
+      "description": "Maximum file size for each Parquet chunk.",
+      "default": 5,
+      "maximum": 100,
+      "minimum": 1
+    },
+    "parquetChunkDownloadTimeout": {
+      "type": "number",
+      "title": "Parquet chunk download timeout (seconds)",
+      "description": "The maximum time allowed for downloading a Parquet chunk. Processing will abort if a chunk cannot be downloaded within the time specified.",
+      "default": 600,
+      "maximum": 3600,
+      "minimum": 1
+    }
+  },
+  "dependencies": {
+    "authType": {
+      "oneOf": [
+        {
+          "required": ["connectionString"],
+          "properties": {
+            "authType": { "enum":["manual"] },
+            "connectionString": {
+              "type": "string",
+              "title": "Connection string",
+              "description": "Enter your Azure storage account Connection String. If left blank, Cribl Stream will fall back to env.AZURE_STORAGE_CONNECTION_STRING.",
+              "encrypt": true
+            }
+          }
+        },
+        {
+          "required": ["textSecret"],
+          "properties": {
+            "authType": { "enum":["secret"] },
+            "textSecret": {
+              "type": "string",
+              "secret": { "type": "text", "target": "connectionString" },
+              "title": "Connection string (text secret)",
+              "description": "Text secret"
+            }
+          }
+        },
+        {
+          "required": ["storageAccountName", "tenantId", "clientId", "clientTextSecret"],
+          "properties": {
+            "authType": { "enum":["clientSecret"] },
+            "storageAccountName": {
+              "type": "string",
+              "title": "Storage account name",
+              "description": "The name of your Azure storage account"
+            },
+            "tenantId": {
+              "type": "string",
+              "title": "Tenant ID",
+              "description": "The service principal's tenant ID"
+            },
+            "clientId": {
+              "type": "string",
+              "title": "Client ID",
+              "description": "The service principal's client ID"
+            },
+            "clientTextSecret": {
+              "type": "string",
+              "secret": { "type": "text", "target": "clientSecretValue" },
+              "title": "Client secret (text secret)",
+              "description": "Text secret containing the client secret"
+            }
+          }
+        },
+        {
+          "required": ["storageAccountName", "tenantId", "clientId", "certificate"],
+          "properties": {
+            "authType": { "enum":["clientCert"] },
+            "storageAccountName": {
+              "type": "string",
+              "title": "Storage account name",
+              "description": "The name of your Azure storage account"
+            },
+            "tenantId": {
+              "type": "string",
+              "title": "Tenant ID",
+              "description": "The service principal's tenant ID"
+            },
+            "clientId": {
+              "type": "string",
+              "title": "Client ID",
+              "description": "The service principal's client ID"
+            },
+            "certificate": {
+              "type": "object",
+              "required": ["certificateName"],
+              "properties": {
+                "certificateName": {
+                  "type": "string",
+                  "title": "Certificate",
+                  "description": "The certificate you registered as credentials for your app in the Azure portal"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

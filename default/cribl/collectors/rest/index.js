@@ -1,0 +1,1 @@
+exports.name="REST";exports.version="0.1";exports.disabled=false;exports.destroyable=false;const{RestCollector}=C.internal.Collectors;const restC=new RestCollector;exports.init=async e=>restC.init(e);exports.discover=async e=>restC.discover(e);exports.collect=async(e,s)=>restC.collect(e,s);exports.getParser=e=>restC.getParser(e);

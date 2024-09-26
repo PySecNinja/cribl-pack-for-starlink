@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "title": "",
+  "additionalProperties": false,
+  "required": ["id", "field", "deduplicate"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "ID",
+      "description": "Notification ID"
+    },
+    "field": {
+      "type": "string",
+      "title": "Field",
+      "description": "Notification event state field name"
+    },
+    "deduplicate": {
+      "type": "boolean",
+      "title": "Deduplicate",
+      "description": "Toggle deduplication."
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "title": "Send Configuration",
+  "additionalProperties": false,
+  "required": ["searchId", "tenantId"],
+  "properties": {
+    "url": {
+      "title": "URL",
+      "description": "Full URL to send search to.",
+      "type": "string"
+    },
+    "group": {
+      "title": "Group",
+      "description": "Group within the workspace we're sending to.",
+      "type": "string",
+      "default": "default"
+    },
+    "workspace": {
+      "title": "Workspace",
+      "description": "Workspace within the deployment to send the search results to.",
+      "type": "string",
+      "default": "main"
+    },
+    "sendUrlTemplate": {
+      "title": "URL Template",
+      "description": "Template to build the URL to send from.",
+      "type": "string"
+    },
+    "searchId": {
+      "title": "Search Id",
+      "description": "Id of the search this function is running on.",
+      "type": "string"
+    },
+    "tee": {
+      "title": "Tee",
+      "description": "Tee results to search. When set to true results will be shipped instead of stats",
+      "type": "string",
+      "default": false
+    },
+    "flushMs": {
+      "title": "Flush period",
+      "description": "How often are stats flushed in ms",
+      "type": "number",
+      "default":1000
+    },
+    "suppressPreviews": {
+      "type": "boolean",
+      "title": "Suppress periodic stats",
+      "description": "Disables generation of intermediate stats. When true stats will be emitted only on end"
+    }
+  }
+}

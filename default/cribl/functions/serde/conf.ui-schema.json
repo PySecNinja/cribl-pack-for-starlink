@@ -1,0 +1,126 @@
+{
+  "mode": {
+    "ui:options": { "inline": true, "width": "40%" }
+  },
+  "type": {
+    "ui:widget": "ParserSelect",
+    "ui:options": { "inline": true, "width": "60%" }
+  },
+  "srcField": {
+    "ui:options": { "inline": true, "width": "40%", "inlineStyle": { "padding": "0" } },
+    "ui:placeholder": "Source field name",
+    "ui:emptyValue": ""
+  },
+  "dstField": {
+    "ui:options": "{ inline: true, width: conf.type === 'kvp' ? '40%' : '60%' }",
+    "ui:forceRender": true,
+    "ui:placeholder": "Destination field name"
+  },
+  "cleanFields": {
+    "ui:options": { "inline": true, "width": "20%", "labelInline": false }
+  },
+  "delimChar": {
+    "ui:options": { "inline": true, "width": "25%", "inlineStyle": { "padding": "0" } }
+  },
+  "escapeChar": {
+    "ui:options": { "inline": true, "width": "25%" }
+  },
+  "quoteChar": {
+    "ui:options": { "inline": true, "width": "25%" }
+  },
+  "nullValue": {
+    "ui:options": { "inline": true, "width": "25%" }
+  },
+  "fieldFilterExpr": {
+    "ui:widget": "JsInput",
+    "ui:placeholder": "Enter field filter expression"
+  },
+  "fields": {
+    "ui:field": "Tags",
+    "ui:placeholder": "Enter field names",
+    "ui:options": {
+      "tokenProcessingExp": "token.replace(/(^\\W+)|(\\W+$)/g, '').replace(/\\W+/g, '_')",
+      "separator": "value.indexOf(',') > -1 ? /[,]+/g : /[\\s]+/g",
+      "popupEditor": "ParserEditor",
+      "updateFormProperties": ["mode", "type", "srcField", "keep", "remove", "fieldFilterExpr"],
+      "parserFormPath": "conf"
+    }
+  },
+  "keep": {
+    "ui:field": "Tags",
+    "ui:placeholder": "Enter field names",
+    "ui:options": {
+      "typeaheadItems": "fields"
+    }
+  },
+  "remove": {
+    "ui:field": "Tags",
+    "ui:placeholder": "Enter field names",
+    "ui:options": {
+      "typeaheadItems": "fields"
+    }
+  },
+  "allowedKeyChars": {
+    "ui:field": "Tags",
+    "ui:options": { "inline": true, "width": "50%" }
+  },
+  "allowedValueChars": {
+    "ui:field": "Tags",
+    "ui:options": { "inline": true, "width": "50%" }
+  },
+  "pattern": {
+    "ui:widget": "GrokInput",
+    "ui:options": {
+      "numLines": 10,
+      "language": "grok",
+      "jsonSchema": true,
+      "popupEditor": "GrokEditor"
+    }
+  },
+  "patternList": {
+    "ui:field": "Table",
+    "items": {
+      "regex": {
+        "ui:placeholder": "Grok pattern",
+        "ui:options": {
+          "columnWidth": "100%"
+        }
+      }
+    }
+  },
+  "regex": {
+    "ui:widget": "RegexInput",
+    "ui:placeholder": "Regular expression",
+    "ui:forceRender": true,
+    "ui:options": {
+      "eventFieldProperty": "srcField"
+    }
+  },
+  "regexList": {
+    "ui:field": "Table",
+    "ui:forceRender": true,
+    "items": {
+      "regex": {
+        "ui:placeholder": "Regular expression",
+        "ui:widget": "RegexInput",
+        "ui:forceRender": true,
+        "ui:options": {
+          "eventFieldProperty": "srcField"
+        }
+      }
+    }
+  },
+  "fieldNameExpression": {
+    "ui:widget": "JsInput",
+    "ui:placeholder": "Enter field name format expression."
+  },
+  "ui:options": {
+    "groups": {
+      "advanced": {
+        "title": "Advanced Settings",
+        "collapsed": true,
+        "properties": ["allowedKeyChars", "allowedValueChars", "iterations", "fieldNameExpression", "overwrite"]
+      }
+    }
+  }
+}

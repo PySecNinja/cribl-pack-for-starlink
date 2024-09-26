@@ -1,0 +1,3 @@
+# A higher-level .gitignore is omitting this but we neet it included under here
+# for `./lib/opentelemetry/proto/logs/`.
+!logs

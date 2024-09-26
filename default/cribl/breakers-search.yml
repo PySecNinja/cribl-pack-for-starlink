@@ -1,0 +1,1222 @@
+AWS Datatypes:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for common AWS data sources
+  tags: vpcflow,elb,alb,loadbalancer,cdn,cloudtrail,waf
+  rules:
+    - condition: /CloudTrail/.test(source)
+      type: aws_cloudtrail
+      disabled: false
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: current
+      timestampTimezone: utc
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 512000
+      parserEnabled: true
+      parser:
+        mode: extract
+        type: json
+        srcField: _raw
+      name: AWS CloudTrail
+      fields:
+        - name: datatype
+          value: "'aws_cloudtrail'"
+        - name: _time
+          value: "C.Time.strptime(eventTime, '%Y-%m-%dT%H:%M:%SZ').getTime()/1000"
+    - condition: /^\d+\s+\w+\s+eni-\w+.*(OK|NODATA|SKIPDATA)?$/m.test(_raw)
+      type: aws_vpcflow
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: current
+      timestampTimezone: utc
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: false
+      name: AWS VPC Flow
+      fields:
+        - name: datatype
+          value: "'aws_vpcflow'"
+        - name: _time
+          value: +start
+    - condition: /^(?:https?|h2|wss?)\s\d+-\d+-\d+.*?arn:aws:elasticloadbalancing/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /\w+\s/
+      timestamp:
+        type: format
+        length: 150
+        format: "%Y-%m-%dT%H:%M:%S.%f%Z"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 4096
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: elff
+        srcField: _raw
+        fields:
+          - type
+          - timestamp
+          - elb
+          - client_port
+          - target_port
+          - request_processing_time
+          - target_processing_time
+          - response_processing_time
+          - elb_status_code
+          - target_status_code
+          - received_bytes
+          - sent_bytes
+          - request
+          - user_agent
+          - ssl_cipher
+          - ssl_protocol
+          - target_group_arn
+          - trace_id
+          - domain_name
+          - chosen_cert_arn
+          - matched_rule_priority
+          - request_creation_time
+          - actions_executed
+          - redirect_url
+          - error_reason
+      name: AWS ALB
+      fields:
+        - name: datatype
+          value: "'aws_alb_accesslogs'"
+    - condition: /^\d+-\d+-\d+.*?(?:\d+\.\d+\s){3}/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: format
+        length: 150
+        format: "%Y-%m-%dT%H:%M:%S.%f%Z"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 4096
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: elff
+        srcField: _raw
+        fields:
+          - timestamp
+          - elb
+          - client_port
+          - backend_port
+          - request_processing_time
+          - backend_processing_time
+          - response_processing_time
+          - elb_status_code
+          - backend_status_code
+          - received_bytes
+          - sent_bytes
+          - request
+          - user_agent
+          - ssl_cipher
+          - ssl_protocol
+      name: AWS ELB
+      fields:
+        - name: datatype
+          value: "'aws_elb_accesslogs'"
+    - condition: /^\d+-\d+-\d+\t\d+:\d+:\d+\t[a-zA-Z]{3}[-\w]*\t\d+(?:\t[^\t]+)+$/m.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: format
+        length: 150
+        format: "%Y-%m-%d\t%H:%M:%S"
+      timestampTimezone: utc
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 4096
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: delim
+        delimChar: \t
+        quoteChar: '"'
+        escapeChar: \\
+        nullValue: "-"
+        srcField: _raw
+        fields:
+          - date
+          - time
+          - x_edge_location
+          - sc_bytes
+          - c_ip
+          - cs_method
+          - cs_host
+          - cs_uri_stem
+          - sc_status
+          - cs_referer
+          - cs_user_agent
+          - cs_uri_query
+          - cs_cookie
+          - x_edge_result_type
+          - x_edge_request_id
+          - x_host_header
+          - cs_protocol
+          - cs_bytes
+          - time_taken
+          - x_forwarded_for
+          - ssl_protocol
+          - ssl_cipher
+          - x_edge_response_result_type
+          - cs_protocol_version
+          - fle_status
+          - fle_encrypted_fields
+      name: AWS Cloudfront Web
+      fields:
+        - name: datatype
+          value: "'aws_cloudfront_accesslogs'"
+    - name: AWS WAF
+      condition: "/aws-waf-logs/.test(source)"
+      type: json
+      timestampAnchorRegex: "/timestamp/"
+      timestamp:
+        type: auto
+        length: 150
+        format: "%Y-%m-%dT%H:%M:%SZ"
+      timestampTimezone: utc
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      jsonArrayField: Records
+      jsonTimeField: eventTime
+      fields:
+        - name: datatype
+          value: "'aws_waf'"
+Azure Datatypes:
+  minRawLength: 256
+  lib: cribl
+  tags: anw,nsg
+  description: Datatype rules for Azure formats
+  rules:
+    - name: Network Security Group
+      condition: _raw.indexOf("NetworkSecurityGroupFlowEvent") > -1
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      parser:
+        mode: extract
+        type: json
+        srcField: _raw
+        dstField: out
+      eventBreakerRegex: /[\r\n]+/
+      fields:
+        - name: datatype
+          value: "'azure_networksecuritygroup'"
+        - name: __resourceData
+          value: >-
+            resourceId.match(/SUBSCRIPTIONS\/(.*)\/RESOURCEGROUPS\/(.*)\/PROVIDERS\/(.*)\/(.*)\/(.*)/)
+        - name: subscriptionId
+          value: __resourceData[1]
+        - name: resourceGroupName
+          value: __resourceData[2]
+        - name: resourceProviderNamespace
+          value: __resourceData[3]
+        - name: resourceType
+          value: __resourceData[4]
+        - name: resourceName
+          value: __resourceData[5]
+        - name: nsgVersion
+          value: properties["Version"]
+        - name: numFlows
+          value: properties["flows"].length
+      jsonArrayField: records
+      jsonTimeField: time
+Microsoft Windows Datatypes:
+  minRawLength: 256
+  lib: cribl
+  tags: windows,eventlogclassic,eventlogxml
+  description: Datatype rules for MS Windows formats
+  rules:
+    - name: Windows Event Log Classic
+      condition: >-
+        /^\d+\/\d+\/\d+\s\d+:\d+:\d+\s\w+[\r\n]+LogName=(?:Security|Application|System|Setup)/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: '0'
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /(?=\d{2}\/\d{2}\/\d{4}\s\d{2}:\d{2}:\d{2}\s[AM|PM])/
+      parser:
+        mode: extract
+        type: regex
+        srcField: _raw
+        iterations: 100
+        overwrite: false
+        cleanFields: false
+        allowedKeyChars: []
+        allowedValueChars: []
+        delimChar: ','
+        quoteChar: '"'
+        escapeChar: \
+        nullValue: '-'
+        dstField: out
+        regex: /LogName=(?<log_name>.+)[\r\n]+/
+        regexList:
+          - regex: /EventCode=(?<event_code>.+)[\r\n]+/
+          - regex: /EventType=(?<event_type>.+)[\r\n]+/
+          - regex: /ComputerName=(?<computer_name>.+)[\r\n]+/
+          - regex: /SourceName=(?<source_name>.+)[\r\n]+/
+          - regex: /Type=(?<type>.+)[\r\n]+/
+          - regex: /RecordNumber=(?<record_number>.+)[\r\n]+/
+          - regex: /Keywords=(?<keywords>.+)[\r\n]+/
+          - regex: /TaskCategory=(?<task_category>.+)[\r\n]+/
+          - regex: /OpCode=(?<opcode>.+)[\r\n]+/
+          - regex: /Message=(?<message>.+)[\r\n]+/
+      fields:
+        - name: datatype
+          value: "'windows_event_classic'"
+    - name: Windows XML Events
+      condition: /^<Event xmlns=/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: '0'
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      parser:
+        mode: extract
+        type: kvp
+        srcField: _raw
+        cleanFields: false
+        allowedKeyChars: []
+        allowedValueChars: []
+        delimChar: ','
+        quoteChar: '"'
+        escapeChar: \
+        nullValue: '-'
+      fields:
+        - name: datatype
+          value: "'windows_event_xml'"
+        - name: _raw
+          value: C.Text.parseWinEvent(_raw,['0x0','-'])
+        - name: EventID
+          value: _raw.Event.System.EventID
+        - name: EventRecordID
+          value: _raw.Event.System.EventRecordID
+        - name: ProcessName
+          value: _raw.Event.EventData.Data.ProcessName
+        - name: ProviderGuid
+          value: _raw.Event.System.Provider.Guid
+        - name: ProviderEventSourceName
+          value: _raw.Event.System.Provider.EventSourceName
+        - name: ProviderName
+          value: _raw.Event.System.Provider.Name
+        - name: ActivityID
+          value: _raw.Event.System.Correlation.ActivityID
+        - name: SubjectUserName
+          value: _raw.Event.EventData.Data.SubjectUserName
+        - name: SubjectUserSid
+          value: _raw.Event.EventData.Data.SubjectUserSid
+        - name: SubjectLogonId
+          value: _raw.Event.EventData.Data.SubjectLogonId
+        - name: SubjectDomainName
+          value: _raw.Event.EventData.Data.SubjectDomainName
+        - name: TargetUserName
+          value: _raw.Event.EventData.Data.TargetUserName
+        - name: TargetUserSid
+          value: _raw.Event.EventData.Data.TargetUserSid
+        - name: TargetLogonId
+          value: _raw.Event.EventData.Data.TargetLogonId
+        - name: TargetDomainName
+          value: _raw.Event.EventData.Data.TargetDomainName
+        - name: PrivilegeList
+          value: _raw.Event.EventData.Data.PrivilegeList
+        - name: AuthenticationPackageName
+          value: _raw.Event.EventData.Data.AuthenticationPackageName
+        - name: LogonProcessName
+          value: _raw.Event.EventData.Data.LogonProcessName
+Microsoft O365 Datatypes:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for Office 365 data sources
+  tags: microsoft,o365
+  rules:
+    - name: status
+      condition: source.endsWith('healthOverviews') || source.endsWith('HistoricalStatus')
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_office365_status'"
+      jsonArrayField: value
+      jsonTimeField: StatusTime
+    - name: messages
+      condition: source.endsWith('messages')
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_office365_messages'"
+      jsonArrayField: value
+      jsonTimeField: lastModifiedDateTime
+    - name: mgmt-activity
+      condition: source.includes('feed/audit')
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: UTC
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_office365_mgmt-activity'"
+      jsonTimeField: CreationTime
+    - name: msg-trace
+      condition: source.includes('MessageTrace')
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: format
+        length: 150
+        format: '%Y-%m-%dT%H:%M:%S.%f'
+      timestampTimezone: UTC
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_office365_msg-trace'"
+      jsonArrayField: value
+      jsonTimeField: Received
+Microsoft Graph API Datatypes:
+  lib: cribl
+  minRawLength: 256
+  tags: microsoft,anw,nsg,o365
+  description: Datatype rules for Azure and Office 365 formats
+  rules:
+    - name: Security Alerts
+      condition: _collectStats.url.includes("/security/alert_v2")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_graph_securityalert'"
+      jsonTimeField: lastModifiedDateTime
+    - name: Security Alerts - Legacy
+      condition: __collectStats.url.includes("/security/alert")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_graph_securityalert_legacy'"
+      jsonTimeField: lastModifiedDateTime
+    - name: Service Health
+      condition: __collectStats.url.includes("/admin/serviceAnnouncement/healthOverviews")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: current
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_graph_servicehealth'"
+    - name: Service Issues
+      condition: __collectStats.url.includes("/admin/serviceAnnouncement/issues")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_graph_serviceissues'"
+      jsonTimeField: lastModifiedDateTime
+    - name: Messages
+      condition: __collectStats.url.includes("/me/messages")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields: 
+        - name: datatype
+          value: "'microsoft_graph_messages'"
+      jsonTimeField: receivedDateTime
+    - name: Users
+      condition: __collectStats.url.includes("/users")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields: 
+        - name: datatype
+          value: "'microsoft_graph_users'"
+      jsonTimeField: onPremisesLastSyncDateTime
+    - name: Devices
+      condition: __collectStats.url.includes("/devices")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_graph_devices'"
+      jsonTimeField: onPremisesLastSyncDateTime
+    - name: Groups
+      condition: __collectStats.url.includes("/groups")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_graph_groups'"
+      jsonTimeField: onPremisesLastSyncDateTime
+    - name: Applications
+      condition: __collectStats.url.includes("/applications")
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      fields:
+        - name: datatype
+          value: "'microsoft_graph_applications'"
+      jsonTimeField: createdDateTime
+Apache Datatypes:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for Apache Common and Combined logs
+  tags: apache,common,combined
+  rules:
+    - condition: /^(\S+\s){3}\[[^\]]+\]\s"[^"]+"(\s+\S+){2}$/m.test(_raw)
+      type: regex
+      timestampAnchorRegex: /\[/
+      timestamp:
+        type: format
+        length: 150
+        format: "%d/%b/%Y:%H:%M:%S %Z"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 4096
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: clf
+        srcField: _raw
+        fields:
+          - clientip
+          - ident
+          - user
+          - timestamp
+          - request
+          - status
+          - bytes
+      name: Apache Common
+      fields:
+        - name: datatype
+          value: "'apache_access'"
+    - condition: /^(\S+\s){3}\[[^\]]+\]\s"[^"]+"(\s+\S+){3,}/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /\[/
+      timestamp:
+        type: format
+        length: 150
+        format: "%d/%b/%Y:%H:%M:%S %Z"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 4096
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: clf
+        srcField: _raw
+        fields:
+          - clientip
+          - ident
+          - user
+          - timestamp
+          - request
+          - status
+          - bytes
+          - referer
+          - useragent
+      name: Apache Combined
+      fields:
+        - name: datatype
+          value: "'apache_access_combined'"
+Cisco Datatypes:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for common Cisco data sources
+  tags: cisco,asa,estreamer
+  rules:
+    - condition: /%ASA-\d-\d{6}:/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: format
+        length: 150
+        format: "%b %d %H:%M:%S"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024
+      disabled: false
+      parserEnabled: false
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: csv
+        srcField: _raw
+      name: Cisco ASA
+      fields:
+        - name: datatype
+          value: "'cisco_asa'"
+    - condition: /%FWSM-\d-\d{6}:/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: format
+        length: 150
+        format: "%b %d %H:%M:%S"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024
+      disabled: false
+      parserEnabled: false
+      eventBreakerRegex: /[\n\r]+/
+      name: Cisco FWSM
+      fields:
+        - name: datatype
+          value: "'cisco_fwsm'"
+    - condition: /^rec_type=.*?event_sec=/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /event_sec=/
+      timestamp:
+        type: format
+        length: 150
+        format: "%s"
+      timestampTimezone: utc
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 8192
+      disabled: false
+      parserEnabled: false
+      eventBreakerRegex: /[\n\r]+/
+      name: Cisco Estreamer
+      fields:
+        - name: datatype
+          value: "'cisco_estreamer_data'"
+OCSF Datatypes:
+  lib: cribl
+  minRawLength: 256
+  description: Datatype rules for new line delimited json data
+  tags: cribl,ndjson
+  rules:
+    - condition: "true"
+      type: json
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024000
+      disabled: false
+      parserEnabled: false
+      eventBreakerRegex: /[\n\r]+/
+      name: ndjson
+      fields:
+        - name: datatype
+          value: category_name
+        - name: _time
+          value: time / 1000
+        - name: __timestampExtracted
+          value: time != null
+Palo Alto Datatypes:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for common Palo Alto data sources
+  tags: palo,traffic,threat,system,config
+  rules:
+    - condition: /^(?:[^,]+,)+TRAFFIC,.*?0x\d{2,}(?:,[^,]*)+$/m.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^(?:[^,]*,){6}/
+      timestamp:
+        type: format
+        length: 150
+        format: "%Y/%m/%d %H:%M:%S"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 8192
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: csv
+        srcField: _raw
+        fields:
+          - future_use_0
+          - receive_time
+          - serial_number
+          - type
+          - threat_content_type
+          - future_use_1
+          - generated_time
+          - source_ip
+          - destination_ip
+          - nat_source_ip
+          - nat_destination_ip
+          - rule_name
+          - source_user
+          - destination_user
+          - application
+          - virtual_system
+          - source_zone
+          - destination_zone
+          - inbound_interface
+          - outbound_interface
+          - log_action
+          - future_use_2
+          - session_id
+          - repeat_count
+          - source_port
+          - destination_port
+          - nat_source_port
+          - nat_destination_port
+          - flags
+          - protocol
+          - action
+          - bytes
+          - bytes_sent
+          - bytes_received
+          - packets
+          - start_time
+          - elapsed_time
+          - category
+          - future_use_3
+          - sequence_number
+          - action_flags
+          - source_location
+          - destination_location
+          - future_use_4
+          - packets_sent
+          - packets_received
+          - session_end_reason
+          - device_group_hierarchy_level_1
+          - device_group_hierarchy_level_2
+          - device_group_hierarchy_level_3
+          - device_group_hierarchy_level_4
+          - virtual_system_name
+          - device_name
+          - action_source
+          - source_vm_uuid
+          - destination_vm_uuid
+          - tunnel_id_imsi
+          - monitor_tag_imei
+          - parent_session_id
+          - parent_start_time
+          - tunnel_type
+          - sctp_association_id
+          - sctp_chunks
+          - sctp_chunks_sent
+          - sctp_chunks_received
+      name: Palo Alto Traffic
+      fields:
+        - name: datatype
+          value: "'pan_traffic'"
+    - condition: /^(?:[^,]+,)+THREAT,.*?0x\d{2,}(?:,[^,]*)+$/m.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^(?:[^,]*,){6}/
+      timestamp:
+        type: format
+        length: 150
+        format: "%Y/%m/%d %H:%M:%S"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 8192
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: csv
+        srcField: _raw
+        fields:
+          - future_use_0
+          - receive_time
+          - serial_number
+          - type
+          - threat_content_type
+          - future_use_1
+          - generated_time
+          - source_ip
+          - destination_ip
+          - nat_source_ip
+          - nat_destination_ip
+          - rule_name
+          - source_user
+          - destination_user
+          - application
+          - virtual_system
+          - source_zone
+          - destination_zone
+          - inbound_interface
+          - outbound_interface
+          - log_action
+          - future_use_2
+          - session_id
+          - repeat_count
+          - source_port
+          - destination_port
+          - nat_source_port
+          - nat_destination_port
+          - flags
+          - protocol
+          - action
+          - url_filename
+          - threat_id
+          - category
+          - severity
+          - direction
+          - sequence_number
+          - action_flags
+          - source_location
+          - destination_location
+          - future_use_3
+          - content_type
+          - pcap_id
+          - file_digest
+          - cloud
+          - url_index
+          - user_agent
+          - file_type
+          - x_forwarded_for
+          - referer
+          - sender
+          - subject
+          - recipient
+          - report_id
+          - device_group_hierarchy_level_1
+          - device_group_hierarchy_level_2
+          - device_group_hierarchy_level_3
+          - device_group_hierarchy_level_4
+          - virtual_system_name
+          - device_name
+          - future_use_4
+          - source_vm_uuid
+          - destination_vm_uuid
+          - http_method
+          - tunnel_id_imsi
+          - monitor_tag_imei
+          - parent_session_id
+          - parent_start_time
+          - tunnel_type
+          - threat_category
+          - content_version
+          - future_use_5
+          - sctp_association_id
+          - payload_protocol_id
+          - http_headers
+      name: Palo Alto Threat
+      fields:
+        - name: datatype
+          value: "'pan_threat'"
+    - condition: /^(?:[^,]+,)+SYSTEM(?:,[^,]*)+$/m.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^(?:[^,]*,){6}/
+      timestamp:
+        type: format
+        length: 150
+        format: "%Y/%m/%d %H:%M:%S"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: csv
+        srcField: _raw
+        fields:
+          - future_use_0
+          - receive_time
+          - serial_number
+          - type
+          - content_threat_type
+          - future_use_1
+          - generated_time
+          - virtual_system
+          - event_id
+          - object
+          - future_use_2
+          - future_use_3
+          - module
+          - severity
+          - description
+          - sequence_number
+          - action_flags
+          - device_group_hierarchy_level_1
+          - device_group_hierarchy_level_2
+          - device_group_hierarchy_level_3
+          - device_group_hierarchy_level_4
+          - virtual_system_name
+          - device_name
+      name: Palo Alto System
+      fields:
+        - name: datatype
+          value: "'pan_system'"
+    - condition: /^(?:[^,]+,)+CONFIG(?:,[^,]*)+$/m.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^(?:[^,]*,){6}/
+      timestamp:
+        type: format
+        length: 150
+        format: "%Y/%m/%d %H:%M:%S"
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: csv
+        srcField: _raw
+        fields:
+          - future_use_0
+          - receive_time
+          - serial_number
+          - type
+          - subtype
+          - future_use_1
+          - generated_time
+          - host
+          - virtual_system
+          - command
+          - admin
+          - client
+          - result
+          - configuration_path
+          - before_change_detail
+          - after_change_detail
+          - sequence_number
+          - action_flags
+          - device_group_hierarchy_level_1
+          - device_group_hierarchy_level_2
+          - device_group_hierarchy_level_3
+          - device_group_hierarchy_level_4
+          - virtual_system_name
+          - device_name
+      name: Palo Alto Config
+      fields:
+        - name: datatype
+          value: "'pan_config'"
+Syslog Datatypes:
+  lib: cribl
+  minRawLength: 256
+  description: Datatype rules for Syslogs formats
+  tags: syslog
+  rules:
+    - condition: /^<(?<priority>\d{1,3})>(?!\d{1,3}\s)((?<timestamp>(\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})|(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?([+-]\d{2}:\d{2}|Z)))\s+((?<hostname>[\w.-]+)\s+((?<appname>[\w.-]+)(\[(?<procid>\d+)\])?:\s)?)?)?(?<message>.+)/m.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: regex
+        srcField: _raw
+        iterations: 100
+        overwrite: false
+        regex: /^<(?<priority>\d{1,3})>(?!\d{1,3}\s)((?<timestamp>(\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})|(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?([+-]\d{2}:\d{2}|Z)))\s+((?<hostname>[\w.-]+)\s+((?<appname>[\w.-]+)(\[(?<procid>\d+)\])?:\s)?)?)?(?<message>.+)$/
+      name: RFC3164
+      fields:
+        - name: datatype
+          value: "'syslog'"
+    - condition: >
+        /^<(?<priority>\d{1,3})>(?<version>\d{1,3})\s+(?<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:.\d{1,6})?(?:Z|[+\-\d:]+))\s+(?<hostname>[\w.-]+)\s+(?<appname>[\w.-]+)\s+(?<procid>[\w.-]+)\s+(?<msgid>[\w.-]+)\s+(?<structured_data>-|\[.*\])\s?(?<message>.*)/m.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 4096
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\n\r]+/
+      parser:
+        mode: extract
+        type: regex
+        srcField: _raw
+        iterations: 100
+        overwrite: false
+        regex: /^<(?<priority>\d{1,3})>(?<version>\d{1,3})\s+(?<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:.\d{1,6})?(?:Z|[+\-\d:]+))\s+(?<hostname>[\w.-]+)\s+(?<appname>[\w.-]+)\s+(?<procid>[\w.-]+)\s+(?<msgid>[\w.-]+)\s+(?<structured_data>-|\[.*\])\s?(?<message>.*)$/
+      name: RFC5424
+      fields:
+        - name: datatype
+          value: "'syslog'"
+CSV Datatypes:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for data in CSV format
+  tags: csv
+  rules:
+    - condition: source.endsWith('csv') || source.endsWith('csv.gz') || cribl_archive_source.endsWith('csv')
+      type: csv
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: utc
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024000
+      disabled: false
+      parserEnabled: false
+      delimiter: ","
+      quoteChar: '"'
+      escapeChar: '"'
+      name: csv
+      fields:
+        - name: datatype
+          value: "'csv'"
+Zeek Datatypes:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for Zeek (formerly Bro) logs
+  tags: bro
+  rules:
+    - condition: /^\d{10}\.\d{6}(?:\t+[^\t]+)+/.test(_raw)
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: format
+        length: 150
+        format: "%s.%f"
+      timestampTimezone: utc
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 4096
+      disabled: false
+      parserEnabled: true
+      eventBreakerRegex: /[\r\n]+(?=\d{10}\.\d{6})/m
+      parser:
+        mode: extract
+        type: csv
+        srcField: _raw
+      name: Zeek
+      fields:
+        - name: datatype
+          value: "'zeek'"
+Cribl Search:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for new line delimited json data
+  tags: cribl,ndjson
+  rules:
+    - condition: "true"
+      type: json
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024000
+      disabled: false
+      parserEnabled: false
+      eventBreakerRegex: /[\n\r]+/
+      name: ndjson
+      fields:
+        - name: datatype
+          value: "'cribl_json'"
+Cribl Search _raw Data:
+  minRawLength: 256
+  lib: cribl
+  description: Datatype rules for new line delimited json data, when the event contains the actual raw data in a field named _raw.
+  tags: cribl,ndjson
+  rules:
+    - condition: "true"
+      type: json
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: "0"
+      timestampLatest: +10years
+      maxEventBytes: 1024000
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      eventBreakerRegex: /[\n\r]+/
+      name: ndjson
+      fields:
+        - name: datatype
+          value: "'cribl_json_raw'"

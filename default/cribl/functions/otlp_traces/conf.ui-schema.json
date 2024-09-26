@@ -1,0 +1,13 @@
+{
+  "resourceAttributePrefixes": {
+    "ui:field": "Tags"
+  },
+  "metadataKeys": {
+    "ui:field": "Tags"
+  },
+  "otlpVersion": {
+    "ui:options": {
+      "allowClear": false
+    }
+  }
+}

@@ -1,0 +1,315 @@
+{
+  "outputName": {
+    "ui:widget": "OutputName",
+    "ui:forceRender": true,
+    "ui:options": {
+      "outputType": "rest",
+      "outputProps": {
+        "discovery": "discovery",
+        "collectUrl": "collectUrl",
+        "collectMethod": "collectMethod",
+        "collectRequestParams": "collectRequestParams",
+        "collectRequestHeaders": "collectRequestHeaders",
+        "authentication": "authentication",
+        "username": "username",
+        "password": "password",
+        "loginUrl": "loginUrl",
+        "loginBody": "loginBody",
+        "tokenRespAttribute": "tokenRespAttribute",
+        "authHeaderExpr": "authHeaderExpr",
+        "authRequestHeaders": "authRequestHeaders",
+        "authRequestParams": "authRequestParams",
+        "clientSecretParamName": "clientSecretParamName",
+        "clientSecretParamValue": "clientSecretParamValue",
+        "textSecret": "textSecret",
+        "subject": "subject",
+        "scopes": "scopes",
+        "serviceAccountCredentials": "serviceAccountCredentials",
+        "enableDiscoverCode": "enableDiscoverCode",
+        "formatResultCode": "formatResultCode",
+        "hmacFunctionId": "hmacFunctionId"
+      }
+    }
+  },
+  "discovery" : {
+    "discoverType": {
+      "ui:options": {
+        "uiEnumOptions": [
+          { "value": "http", "label": "HTTP Request", "description": "Make a REST call to dynamically get Discover results" },
+          { "value": "json", "label": "JSON Response", "description": "Manually define Discover results as a JSON object" },
+          { "value": "list", "label": "Item List", "description": "Enumerate Discover results as a list of strings" },
+          { "value": "none", "label": "None", "description": "No Discover operation required" }
+        ]
+      }
+    },
+    "discoverUrl": {
+      "ui:widget": "JsInput", "ui:placeholder": "Enter URL expression for the discover operation", "ui:options": { "columnWidth": "60%" }
+    },
+    "discoverRequestParams": {
+      "ui:field": "Table",
+      "items": {
+        "name": { "ui:placeholder": "Enter parameter name", "ui:options": { "columnWidth": "40%" } },
+        "value": { "ui:widget": "JsInput", "ui:placeholder": "Enter parameter value expression", "ui:options": { "columnWidth": "60%" } }
+      }
+    },
+    "discoverRequestHeaders": {
+      "ui:field": "Table",
+      "items": {
+        "name": { "ui:placeholder": "Enter header name", "ui:options": { "columnWidth": "40%" } },
+        "value": { "ui:widget": "JsInput", "ui:placeholder": "Enter header value", "ui:options": { "columnWidth": "60%" } }
+      }
+    },
+    "itemList": {
+      "ui:field": "Tags",
+      "ui:placeholder": "Enter list of items to return from the discover task.",
+      "ui:options": {
+        "separator": ","
+      }
+    },
+    "manualDiscoverResult": {
+      "ui:widget": "TextareaUpload",
+      "ui:options": {
+        "rows": 5
+      }
+    },
+    "enableDiscoverCode" : {},
+    "formatResultCode": {
+      "ui:widget": "JsInput",
+      "ui:options": {
+        "autoheight": true,
+        "numLines": 10,
+        "scrollbar": {
+          "horizontal": "visible"
+        }
+      },
+      "ui:placeholder": "const count = +__e['count']; // Expecting __e = { \"count\" : 12345 }\nconst pageSize=100000;\nconst numPages=count/pageSize;\n// Add a task for each page of data to be retrieved\nconst collectTasks=[];\nfor (let i = 0; i < numPages; i++) {\n  collectTasks.push({ offset: i*pageSize, limit: pageSize, count }) // `${offset}` and `${limit}` can be referenced in collect request params\n}\n// Add tasks array to the result object - Discover data field should be set to 'tasks' and will execute one collect task per item in tasks array\n__e['tasks'] = collectTasks;"
+    }
+  },
+  "collectUrl": {
+    "ui:widget": "JsInput", "ui:placeholder": "Enter URL expression for the collect operation", "ui:options": { "columnWidth": "60%" }
+  },
+  "collectRequestParams": {
+    "ui:field": "Table",
+    "items": {
+      "name": { "ui:placeholder": "Enter parameter name", "ui:options": { "columnWidth": "40%" } },
+      "value": { "ui:widget": "JsInput", "ui:placeholder": "Enter parameter value expression", "ui:options": { "columnWidth": "60%" } }
+    }
+  },
+  "collectRequestHeaders": {
+    "ui:field": "Table",
+    "items": {
+      "name": { "ui:placeholder": "Enter header name", "ui:options": { "columnWidth": "40%" } },
+      "value": { "ui:widget": "JsInput", "ui:placeholder": "Enter header value", "ui:options": { "columnWidth": "60%" } }
+    }
+  },
+  "pagination": {
+    "attribute": {
+      "ui:field": "Tags"
+    },
+    "offsetField": { "ui:placeholder": "offset", "ui:options": { "inline": true, "width": "40%" } },
+    "offset": { "ui:placeholder": "Optional starting offset", "ui:options": { "inline": true, "width": "25%" } },
+    "pageField": { "ui:placeholder": "page", "ui:options": { "inline": true, "width": "40%" } },
+    "page": { "ui:placeholder": "Optional starting page", "ui:options": { "inline": true, "width": "25%" } },
+    "offsetSpacer": { "ui:options": { "inline": true, "width": "35%" } },
+    "limitField": { "ui:placeholder": "limit", "ui:options": { "inline": true, "width": "40%", "inlineStyle": { "padding-left": "0" } } },
+    "limit": { "ui:options": { "inline": true, "width": "25%" } },
+    "sizeField": { "ui:placeholder": "size", "ui:options": { "inline": true, "width": "40%", "inlineStyle": { "padding-left": "0" } } },
+    "size": { "ui:options": { "inline": true, "width": "25%" } },
+    "limitSpacer": { "ui:options": { "inline": true, "width": "35%" } },
+    "totalPageField": { "ui:placeholder": "total-pages", "ui:options": { "width": "40%" } },
+    "totalRecordField": { "ui:placeholder": "total-count", "ui:options": { "width": "40%" } },
+    "maxPages": { "ui:options": { "inline": true, "width": "15%" } },
+    "zeroIndexed": { "ui:options": { "inline": true, "labelInline": false, "width": "35%" } },
+    "lastPageExpr": {
+      "ui:widget": "JsInput", "ui:placeholder": "Enter optional expression to identify last page of input", "ui:options": { "columnWidth": "60%" }
+    }
+  },
+  "authentication": {
+    "ui:options": {
+      "uiEnumOptions": [
+        {"value": "none", "label": "None"},
+        {"value": "basic", "label": "Basic"},
+        {"value": "basicSecret", "label": "Basic (credentials secret)"},
+        {"value": "login", "label": "Login"},
+        {"value": "loginSecret", "label": "Login (credentials secret)"},
+        {"value": "oauth", "label": "OAuth"},
+        {"value": "oauthSecret", "label": "OAuth (text secret)"},
+        {"value": "google_oauth", "label": "Google service account OAuth"},
+        {"value": "google_oauthSecret", "label": "Google service account OAuth (text secret)"},
+        {"value": "hmac", "label": "HMAC"}
+      ]
+    }
+  },
+  "loginUrl": {
+    "ui:widget": "JsInput", "ui:placeholder": "Enter URL expression for the login url", "ui:options": { "columnWidth": "60%" }
+  },
+  "credentialsSecret": {
+    "ui:widget": "ApiLookupWithCreate",
+    "ui:options": {
+      "createType": "secret",
+      "typeName": "credentials secret",
+      "url": "/system/secrets?type=credentials",
+      "createUrl": "/settings/secrets",
+      "valueProp": "id",
+      "secretType": "credentials"
+    }
+  },
+  "clientSecretParamValue": {
+    "ui:placeholder": "Enter OAuth Client Credentials client secret value"
+  },
+  "textSecret": {
+    "ui:widget": "ApiLookupWithCreate",
+    "ui:options": {
+      "createType": "secret",
+      "typeName": "text secret",
+      "url": "/system/secrets?type=text",
+      "createUrl": "/settings/secrets",
+      "valueProp": "id",
+      "secretType": "text"
+    }
+  },
+  "loginBody": {
+    "ui:widget": "JsInput",
+    "ui:options": {
+      "rows": 1
+    }
+  },
+  "authRequestParams": {
+    "ui:field": "Table",
+    "items": {
+      "name": { "ui:placeholder": "Enter parameter name", "ui:options": { "columnWidth": "40%" } },
+      "value": { "ui:widget": "JsInput", "ui:placeholder": "Enter parameter value expression", "ui:options": { "columnWidth": "60%" } }
+    }
+  },
+  "authRequestHeaders": {
+    "ui:field": "Table",
+    "items": {
+      "name": { "ui:placeholder": "Enter header name", "ui:options": { "columnWidth": "40%" } },
+      "value": { "ui:widget": "JsInput", "ui:placeholder": "Enter header value", "ui:options": { "columnWidth": "60%" } }
+    }
+  },
+  "useRoundRobinDns": { "ui:options": { "titleInlineStyle": { "minWidth": 240 }}},
+  "disableTimeFilter": { "ui:options": { "titleInlineStyle": { "minWidth": 240 }}},
+  "decodeUrl": { "ui:options": { "titleInlineStyle": { "minWidth": 240 }}},
+  "rejectUnauthorized": { "ui:options": { "titleInlineStyle": { "minWidth": 240 }}},
+  "captureHeaders": { "ui:options": { "titleInlineStyle": { "minWidth": 240 }}},
+  "safeHeaders": { "ui:field": "Tags", "ui:placeholder": "Header names" },
+  "retryRules": {
+    "ui:forceRender": true,
+    "codes": {
+      "ui:field": "Tags",
+      "ui:options": {
+        "separator": ","
+      }
+    },
+    "interval": { "ui:widget": "TimeNumberInput", "ui:options": { "inline": true, "unit": "ms" } },
+    "multiplier": { "ui:options": { "inline": true } },
+    "limit": { "ui:options": { "inline": true } },
+    "maxIntervalMs": { "ui:widget": "TimeNumberInput", "ui:options": { "inline": true, "unit": "ms" } },
+    "enableHeader": { "ui:options": { "inline": true } },
+    "retryConnectTimeout": { "ui:options": { "inline": true }},
+    "retryConnectReset": { "ui:options": { "inline": true }}
+  },
+  "serviceAccountCredentials": {
+    "ui:widget": "TextareaUpload",
+    "rows": 20,
+    "ui:forceRender": true
+  },
+  "hmacFunctionId": {
+    "ui:widget": "ApiLookupWithCreate",
+    "ui:forceRender": true,
+    "ui:placeholder": "Select one",
+    "ui:options": {
+      "url": "/lib/hmac-functions",
+      "createUrl": "/lib/hmac-functions",
+      "valueProp": "id",
+      "labelProp": "id",
+      "createType": "hmacFunction",
+      "createLabel": "HMAC Function",
+      "inlineStyle": {
+          "marginTop": "20px"
+      }
+    }
+  },
+  "ui:options": {
+    "groups": {
+      "discover": {
+        "title": "Discover",
+        "collapsed": true,
+        "properties": [
+          "discovery",
+          "discoverType",
+          "discoverUrl",
+          "discoverMethod",
+          "discoverVerb",
+          "discoverRequestParams",
+          "discoverBody",
+          "discoverRequestHeaders",
+          "discoverDataField",
+          "manualDiscoverResult",
+          "discoverDataField",
+          "itemList",
+          "enableDiscoverCode",
+          "formatResultCode"
+        ]
+      },
+      "collect": {
+        "title": "Collect",
+        "collapsed": false,
+        "properties": [
+          "collectUrl",
+          "collectMethod",
+          "collectVerb",
+          "collectRequestParams",
+          "collectBody",
+          "collectRequestHeaders",
+          "pagination"
+        ]
+      },
+      "authentication": {
+        "title": "Authentication",
+        "collapsed": true,
+        "properties": [
+          "authentication",
+          "loginUrl",
+          "authType",
+          "credentialsSecret",
+          "username",
+          "password",
+          "loginBody",
+          "clientSecretParamName",
+          "clientSecretParamValue",
+          "textSecret",
+          "authRequestParams",
+          "tokenRespAttribute",
+          "authHeaderKey",
+          "authRequestHeaders",
+          "scopes",
+          "serviceAccountCredentials",
+          "subject",
+          "authHeaderExpr",
+          "hmacFunctionId"
+        ]
+      },
+      "retries": {
+        "title": "Retries",
+        "collapsed": true,
+        "properties": [
+          "retryRules"
+        ]
+      }
+    }
+  },
+  "__scheduling": {
+    "ui:options": {
+      "groups": {
+        "stateTracking": {
+          "title": "State Tracking",
+          "collapsed": true,
+          "order": -1,
+          "properties": ["stateTracking"]
+        }
+      }
+    }
+  }
+}

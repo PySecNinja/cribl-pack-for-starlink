@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "title": "",
+  "additionalProperties": false,
+  "required": ["eventWindowId", "registeredFunctions"],
+  "properties": {
+    "eventWindowId": {
+      "title": "Unique Identifier",
+      "description": "Identifies the unique ID, used for a event window",
+      "type": "number"
+    },
+    "registeredFunctions": {
+      "title": "Registered Window Functions",
+      "description": "All window functions, tracked by this event window",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "tailEventCount": {
+      "title": "Tail Event Count",
+      "description": "Number of events to keep before the current event in the window",
+      "type": "number",
+      "default": 0
+    },
+    "headEventCount": {
+      "title": "Head Event Count",
+      "description": "Number of events to keep after the current event in the window",
+      "type": "number",
+      "default": 0
+    }
+  }
+}

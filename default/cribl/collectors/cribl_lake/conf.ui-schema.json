@@ -1,0 +1,13 @@
+{
+  "dataset": {
+    "ui:placeholder": "Select lake dataset",
+    "ui:widget": "ApiLookup",
+    "ui:options": {
+      "url": "/products/lake/lakes/default/datasets",
+      "ignoreContext": true,
+      "valueProp": "id",
+      "labelProp": "id",
+      "createType": "lakeDataset"
+    }
+  }
+}

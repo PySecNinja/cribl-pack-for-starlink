@@ -1,0 +1,26 @@
+cribl_leader:
+  description: Provider for searching Cribl internal logs
+  type: cribl_leader
+cribl_edge:
+  description: Provider for searching Cribl Edge fleets
+  type: cribl_edge
+S3:
+  description: Provider for searching Amazon S3 data
+  reuseConnections: true
+  rejectUnauthorized: true
+  signatureVersion: v4
+  region: us-west-2
+  type: s3
+cribl_s3sample_provider:
+  description: Provider for searching Amazon S3 sample data
+  enableAssumeRole: true
+  reuseConnections: true
+  rejectUnauthorized: true
+  signatureVersion: v4
+  region: us-west-2
+  type: s3
+  assumeRoleArn: arn:aws:iam::498946618345:role/cribl-search-example-read
+  assumeRoleExternalId: CriblGOAT
+cribl_meta:
+  type: cribl_meta
+  description: Meta dataset provider

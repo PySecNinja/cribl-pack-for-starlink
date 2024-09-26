@@ -1,0 +1,100 @@
+inputs:
+  in_system_metrics:
+    disabled: false
+    sendToRoutes: false
+    type: system_metrics
+    persistence:
+      enable: true
+      maxDataSize: 100MB
+    connections:
+      - output: devnull
+  in_system_state:
+    disabled: false
+    sendToRoutes: false
+    type: system_state
+    persistence:
+      enable: true
+      maxDataSize: 100MB
+    connections:
+      - output: devnull
+  in_windows_metrics:
+    disabled: false
+    sendToRoutes: false
+    type: windows_metrics
+    persistence:
+      enable: true
+      maxDataSize: 100MB
+    connections:
+      - output: devnull
+  in_kube_metrics:
+    disabled: true
+    sendToRoutes: false
+    type: kube_metrics
+  in_kube_logs:
+    disabled: true
+    sendToRoutes: false
+    type: kube_logs
+  in_kube_events:
+    disabled: true
+    sendToRoutes: false
+    type: kube_events
+  in_file_auto:
+    type: file
+    disabled: true
+    sendToRoutes: false
+    mode: auto
+    includeUnidentifiableBinary: false
+  in_file_varlog:
+    type: file
+    disabled: true
+    sendToRoutes: false
+    mode: manual
+    interval: 10
+    path: /var/log/
+    includeUnidentifiableBinary: false
+    filenames:
+      - "!*.journal*"
+      - "*"
+  in_journal_local:
+    disabled: true
+    sendToRoutes: false
+    path: $CRIBL_EDGE_FS_ROOT/var/log/journal/$MACHINE_ID
+    journals:
+      - "system"
+    type: journal_files
+  in_appscope:
+    disabled: true
+    sendToRoutes: true
+    tags: []
+    ipWhitelistRegex: /.*/
+    maxActiveCxn: 1000
+    enableProxyHeader: false
+    staleChannelFlushMs: 10000
+    enableUnixPath: true
+    authType: manual
+    tls:
+      disabled: true
+    host: 0.0.0.0
+    port: 10090
+    unixSocketPath: $CRIBL_HOME/state/appscope.sock
+    unixSocketPerms: "777"
+    type: appscope
+    extractDir: "$TEMP/appscope"
+  CriblLogs:
+    type: cribl
+    disabled: true
+  CriblMetrics:
+    type: criblmetrics
+    disabled: true
+    pipeline: cribl_metrics_rollup
+  in_win_event_logs:
+    disabled: true
+    sendToRoutes: false
+    pqEnabled: false
+    streamtags: []
+    logNames:
+      - Security
+    readMode: oldest
+    interval: 10
+    batchSize: 500
+    type: win_event_logs

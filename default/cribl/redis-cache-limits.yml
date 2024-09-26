@@ -1,0 +1,6 @@
+keyTTLSecs: 600
+maxNumKeys: 0
+maxCacheSize: 0
+servicePeriodSecs: 30
+enableServerAssist: false
+clientTrackingMechanism: default

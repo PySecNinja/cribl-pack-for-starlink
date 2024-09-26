@@ -1,0 +1,12 @@
+{
+  "aggregations": {
+    "items": {
+      "ui:widget": "AggInput",
+      "ui:placeholder": "Enter an aggregate function"
+    }
+  },
+  "groupBys": {
+    "ui:field": "Tags",
+    "ui:placeholder": "One or more fields (or wildcard expression) to group by. Optional."
+  }
+}

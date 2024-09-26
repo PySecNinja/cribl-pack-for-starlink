@@ -1,0 +1,28 @@
+{
+  "primitive_BOOLEAN": {
+    "type": "BOOLEAN"
+  },
+  "primitive_INT32": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true
+  },
+  "primitive_INT64": {
+    "type": "INT",
+    "bitWidth": 64,
+    "signed": true
+  },
+  "primitive_FLOAT": {
+    "type": "FLOAT"
+  },
+  "primitive_DOUBLE": {
+    "type": "DOUBLE"
+  },
+  "primitive_BYTE_ARRAY": {
+    "type": "BYTE_ARRAY"
+  },
+  "primitive_FIXED_LEN_BYTE_ARRAY": {
+    "type": "FIXED_LEN_BYTE_ARRAY",
+    "typeLength": 10
+  }
+}

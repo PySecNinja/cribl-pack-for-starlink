@@ -1,0 +1,6 @@
+[ {"required_INT32":42},   {"required_INT32":42,"repeated_INT32":3},
+  {"required_INT32":42,"optional_INT32":4},
+  {"required_INT32":6,"optional_INT32":5, "repeated_INT32": [42,420,4200,42000]},
+  {"required_INT32":17,"optional_INT32":77, "repeated_INT32": 42, "repeated_INT32":  123 },
+  {"required_INT32":1,"optional_INT32":null}
+]

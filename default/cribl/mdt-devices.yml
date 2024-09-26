@@ -1,0 +1,8 @@
+generic-device:
+  name: Generic MDT device
+  description: Any MDT enabled device sending data in self-describing format
+  protobuf:
+    libraryId: mdt-generic-device
+    typeMappings:
+      dialOut: mdt_dialout.gRPCMdtDialout
+      telemetry: telemetry.Telemetry
