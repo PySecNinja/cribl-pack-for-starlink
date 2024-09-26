@@ -1,0 +1,75 @@
+{
+  "logical_STRING": {
+    "type": "STRING"
+  },
+  "logical_ENUM": {
+    "type": "ENUM"
+  },
+  "logical_DECIMAL": {
+    "type": "DECIMAL",
+    "precision": 5,
+    "scale": 2
+  },
+  "logical_DATE": {
+    "type": "DATE"
+  },
+  "logical_TIME_MILLIS": {
+    "type": "TIME",
+    "unit": "MILLIS",
+    "adjustedToUtc": true
+  },
+  "logical_TIME_MICROS": {
+    "type": "TIME",
+    "unit": "MICROS",
+    "adjustedToUtc": true
+  },
+  "logical_UINT_8": {
+    "type": "INT",
+    "bitWidth": 8,
+    "signed": false
+  },
+  "logical_UINT_16": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": false
+  },
+  "logical_UINT_32": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": false
+  },
+  "logical_UINT_64": {
+    "type": "INT",
+    "bitWidth": 64,
+    "signed": false
+  },
+  "logical_INT_8": {
+    "type": "INT",
+    "bitWidth": 8,
+    "signed": true
+  },
+  "logical_INT_16": {
+    "type": "INT",
+    "bitWidth": 16,
+    "signed": true
+  },
+  "logical_INT_32": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true
+  },
+  "logical_INT_64": {
+    "type": "INT",
+    "bitWidth": 64,
+    "signed": true
+  },
+  "logical_JSON": {
+    "type": "JSON"
+  },
+  "logical_BSON": {
+    "type": "BSON"
+  },
+  "logical_INTERVAL": {
+    "type": "INTERVAL"
+  }
+}

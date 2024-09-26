@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "title": "Union Configuration",
+  "additionalProperties": false,
+  "required": ["searchJobId", "stageIds"],
+  "properties": {
+    "searchJobId": {
+      "title": "Search Job Id",
+      "description": "The id for this search job.",
+      "type": "string"
+    },
+    "stageIds": {
+      "title": "Stage Ids",
+      "description": "The stages we are unioning with.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

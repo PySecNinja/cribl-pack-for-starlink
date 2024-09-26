@@ -1,0 +1,18 @@
+Kubernetes Logs:
+  lib: cribl
+  description: Event breaking rules for the Kubernetes Logs source when timestamps are enabled
+  rules:
+    - condition: "true"
+      type: regex
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 32
+      timestampTimezone: local
+      timestampEarliest: -420weeks
+      timestampLatest: +1week
+      maxEventBytes: 51200
+      disabled: false
+      eventBreakerRegex: /[\n\r]+(?=\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,9}Z\s(?!\s))/
+      name: regex
+  tags: edge,kubernetes

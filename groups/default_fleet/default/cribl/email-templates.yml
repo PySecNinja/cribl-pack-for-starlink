@@ -1,0 +1,173 @@
+text: |
+  ${body}
+
+  ${workspace ? 'Workspace: ' + workspace + '\n' : ''}${organization ? 'Organization: ' + organization + '\n' : ''}Notification ID: ${cribl_notification}\nTime of event: ${timestamp}\n
+html: |
+  <!doctype html>
+  <html>
+     <head>
+        <meta charset="UTF-8">
+        <title>Cribl</title>
+        <style>
+          p {
+            white-space: pre-line;
+          }
+        </style>
+     </head>
+     <body bgcolor="#F2F5F8">
+        <table width="600" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="">
+           <tbody>
+              <tr>
+                 <td style="padding: 12px 0px 12px 24px"><img src="cid:cribl_logo" width="auto" height="40px" alt=""/></td>
+              </tr>
+              <tr bgcolor="#FFFFFF" style="border-radius: 6px;">
+                 <td>
+                    <table width="600" border="0" cellspacing="0" cellpadding="0" style="border-radius: 6px;">
+                       <tbody>
+                          <tr style="border-radius: 6px;">
+                             <td style="border-radius: 6px;">
+                                <br>
+                                <p class="paragraph" style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 14px; padding: 0px 24px 0px 24px; line-height: 22px; 5px; color: #262626" >${body}</p>
+                                ${dataTable}
+                                <p class="paragraph" style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 14px; padding: 0px 24px 0px 24px; line-height: 22px; 5px; color: #262626" >  
+                                  ${workspace ? 'Workspace: ' + workspace + '<br>' : ''}
+                                  ${organization ? 'Organization: ' + organization + '<br>' : ''}
+                                  Notification ID: ${cribl_notification}<br>
+                                  Time of event: ${timestamp}<br>
+                                </p>
+                                <table width="600" border="0" cellspacing="24" cellpadding="0" >
+                                   <tbody>
+                                      <tr>
+                                         <td><a href="https://docs.cribl.io/" style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 14px; line-height: 22px;  color: #1890FF; text-decoration:none;">Learn about Notifications</a></td>
+                                      </tr>
+                                   </tbody>
+                                </table>
+                                </p>
+                             </td>
+                          </tr>
+                       </tbody>
+                    </table>
+                 </td>
+              </tr>
+              <tr>
+                 <td>
+                    <table width="600" border="0" cellspacing="0" cellpadding="0">
+                       <tbody>
+                          <tr>
+                             <td style="padding: 12px 0px 12px 24px"><img src="cid:cribl_logo" width="auto" height="20px" alt=""/></td>
+                             <td align="center" valign="middle"><a href="https://cribl.io/" target="_blank" style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 10px; line-height: 22px;  color: #373737; text-decoration:none;">Company Home</a></td>
+                             <td align="center" valign="middle"style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 10px; line-height: 22px;  color: #373737;">|</td>
+                             <td align="center" valign="middle"><a href="https://docs.cribl.io/" target="_blank" style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 10px; line-height: 22px;  color: #373737; text-decoration:none;">Documentation</a></td>
+                             <td align="center" valign="middle"style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 10px; line-height: 22px;  color: #373737;">|</td>
+                             <td align="center" valign="middle"><a href="https://cribl.io/support/" target="_blank" style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 10px; line-height: 22px;  color: #373737; text-decoration:none;">Support</a></td>
+                             <td align="center" valign="middle" style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 10px; line-height: 22px;  color: #373737;">|</td>
+                             <td align="center" valign="middle"><a href="https://community.cribl.io/discussions/" target="_blank" style="font-family: Helvetica, Arial, 'sans-serif'; font-size: 10px; line-height: 22px;  color: #373737; text-decoration:none;">Cribl Curious</a></td>
+                          </tr>
+                       </tbody>
+                    </table>
+                 </td>
+              </tr>
+           </tbody>
+        </table>
+     </body>
+  </html>
+result: |
+  <table>
+   <tbody>
+      <tr>
+         <td>
+         <div>
+            <!--[if mso | IE]><table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+            <div style="margin:0px auto;max-width:600px;">
+               <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+               <tbody>
+                  <tr>
+                     <td style="direction:ltr;font-size:0px;padding:4px 0;text-align:left;">
+                     <!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="" style="vertical-align:top;width:160px;" ><![endif]-->
+                     <div class="mj-outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top; width: 140px !important; max-width: 160px;">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+                           <tbody>
+                           <tr>
+                              <td align="center" vertical-align="middle" style="font-size:0px;padding:4px 0;word-break:break-word;">
+                                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
+                                 <tr>
+                                    <td align="center" bgcolor="#1890FF" role="presentation" style="border:none;border-radius:3px;cursor:auto;mso-padding-alt:8px 16px;background:#1890FF;" valign="middle">
+                                       <p style="display:inline-block;background:#1890FF;color:white;font-family:Helvetica;font-size:14px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:8px 16px;mso-padding-alt:0px;border-radius:3px;">
+                                       <a href="${resultsUrl}" style="font-family: Helvetica, Arial, 'sans-serif'; color: #FFFFFF; text-decoration:none; padding: 0; display: inline-block;">View All Events</a>
+                                       </p>
+                                    </td>
+                                 </tr>
+                                 </table>
+                              </td>
+                           </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <!--[if mso | IE]></td><td class="" style="vertical-align:top;width:120px;" ><![endif]-->
+                     <div class="mj-outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%; width: 110px !important; max-width: 120px;">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+                           <tbody>
+                           <tr>
+                              <td align="center" vertical-align="middle" style="font-size:0px;padding:4px 0;word-break:break-word;">
+                                 <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="border-collapse:separate;line-height:100%;">
+                                 <tr>
+                                    <td align="center" bgcolor="#FFFFFF" role="presentation" style="border:solid 1px #d9d9d9
+                                                                                                   ;border-radius:3px;cursor:auto;mso-padding-alt:8px 16px;background:#FFFFFF;" valign="middle">
+                                       <p style="display:inline-block;background:#FFFFFF;color:#000000;font-family:Helvetica;font-size:14px;font-weight:normal;line-height:120%;margin:0;text-decoration:none;text-transform:none;padding:8px 16px;mso-padding-alt:0px;border-radius:3px;">
+                                       <a href="https://www.cribl.cloud" style="font-family: Helvetica, Arial, 'sans-serif'; color: #000000; text-decoration:none; padding: 0; display: inline-block;">Go to Cribl</a>
+                                       </p>
+                                    </td>
+                                 </tr>
+                                 </table>
+                              </td>
+                           </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <!--[if mso | IE]></td></tr></table><![endif]-->
+                     </td>
+                  </tr>
+               </tbody>
+               </table>
+            </div>
+            <!--[if mso | IE]></td></tr></table><table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600" ><tr><td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+            <div style="margin:0px auto;max-width:600px;">
+               <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="width:100%;">
+               <tbody>
+                  <tr>
+                     <td style="direction:ltr;font-size:0px;padding:8px 0;text-align:center;">
+                     <!--[if mso | IE]><table role="presentation" border="0" cellpadding="0" cellspacing="0"><tr><td class="" style="vertical-align:top;width:600px;" ><![endif]-->
+                     <div class="mj-outlook-group-fix" style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top; width: 100% !important; max-width: 100%;">
+                        <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="vertical-align:top;" width="100%">
+                           <tbody>
+                           <tr>
+                              <td align="left" style="font-size:0px;padding:8px;word-break:break-word;">
+                                 <table cellpadding="0" cellspacing="0" width="100%" border="0" style="color:#000000;font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:12px;line-height:22px;table-layout:fixed;width:100%;border:none; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                 ${table_header}
+                                 ${table_rows}
+                                 </table>
+                              </td>
+                           </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                     <!--[if mso | IE]></td></tr></table><![endif]-->
+                     </td>
+                  </tr>
+               </tbody>
+               </table>
+            </div>
+         </div>
+         </td>
+      </tr>
+   </tbody>
+  </table>
+attachments:
+  - filename: __cribl_logo.png
+    cid: cribl_logo
+    contentType: image/png
+    encoding: base64
+    content: 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
+
+
+

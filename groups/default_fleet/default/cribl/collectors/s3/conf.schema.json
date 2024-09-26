@@ -1,0 +1,271 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["bucket"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["s3"],
+      "flag": {
+        "prefix": "collector",
+        "modes": ["single", "worker"]
+      }
+    },
+    "outputName": {
+      "type": "string",
+      "title": "Auto-populate from",
+      "description": "The name of the predefined Destination that will be used to auto-populate collector settings."
+    },
+    "bucket": {
+      "type": "string",
+      "title": "S3 bucket",
+      "minLength": 1,
+      "description": "S3 Bucket from which to collect data.",
+      "jsExpression": "warning",
+      "s3BucketName": true
+    },
+    "parquetChunkSizeMB": {
+      "type": "number",
+      "title": "Max Parquet chunk size (MB)",
+      "description": "Maximum file size for each Parquet chunk.",
+      "default": 5,
+      "maximum": 100,
+      "minimum": 1
+    },
+    "parquetChunkDownloadTimeout": {
+      "type": "number",
+      "title": "Parquet chunk download timeout (seconds)",
+      "description": "The maximum time allowed for downloading a Parquet chunk. Processing will abort if a chunk cannot be downloaded within the time specified.",
+      "default": 600,
+      "maximum": 3600,
+      "minimum": 1
+    },
+    "region": {
+      "type": "string",
+      "title": "Region",
+      "description": "Region from which to retrieve data.",
+      "enum": [
+        "us-east-2",
+        "us-east-1",
+        "us-west-1",
+        "us-west-2",
+        "af-south-1",
+        "ap-east-1",
+        "ap-south-2",
+        "ap-southeast-3",
+        "ap-southeast-4",
+        "ap-south-1",
+        "ap-northeast-3",
+        "ap-northeast-2",
+        "ap-southeast-1",
+        "ap-southeast-2",
+        "ap-northeast-1",
+        "ca-central-1",
+        "ca-west-1",
+        "eu-central-1",
+        "eu-west-1",
+        "eu-west-2",
+        "eu-south-1",
+        "eu-west-3",
+        "eu-south-2",
+        "eu-north-1",
+        "eu-central-2",
+        "il-central-1",
+        "me-south-1",
+        "me-central-1",
+        "sa-east-1",
+        "us-gov-east-1",
+        "us-gov-west-1"
+      ],
+      "enumNames": [
+        "US East (Ohio)",
+        "US East (N. Virginia)",
+        "US West (N. California)",
+        "US West (Oregon)",
+        "Africa (Cape Town)",
+        "Asia Pacific (Hong Kong)",
+        "Asia Pacific (Hyderabad)",
+        "Asia Pacific (Jakarta)",
+        "Asia Pacific (Melbourne)",
+        "Asia Pacific (Mumbai)",
+        "Asia Pacific (Osaka)",
+        "Asia Pacific (Seoul)",
+        "Asia Pacific (Singapore)",
+        "Asia Pacific (Sydney)",
+        "Asia Pacific (Tokyo)",
+        "Canada (Central)",
+        "Canada West (Calgary)",
+        "Europe (Frankfurt)",
+        "Europe (Ireland)",
+        "Europe (London)",
+        "Europe (Milan)",
+        "Europe (Paris)",
+        "Europe (Spain)",
+        "Europe (Stockholm)",
+        "Europe (Zurich)",
+        "Israel (Tel Aviv)",
+        "Middle East (Bahrain)",
+        "Middle East (UAE)",
+        "South America (São Paulo)",
+        "AWS GovCloud (US-East)",
+        "AWS GovCloud (US-West)"
+      ]
+    },
+    "path": {
+      "type": "string",
+      "title": "Path",
+      "description": "Directory where data will be collected. Templating (such as 'myDir/${datacenter}/${host}/${app}/') and time-based tokens (such as 'myOtherDir/${_time:%Y}/${_time:%m}/${_time:%d}/') are supported. Can be a constant (enclosed in quotes) or a JavaScript expression.",
+      "minLength": 1,
+      "jsExpression": "warning",
+      "templated": true
+    },
+    "extractors": {
+      "type": "array",
+      "uniqueFields": ["key"],
+      "title": "Path extractors",
+      "additionalProperties": false,
+      "items": {
+        "type": "object",
+        "required": ["key", "expression"],
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Token",
+            "description": "A token from the template path, e.g.: epoch"
+          },
+          "expression": {
+            "type": "string",
+            "title": "Extractor expression",
+            "description": "JS expression that receives token under \"value\" variable, and evaluates to populate event fields, e.g.: {date: new Date(+value*1000)}"
+          }
+        }
+      },
+      "description": "Allows using template tokens as context for expressions that enrich discovery results. E.g.: given a template /path/${epoch}, an extractor under key \"epoch\" with an expression {date: new Date(+value*1000)}, will enrich discovery results with a human readable \"date\" field"
+    },
+    "awsAuthenticationMethod": {
+      "type": "string",
+      "title": "Authentication method",
+      "description": "AWS authentication method. Choose Auto to use IAM roles.",
+      "default": "auto",
+      "enum": ["auto", "manual", "secret"],
+      "enumNames": ["Auto", "Manual", "Secret Key pair"]
+    },
+    "endpoint": {
+      "type": "string",
+      "title": "Endpoint",
+      "description": "Must point to an S3-compatible endpoint. If empty, defaults to an AWS region-specific endpoint. "
+    },
+    "signatureVersion": {
+      "type": "string",
+      "title": "Signature version",
+      "description": "Signature version to use for signing S3 requests",
+      "default": "v4",
+      "enum": ["v2", "v4"]
+    },
+    "enableAssumeRole": {
+      "type":"boolean",
+      "title": "Enable Assume Role",
+      "description": "Use AssumeRole credentials",
+      "default": false
+    },
+    "assumeRoleArn": {
+      "type":"string",
+      "title": "AssumeRole ARN",
+      "description": "Amazon Resource Name (ARN) of the role to assume",
+      "pattern": "^arn:",
+      "minLength": 20
+    },
+    "assumeRoleExternalId": {
+      "type": "string",
+      "title": "External ID",
+      "description": "External ID to use when assuming role"
+    },
+    "durationSeconds": {
+      "type": "number",
+      "title": "Duration (seconds)",
+      "description": "Duration of the Assumed Role's session, in seconds. Minimum is 900 (15 minutes), default is 3600 (1 hour), and maximum is 43200 (12 hours).",
+      "minimum": 900,
+      "maximum": 43200,
+      "default": 3600
+    },
+    "maxBatchSize": {
+      "type": "number",
+      "title": "Max Batch Size (objects)",
+      "description": "Maximum number of metadata objects to batch before recording as results",
+      "minimum": 1,
+      "default": 10
+    },
+    "recurse": {
+      "type": "boolean",
+      "title": "Recursive",
+      "description": "Whether to recurse through subdirectories",
+      "default": true
+    },
+    "reuseConnections": {
+      "type": "boolean",
+      "title": "Reuse Connections",
+      "description": "If toggled on, connections will be reused between requests, which can improve performance",
+      "default": true
+    },
+    "rejectUnauthorized": {
+      "type": "boolean",
+      "title": "Reject Unauthorized Certificates",
+      "description": "If toggled on, certificates that cannot be verified against a valid CA (such as a self-signed certificate) will be rejected",
+      "default": true
+    },
+    "verifyPermissions": {
+      "type": "boolean",
+      "title": "Verify bucket permissions",
+      "description": "Disable if you can access files within the bucket but not the bucket itself. Resolves errors of the form \"discover task initialization failed...error: Forbidden\".",
+      "default": true
+    },
+    "disableTimeFilter": {
+      "type": "boolean",
+      "title": "Disable time filter",
+      "description": "Used to disable collector event time filtering when a date range is specified.",
+      "default": false
+    }
+  },
+  "dependencies": {
+    "awsAuthenticationMethod": {
+      "oneOf": [
+        {
+          "properties": {
+            "awsAuthenticationMethod": {
+              "enum":["auto"]
+            }
+          }
+        },
+        {
+          "properties": {
+            "awsAuthenticationMethod": {"enum": ["manual"]},
+            "awsApiKey": {
+              "type": "string",
+              "title": "Access key",
+              "jsExpression": "warning",
+              "description": "Access key. If not present, will fall back to env.AWS_ACCESS_KEY_ID, or to the metadata endpoint for IAM creds. Optional when running on AWS. This value can be a constant or a JavaScript expression."
+            },
+            "awsSecretKey": {
+              "type": "string",
+              "title": "Secret key",
+              "description": "Secret key. If not present, will fall back to env.AWS_SECRET_ACCESS_KEY, or to the metadata endpoint for IAM creds. Optional when running on AWS. This value can be a constant or a JavaScript expression.",
+              "jsExpression": "warning",
+              "encrypt": true
+            }
+          }
+        },
+        {
+          "properties": {
+            "awsAuthenticationMethod": {"enum": ["secret"]},
+            "awsSecret": {
+              "type": "string",
+              "title": "Secret key pair",
+              "secret": {"target": ["awsApiKey", "awsSecretKey"], "type": "keypair"},
+              "description": "Select (or create) a stored secret that references AWS access key and secret key."
+            }
+          }
+        }
+      ]
+    }
+  }
+}

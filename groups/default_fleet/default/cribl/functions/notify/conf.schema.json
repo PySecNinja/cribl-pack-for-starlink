@@ -1,0 +1,87 @@
+{
+    "type": "object",
+    "title": "Notify Configuration",
+    "additionalProperties": false,
+    "required": ["searchId", "notificationId", "savedQueryId", "group", "searchUrl", "messagesEndpoint", "authToken"],
+    "properties": {
+      "group": {
+        "title": "Group",
+        "description": "Group the notification belongs to",
+        "type": "string",
+        "default": "default"
+      },
+      "notificationId": {
+        "title": "Workspace",
+        "description": "Workspace within the deployment to send the search results to.",
+        "type": "string",
+        "default": "main"
+      },
+      "searchId": {
+        "title": "Search Id",
+        "description": "Id of the search this function is running on.",
+        "type": "string"
+      },
+      "savedQueryId": {
+        "title": "Saved query Id",
+        "description": "Id of the saved query",
+        "type": "string"
+      },
+      "trigger": {
+        "title": "Trigger condition expression",
+        "description": "Js expression that filters events, a greater than 'Trigger Count' events will trigger the notification",
+        "type": "string"
+      },
+      "triggerType": {
+        "type":"string",
+        "title": "Trigger type",
+        "description": "Type of the trigger condition. custom applies a kusto expression over the results, and results count applies a comparison over results count",
+        "enum": ["custom", "resultsCount"],
+        "enumNames": ["Where", "Count of Results"]
+      },
+      "triggerComparator": {
+        "type":"string",
+        "title": "Count comparator",
+        "description": "Operation to be applied over the results count",
+        "enum": [">", "<", "===", "!==", ">=", "<="],
+        "enumNames": ["greater than", "less than", "equals", "not equal to", "greater than or equal to", "less than or equal to"]
+      },
+      "triggerCount": {
+        "title": "Trigger Count",
+        "description": "How many results that match trigger the condition",
+        "type": "number",
+        "default": 0
+      },
+      "resultsLimit": {
+        "title": "Top number results",
+        "description": "Number of results to include in the notification event",
+        "type": "string",
+        "default": 50
+      },
+      "searchUrl": {
+        "title": "Search url",
+        "description": "Url of the search results",
+        "type": "string"
+      },
+      "message": {
+        "title": "Message content",
+        "description": "Message content template, available fields: searchId, resultSet, savedQueryId, notificationId, searchResultsUrl",
+        "type": "string"
+      },
+      "authToken": {
+        "title": "Api Auth Token",
+        "description": "Auth token for sending notification messages",
+        "type":"string"
+      },
+      "messagesEndpoint": {
+        "title": "Messages api endpoint",
+        "description": "System messages api endpoint",
+        "type":"string"
+      },
+      "tenantId": {
+        "title": "Tenant Id",
+        "description": "Current tenant id",
+        "type": "string"
+      }
+    }
+  }
+  

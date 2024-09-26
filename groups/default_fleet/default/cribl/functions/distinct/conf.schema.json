@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "title": "distinct configuration",
+  "required": ["groupBy"],
+  "properties": {
+    "groupBy": {
+      "type": "array",
+      "title": "Grouping properties",
+      "description": "Defines the properties that are concatenated to produce distinct key",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "maxCombinations": {
+      "type": "number",
+      "description": "maximum number of tracked combinations",
+      "default":  10000
+    },
+    "maxDepth": {
+      "type": "number",
+      "description": "maximum number of groupBy properties",
+      "default": 15
+    },
+    "isFederated": {
+      "type": "boolean",
+      "description": "indicator that the operator runs on a federated executor",
+      "default": false
+    }
+  }
+}

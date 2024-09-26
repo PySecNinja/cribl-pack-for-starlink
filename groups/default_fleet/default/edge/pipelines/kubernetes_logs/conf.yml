@@ -1,0 +1,8 @@
+functions:
+  - id: eval
+    filter: "true"
+    conf:
+      add:
+        - name: _raw
+          value: "_raw.replace(/(^|([\\n\\r])+)\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z\\s/gm, '$2')"
+    description: Removes timestamp prefixes from events broken by the "Kubernetes Logs" Event Breaker. Use as a Pre-processing Pipeline when the Timestamp option is enabled.

@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "title": "Sort Configuration",
+  "additionalProperties": false,
+  "required": ["comparisonExpression"],
+  "properties": {
+    "sortId": {
+      "title": "Identifier for the specific sort operation",
+      "description": "Has to be unique if there are multiple sorts on the pipeline.",
+      "type": "string"
+    },
+    "comparisonExpression": {
+      "title": "Expression to compare two events",
+      "description": "The expression can access the events via the 'left' and 'right' properties.",
+      "type": "string",
+      "jsExpression": true
+    },
+    "topN": {
+      "title": "The amount of events to return sorted",
+      "description": "Limits the output to N (highest/lowest) events",
+      "type": "number"
+    },
+    "maxEvents": {
+      "title": "The maximum number of events in input",
+      "description": "Specifies the number of events that can flow into this function",
+      "type": "number"
+    },
+    "suppressPreviews": {
+      "type": "boolean",
+      "title": "Disable intermediate results",
+      "description": "Disables the generation of intermediate results when true"
+    }
+  }
+}

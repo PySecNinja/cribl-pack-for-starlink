@@ -1,0 +1,19 @@
+{
+  "required_INT32": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true
+  },
+  "optional_INT32": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "optional": true
+  },
+  "repeated_INT32": {
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true,
+    "repeated": true
+  }
+}

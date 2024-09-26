@@ -1,0 +1,7 @@
+eventsMetadataSources:
+  - os
+  - cribl
+  - aws
+  - env
+  - kube
+defaultHeartbeatSeconds: 60

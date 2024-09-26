@@ -1,0 +1,8 @@
+{
+  "name": {
+    "type": "string",
+    "description": "Source ID",
+    "default": "${IO_ID}",
+    "ui:disabled": true
+  }
+}

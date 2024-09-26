@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "title": "Configuration of FoldKeys functions",
+  "additionalProperties": false,
+  "properties": {
+    "deleteOriginal": {
+      "title": "Delete original",
+      "description": "If false, we keep the original entry plus the folded keys. If true, only folded keys are kept.",
+      "type": "boolean",
+      "default": true
+    },
+    "separator": {
+      "title": "Separator string",
+      "description": "Character or string, used to separate key-levels, that should be folded.",
+      "type": "string",
+      "default": "."      
+    },
+    "selectionRegExp": {
+      "title": "Selection RegExp",
+      "description": "Optional RegExp to select a subset of the keys to fold.",
+      "type": "string"
+    }
+  }
+}

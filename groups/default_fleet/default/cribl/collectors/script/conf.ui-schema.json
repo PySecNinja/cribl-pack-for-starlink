@@ -1,0 +1,30 @@
+{
+  "discoverScript": {
+    "ui:widget": "TextareaUpload",
+    "ui:options": {
+      "rows": 5
+    },
+    "ui:placeholder": "Discover script"
+  },
+  "collectScript": {
+    "ui:widget": "TextareaUpload",
+    "ui:options": {
+      "rows": 5
+    },
+    "ui:placeholder": "Collect script"
+  },
+  "envVars": {
+    "ui:field": "Table",
+    "items": {
+      "name": {
+        "ui:placeholder": "Enter variable name",
+        "ui:options": { "columnWidth": "30%" }
+      },
+      "value": {
+        "ui:placeholder": "Enter variable value",
+        "ui:options": { "columnWidth": "70%" },
+        "ui:widget": "JsInput"
+      }
+    }
+  }
+}

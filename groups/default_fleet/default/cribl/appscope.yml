@@ -1,0 +1,384 @@
+default_metrics_events:
+  config:
+    metric:
+      enable: true
+      format:
+        type: statsd
+        statsdmaxlen: 512
+        verbosity: 4
+      watch:
+        - type: fs
+        - type: net
+        - type: http
+        - type: dns
+      transport:
+        type: udp
+        host: 127.0.0.1
+        port: 8125
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    event:
+      enable: true
+      format:
+        type: ndjson
+        maxeventpersec: 10000
+        enhancefs: true
+      watch:
+        - type: file
+          enabled: false
+          name: (\/logs?\/)|(\.log$)|(\.log[.\d])
+          value: .*
+        - type: console
+          enabled: false
+          name: (stdout)|(stderr)
+          value: .*
+        - type: net
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: fs
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: dns
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: http
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+          headers:
+        - type: metric
+          enabled: false
+          name: .*
+          field: .*
+          value: .*
+      transport:
+        type: tcp
+        host: 127.0.0.1
+        port: 9109
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    libscope:
+      configevent: true
+      summaryperiod: 10
+      commanddir: /tmp
+      log:
+        level: warning
+        transport:
+          type: file
+          buffer: line
+          path: /tmp/scope.log
+    cribl:
+      enable: true
+      transport:
+        type: unix
+        path: /var/log/appscope.sock
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    payload:
+      enable: false
+      dir: /tmp
+  lib: cribl
+  tags: cribl, sample
+  description: A sensible AppScope configuration for default metrics and events
+verbose_metrics_events:
+  config:
+    metric:
+      enable: true
+      format:
+        type: statsd
+        statsdmaxlen: 512
+        verbosity: 7
+      watch:
+        - type: statsd
+        - type: fs
+        - type: net
+        - type: http
+        - type: dns
+        - type: process
+      transport:
+        type: udp
+        host: 127.0.0.1
+        port: 8125
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    event:
+      enable: true
+      format:
+        type: ndjson
+        maxeventpersec: 10000
+        enhancefs: true
+      watch:
+        - type: file
+          enabled: false
+          name: (\/logs?\/)|(\.log$)|(\.log[.\d])
+          value: .*
+        - type: console
+          enabled: false
+          name: (stdout)|(stderr)
+          value: .*
+        - type: net
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: fs
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: dns
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: http
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+          headers:
+        - type: metric
+          enabled: false
+          name: .*
+          field: .*
+          value: .*
+      transport:
+        type: tcp
+        host: 127.0.0.1
+        port: 9109
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    libscope:
+      configevent: true
+      summaryperiod: 10
+      commanddir: /tmp
+      log:
+        level: warning
+        transport:
+          type: file
+          buffer: line
+          path: /tmp/scope.log
+    cribl:
+      enable: true
+      transport:
+        type: unix
+        path: /var/log/appscope.sock
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    payload:
+      enable: false
+      dir: /tmp
+  lib: cribl
+  tags: cribl, sample
+  description: AppScope configuration for full-fidelity metrics and events
+verbose_metrics_events_payloads:
+  config:
+    metric:
+      enable: true
+      format:
+        type: statsd
+        statsdmaxlen: 512
+        verbosity: 7
+      watch:
+        - type: fs
+        - type: net
+        - type: http
+        - type: dns
+      transport:
+        type: udp
+        host: 127.0.0.1
+        port: 8125
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    event:
+      enable: true
+      format:
+        type: ndjson
+        maxeventpersec: 10000
+        enhancefs: true
+      watch:
+        - type: file
+          enabled: false
+          name: (\/logs?\/)|(\.log$)|(\.log[.\d])
+          value: .*
+        - type: console
+          enabled: false
+          name: (stdout)|(stderr)
+          value: .*
+        - type: net
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: fs
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: dns
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: http
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+          headers:
+        - type: metric
+          enabled: false
+          name: .*
+          field: .*
+          value: .*
+      transport:
+        type: tcp
+        host: 127.0.0.1
+        port: 9109
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    libscope:
+      configevent: true
+      summaryperiod: 10
+      commanddir: /tmp
+      log:
+        level: warning
+        transport:
+          type: file
+          buffer: line
+          path: /tmp/scope.log
+    cribl:
+      enable: true
+      transport:
+        type: unix
+        path: /var/log/appscope.sock
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    payload:
+      enable: true
+      dir: /tmp
+  lib: cribl
+  tags: cribl, sample
+  description: AppScope configuration for full-fidelity metrics and events, plus payloads
+sample_config:
+  config:
+    metric:
+      enable: true
+      format:
+        type: statsd
+        statsdmaxlen: 512
+        verbosity: 4
+      watch:
+        - type: statsd
+        - type: fs
+        - type: net
+        - type: http
+        - type: dns
+        - type: process
+      transport:
+        type: udp
+        host: 127.0.0.1
+        port: 8125
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    event:
+      enable: true
+      format:
+        type: ndjson
+        maxeventpersec: 10000
+        enhancefs: true
+      watch:
+        - type: file
+          enabled: true
+          name: (\/logs?\/)|(\.log$)|(\.log[.\d])
+          value: .*
+        - type: console
+          enabled: true
+          name: (stdout)|(stderr)
+          value: .*
+        - type: net
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: fs
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: dns
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+        - type: http
+          enabled: true
+          name: .*
+          field: .*
+          value: .*
+          headers:
+        - type: metric
+          enabled: false
+          name: .*
+          field: .*
+          value: .*
+      transport:
+        type: tcp
+        host: 127.0.0.1
+        port: 9109
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    libscope:
+      configevent: true
+      summaryperiod: 10
+      commanddir: /tmp
+      log:
+        level: warning
+        transport:
+          type: file
+          buffer: line
+          path: /tmp/scope.log
+    cribl:
+      enable: true
+      transport:
+        type: unix
+        path: /var/log/appscope.sock
+        tls:
+          enable: false
+          validateserver: true
+          cacertpath: ''
+    payload:
+      enable: false
+      dir: /tmp
+  lib: cribl
+  tags: cribl, sample
+  description: A sample AppScope configuration

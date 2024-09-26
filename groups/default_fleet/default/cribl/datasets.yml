@@ -1,0 +1,110 @@
+cribl_edge_appscope_events:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Appscope events across all Cribl Edge fleets
+  fleets:
+    - '*'
+  path: '$CRIBL_HOME/state/appscope/${input_id}/${guid}/${_time:%s}/evt/${event_source}'
+  # the GUID directory contains either a timestamp or a folder named `cfg`. The latter should be excluded.
+  filter: "source.endsWith('.json') && !source.match(/\\/cfg\\/[^/]+\\/[^/]+\\/[^/]+$/)"
+cribl_edge_appscope_metrics:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Appscope metrics across all Cribl Edge fleets
+  fleets:
+    - '*'
+  path: '$CRIBL_HOME/state/appscope/${input_id}/${guid}/${__earliest:%s}/metric/${metric}'
+  # the GUID directory contains either a timestamp or a folder named `cfg`. The latter should be excluded.
+  filter: "source.endsWith('.json') && !source.match(/\\/cfg\\/[^/]+\\/[^/]+\\/[^/]+$/)"
+cribl_edge_logs:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Cribl Edge internal logs across all fleets
+  fleets:
+    - '*'
+  path: '$CRIBL_LOG_DIR'
+  filter: source.endsWith('.log')
+cribl_edge_state:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Cribl Edge system state across all fleets
+  fleets:
+    - '*'
+  path: '$CRIBL_STATE_DIR/system_state/${__earliest:%s}/${state_source}'
+cribl_edge_metrics:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Cribl Edge system metrics across all fleets
+  fleets:
+    - '*'
+  path: '$CRIBL_STATE_DIR/system_metrics/${__earliest:%s}/${metrics_source}'
+cribl_edge_system_logs:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Cribl Edge system logs across all fleets
+  fleets:
+    - '*'
+  path: '/var/log'
+  filter: 'true'
+cribl_edge_prometheus_scraper:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Cribl Edge Prometheus scraper data across all fleets
+  fleets:
+    - '*'
+  path: '$CRIBL_SPOOL_DIR/in/edge_prometheus/${input_id}/${__earliest:%s}_${__latest:%s}'
+  filter: "!source.endsWith('.tmp')"
+cribl_edge_kubernetes_logs:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Cribl Edge Kubernetes logs across all fleets
+  fleets:
+    - '*'
+  path: '$CRIBL_SPOOL_DIR/in/kube_logs/${input_id}/${__earliest:%s}_${__latest:%s}/${namespace}/${pod}/${container}'
+  filter: "!source.endsWith('.tmp')"
+cribl_edge_spool:
+  provider: cribl_edge
+  type: cribl_edge
+  description: Search Cribl Edge Disk Spool outputs
+  fleets:
+    - '*'
+  path: '$CRIBL_SPOOL_DIR/out/disk_spool/${output_id}/${__earliest:%s}_${__latest:%s}'
+  filter: "!source.endsWith('.tmp')"
+cribl_internal_logs:
+  provider: cribl_leader
+  type: cribl_leader
+  description: Search Cribl internal logs
+  path: '$CRIBL_LOG_DIR'
+  filter: source.endsWith('.log')
+cribl_lookups:
+  breakerRulesets:
+    - CSV Datatypes
+  provider: cribl_leader
+  type: cribl_leader
+  description: Search Cribl lookup tables
+  path: '$CRIBL_LOOKUP_DIR/${lookup_table}.${lookup_table_extension}'
+  filter: source.endsWith('.csv') || source.endsWith('.csv.gz')
+  excludeInternalFields: true
+cribl_search_sample:
+  type: s3
+  breakerRulesets:
+    - AWS Datatypes
+    - Apache Datatypes
+    - Syslog Datatypes
+    - Cribl Search
+    - Microsoft Windows Datatypes
+    - Azure Datatypes
+    - Microsoft O365 Datatypes
+    - Microsoft Graph API Datatypes
+  staleChannelFlushMs: 10000
+  filter: "true"
+  provider: cribl_s3sample_provider
+  description: Search Cribl provided public sample data 
+  bucket: cribl-search-example/data/${dataSource}/${_time:%Y}/${_time:%m}/${_time:%d}/${_time:%H}
+  region: us-west-2
+default:
+  provider: cribl_meta
+  type: cribl_meta
+  description: Default list of datasets to be searched when none is specified
+  datasets:
+    - cribl_search_sample 

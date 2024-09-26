@@ -1,0 +1,18 @@
+# Group that handles system guardrails. 
+# Users are not being assigned to this group, the rules defined here
+# are immutable and will be evaluated for all jobs
+system:
+  id: system
+  description: System-level limits for preventing running critically inefficient queries.
+  rules:
+    # max running time for a single job, in seconds, default is 24h
+    maxRunningTimePerSearch:
+      limit: 86400
+    # max volume of data ingested per job, in bytes, default is 1PB
+    maxBytesReadPerSearch:
+      limit: 1000000000000000
+default:
+  id: default
+  enabled: true
+  description: Catch-all group for adhoc searches
+  rules: []

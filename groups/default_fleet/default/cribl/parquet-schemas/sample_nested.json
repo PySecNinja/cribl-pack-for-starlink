@@ -1,0 +1,30 @@
+{
+  "parent": {
+    "fields": {
+      "nested_child": {
+        "type": "STRING"
+      }
+    }
+  },
+  "grandparent": {
+    "fields": {
+      "parent_one": {
+        "fields": {
+          "child": {
+            "type": "STRING"
+          }
+        }
+      },
+      "parent_two": {
+        "fields": {
+          "child": {
+            "type": "STRING"
+          }
+        }
+      },
+      "uncle": {
+        "type": "BOOLEAN"
+      }
+    }
+  }
+}

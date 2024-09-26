@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "title": "",
+  "additionalProperties": false,
+  "properties": {
+    "limit": {
+      "title": "Event limit",
+      "description": "Number of qualifying events to pass through",
+      "type": "integer",
+      "default": 100,
+      "minimum": 0
+    }
+  }
+}

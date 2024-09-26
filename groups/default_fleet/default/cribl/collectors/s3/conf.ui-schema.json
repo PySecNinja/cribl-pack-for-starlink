@@ -1,0 +1,135 @@
+{
+  "outputName": {
+    "ui:widget": "OutputName",
+    "ui:forceRender": true,
+    "ui:options": {
+      "outputType": "s3",
+      "outputProps": {
+        "awsAuthenticationMethod": "awsAuthenticationMethod",
+        "awsSecret": "awsSecret",
+        "awsApiKey": "awsApiKey",
+        "awsSecretKey": "awsSecretKey",
+        "region": "region",
+        "endpoint": "endpoint",
+        "signatureVersion": "signatureVersion",
+        "bucket": "bucket",
+        "path": [
+          "destPath",
+          {
+            "id": "partitionExpr",
+            "expression": true
+          }
+        ]
+      }
+    }
+  },
+  "extractors": {
+    "ui:widget": "Table",
+    "items": {
+      "key": {
+        "ui:options": { "columnWidth": "30%" },
+        "ui:placeholder": "Enter extractor token"
+      },
+      "expression": {
+        "ui:widget": "JsInputWithoutPopup",
+        "ui:options": { "columnWidth": "70%" },
+        "ui:placeholder": "Enter extractor expression"
+      }
+    }
+  },
+  "recurse": {
+    "ui:options": { "inline": true }
+  },
+  "maxBatchSize": {
+    "ui:options": { "width": "30%" }
+  },
+  "awsAuthenticationMethod": {
+    "ui:options": {
+      "uiEnumOptions": [
+        { "value": "auto", "label": "Auto", "description": "Will use environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY, or the attached IAM role. Will work only when running on AWS." },
+        { "value": "manual", "label": "Manual", "description": "Enter access key and secret key. Required when not running on AWS." },
+        { "value": "secret", "label": "Secret", "description": "Use a secret that references AWS access key and secret key." }
+      ]
+    }
+  },
+  "awsApiKey": {
+    "ui:placeholder": "Enter access key (optional). If empty, IAM roles will be used.",
+    "ui:widget" : "JsInput"
+  },
+  "awsSecretKey": {
+    "ui:widget" : "JsInput",
+    "ui:placeholder": "Enter secret key (optional). If empty, IAM roles will be used."
+  },
+  "awsSecret": {
+    "ui:widget": "ApiLookupWithCreate",
+    "ui:options": {
+      "createType": "secret",
+      "typeName": "API key & secret key",
+      "url": "/system/secrets?type=keypair",
+      "createUrl": "/settings/secrets",
+      "valueProp": "id",
+      "secretType": "keypair"
+    }
+  },
+  "bucket": {
+    "ui:placeholder": "Enter S3 bucket.",
+    "ui:widget" : "JsInput"
+  },
+  "path": {
+    "ui:widget": "JsInput",
+    "ui:options": "{extraDescription: collector && collector.conf && !collector.conf.path ? [{content: 'Caution: If a path is not set, all contents of the specified S3 bucket will be collected.', alertProps: {type: 'warning', showIcon: true}}] : []}"
+  },
+  "assumeRoleArn": {
+    "ui:placeholder": "Enter AssumeRole ARN."
+  },
+  "assumeRoleExternalId": {
+    "ui:placeholder": "Enter external ID."
+  },
+  "durationSeconds": {
+    "ui:placeholder": "Enter a duration for the session"
+  },
+  "rejectUnauthorized": {
+    "ui:options": {
+      "inline": true
+    }
+  },
+  "reuseConnections": {
+    "ui:options": {
+      "inline": true
+    }
+  },
+  "verifyPermissions": {
+    "ui:options": {
+      "inline": true
+    }
+  },
+  "disableTimeFilter": {
+    "ui:options": {
+      "inline": false
+    }
+  },
+  "ui:options": {
+    "groups": {
+      "authentication": {
+        "title": "Authentication",
+        "collapsed": true,
+        "properties": [
+          "awsAuthenticationMethod",
+          "awsApiKey",
+          "awsSecretKey",
+          "awsSecret"
+        ]
+      },
+      "assumeRole": {
+        "title": "Assume Role",
+        "collapsed": true,
+        "properties": [
+          "enableAssumeRole",
+          "assumeRoleArn",
+          "assumeRoleExternalId",
+          "durationSeconds"
+        ]
+      }
+    }
+  }
+}

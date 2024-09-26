@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "title": "eventstats configuration",
+  "required": ["aggregations", "searchAggMode"],
+  "properties": {
+    "aggregations": {
+      "type": "array",
+      "title": "Aggregates",
+      "description": "Aggregate function(s) to perform on events. E.g., sum(bytes).where(action=='REJECT').as(TotalBytes)",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "aggregationExpression": true
+      }
+    },
+    "groupBys": {
+      "type": "array",
+      "title": "Group by fields",
+      "description": "Fields to group aggregates by, supports wildcard expressions.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "maxEvents": {
+      "type": "number",
+      "title": "Maximum number of events",
+      "description": "Specifies how many events are at max kept in memory to be enriched with aggregations",
+      "default": 50000
+    }
+  }
+}

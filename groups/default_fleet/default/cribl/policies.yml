@@ -1,0 +1,488 @@
+GroupFull:
+  args:
+    - groupName
+  template:
+    - GroupEdit ${groupName}
+    - '* /master/workers'
+    - PATCH /master/workers/restart
+    - PATCH /master/groups/${groupName}
+    - PATCH /master/groups/${groupName}/*
+  description: Can modify resources within this @{group} and deploy the @{group}
+  title: Admin
+GroupEdit:
+  args:
+    - groupName
+  template:
+    - '* /m/${groupName}'
+    - '* /m/${groupName}/*'
+    - GroupRead ${groupName}
+    - POST /system/capture
+    - '* /w/*'
+    - LakeDatasetAccess default *
+  description: Can modify resources within this @{group}
+  title: Editor
+GroupCollect:
+  args:
+    - groupName
+  template:
+    - POST /m/${groupName}/lib/jobs
+    - PATCH /m/${groupName}/lib/jobs/*
+    - POST /m/${groupName}/jobs
+    - PATCH /m/${groupName}/jobs/*
+    - GroupRead ${groupName}
+    - LakeDatasetAccess default *
+  description: Can run Collection jobs on this @{group}
+  title: Collect
+GroupRead:
+  args:
+    - groupName
+  template:
+    - GroupUser ${groupName}
+    - GET /m/${groupName}/*
+    - POST /m/${groupName}/lib/expression
+    - POST /m/${groupName}/system/metrics/query
+    - POST /m/${groupName}/edge/metrics/query
+    - GET /master/summary/workers
+    - GET /master/workers/*
+    - GET /w/*
+    - POST /w/*/edge/metrics/query
+    - POST /w/*/system/metrics/query
+    - POST /w/*/lib/expression
+    - GET /system/info
+    - GET /system/logs
+    - GET /system/logs/search
+    - GET /system/logs/notifications.log
+    - GET /system/limits
+    - GET /system/job-limits
+    - GET /system/redis-cache-limits
+    - GET /system/search-limits
+    - POST /system/metrics/query
+    - POST /products/edge/map/query
+    - GET /notifications
+    - GET /conditions
+    - GET /conditions/*
+    - GET /notification-targets
+    - GET /notification-targets/*
+    - Monitor
+  description: Can access resources within this @{group}
+  title: Read Only
+GroupUser:
+  args:
+    - groupName
+  template:
+    - GET /m/${groupName}
+    - GET /m/${groupName}/settings/features
+    - GET /m/${groupName}/system/info
+    - GET /master/groups
+    - GET /master/groups/${groupName}
+    - GET /system/logs/group/${groupName}/*
+    - GET /master/summary
+    - GET /master/workers
+    - GET /system/messages
+    - GET /ui/*
+    - GET /clui
+  description: Can receive access to resources within this @{group}
+  title: User
+ProjectMaintain:
+  args:
+    - groupName
+    - projectName
+  template:
+    - ProjectEdit ${groupName} ${projectName}
+    - '* /m/${groupName}/system/projects/${projectName}'
+    - MaintainBase stream
+  description: Can edit and delete the Project; must have higher-level Admin or Editor Permissions (automatically assigned via inheritance)
+  title: Maintainer
+ProjectRead:
+  args:
+    - groupName
+    - projectName
+  template:
+    - GET /m/${groupName}/lib/breakers
+    - GET /m/${groupName}/lib/breakers/*
+    - GET /m/${groupName}/lib/grok/*
+    - GET /m/${groupName}/lib/parquet-schemas/*
+    - GET /m/${groupName}/lib/protobuf-libraries/*
+    - GET /m/${groupName}/lib/parsers
+    - GET /m/${groupName}/lib/parsers/*
+    - GET /m/${groupName}/lib/regex/*
+    - GET /m/${groupName}/lib/schemas/*
+    - GET /m/${groupName}/lib/vars
+    - GET /m/${groupName}/lib/vars/*
+    - GET /m/${groupName}/lookups/*
+    - GET /m/${groupName}/packs/*
+    - GET /m/${groupName}/packs
+    - GET /m/${groupName}/pipelines/*
+    - GET /m/${groupName}/pipelines
+    - GET /m/${groupName}/routes
+    - GET /m/${groupName}/routes/*
+    - GET /m/${groupName}/system/inputs
+    - GET /m/${groupName}/system/projects
+    - GET /m/${groupName}/system/projects/${projectName}
+    - GET /m/${groupName}/system/projects/${projectName}/*
+    - GET /master/groups
+    - GET /master/groups/${groupName}
+    - GET /m/${groupName}/functions
+    - GET /m/${groupName}/functions/*
+    - POST /system/metrics/query
+    - POST /m/${groupName}/system/projects/${projectName}/preview
+    - GET /m/${groupName}/system/projects/${projectName}/destinations
+    - GET /m/${groupName}/system/projects/${projectName}/pipelines
+    - GET /m/${groupName}/system/projects/${projectName}/pipelines/*
+    - GET /m/${groupName}/system/projects/${projectName}/samples
+    - GET /m/${groupName}/system/projects/${projectName}/samples/*
+  description: Can view the Project and its Subscriptions
+  title: Read Only
+ProjectEdit:
+  args:
+    - groupName
+    - projectName
+  template:
+    - ProjectRead ${groupName} ${projectName}
+    - PATCH /m/${groupName}/system/projects/${projectName}/subscriptions/*/connections
+    - POST /m/${groupName}/system/projects/${projectName}/pipelines
+    - PATCH|DELETE /m/${groupName}/system/projects/${projectName}/pipelines/*
+    - POST /m/${groupName}/system/projects/${projectName}/subscriptions/*/capture
+    - POST /m/${groupName}/system/projects/${projectName}/capture
+    - POST /m/${groupName}/system/projects/${projectName}/version/commit
+    - GET /m/${groupName}/system/projects/${projectName}/version/diff
+    - GET /m/${groupName}/system/projects/${projectName}/version/files
+    - GET /m/${groupName}/system/projects/${projectName}/version/count
+    - POST /m/${groupName}/system/projects/${projectName}/version/commit
+    - POST /m/${groupName}/system/projects/${projectName}/samples
+    - DELETE /m/${groupName}/system/projects/${projectName}/samples/*
+    - PATCH /m/${groupName}/system/projects/${projectName}/samples/*
+  description: Can edit the Project and its Subscriptions
+  title: Editor
+Monitor:
+  template:
+    - GET /system/monitoring/health
+Product:
+  args:
+    - product
+    - action
+  template:
+    - ${action} /products/${product}
+    - ${action} /products/${product}/
+    - GET /master/summary
+    - GET /master/summary/workers
+    - GET /system/info
+    - GET /system/settings/conf
+    - GET /system/users
+    - GET /system/banners
+    - GET /system/banners/*
+    - GET /clui
+    - PATCH /ui/*
+  description: Building block for product policies
+Licenses:
+  template:
+    - GET /system/licenses
+    - GET /system/licenses/*
+BaseProductUser:
+  template:
+    - GET /master/groups
+    - GET /master/workers
+    - GET /conditions
+    - GET /conditions/*
+    - GET /m/*/routes/*
+    - GET /notification-targets
+    - GET /notifications
+    - GET /notification-templates
+    - GET /system/authentication
+    - GET /system/licenses
+    - GET /system/logs
+    - GET /system/logs/search
+    - GET /system/messages
+    - GET /ui/*
+  description: Building block for policies that need to use a specific product. Should not be referenced directly in roles.
+ProductUser:
+  args:
+    - product
+    - action
+  template:
+    - Product ${product}/* GET
+    - Product ${product}/m/* ${action}
+    - GET /system/saas-limits
+    - BaseProductUser
+    - GET /functions
+    - GET /functions/*
+    - POST /system/metrics/query
+    - GET /master/workers/*
+    - ${action} /notification-targets
+    - ${action} /notification-targets/*
+    - ${action} /notifications
+    - ${action} /notifications/*
+  description: Assignable to @{group}s and resources at the Product level, with no initial access
+LimitedProductUser:
+  args:
+    - product
+  template:
+    - Product ${product} GET
+    - BaseProductUser
+  description: Similar to ProductUser, but does not have the ability to read or act on all the endpoints within @{group}s.
+ProductAdmin:
+  args:
+    - product
+  template:
+    - Product ${product}/* *
+    - ProductUser ${product} *
+    - '* /admin/products/${product}/*'
+    - Monitor
+    - '* /master/groups'
+    - '* /master/workers'
+    - '* /w/*'
+    - MaintainBase ${product}
+    - '* /security/kms/*'
+    - GET /system/settings
+    - POST /system/settings/restart
+    - POST /system/settings/reload
+    - GET /system/settings/git-settings
+    - '* /system/settings/upgrade'
+    - '* /system/settings/upgrade/*'
+    - '* /system/certificates'
+    - '* /system/certificates/*'
+    - '* /system/distributed/upgrade'
+    - PATCH /system/settings/conf
+    - GET /system/diag
+    - GET /system/diag/*
+    - POST /system/diag/download
+    - POST /system/metrics/query
+    - GET /system/instance/*
+    - PATCH /master/workers/restart
+    - 'GET /system/teams'
+    - 'GET /system/teams/*'
+    - GET /version/branch
+    - GET /system/settings/auth
+    - GET /system/scripts
+    - GET /system/app-limits
+    - GET /system/logger
+    - GET /settings/features
+    - GET /system/services-limits
+    - GET /system/processes
+    - Licenses
+  description: Can create, view, update, and delete all @{group}s and resources
+DatasetMaintain:
+  args:
+    - groupName
+    - datasetName
+  template:
+    - '* /m/${groupName}/search/datasets/${datasetName}'
+    - '* /m/${groupName}/search/datasets/${datasetName}/*'
+    - MaintainBase search
+  description: Can own, edit, and delete the dataset
+  title: Maintainer
+DatasetRead:
+  args:
+    - groupName
+    - datasetName
+  template:
+    - GET /m/${groupName}/search/datasets/${datasetName}
+    - GET /m/${groupName}/search/datasets/${datasetName}/*
+  description: Can view and use the dataset
+  title: Read Only
+DatasetProviderMaintain:
+  args:
+    - groupName
+    - providerName
+  template:
+    - '* /m/${groupName}/search/dataset-providers/${providerName}'
+    - '* /m/${groupName}/search/dataset-providers/${providerName}/*'
+    - MaintainBase search
+  description: Can own, edit, and delete the dataset provider
+  title: Maintainer
+DatasetProviderRead:
+  args:
+    - groupName
+    - providerName
+  template:
+    - GET /m/${groupName}/search/dataset-providers/${providerName}
+    - GET /m/${groupName}/search/dataset-providers/${providerName}/*
+  description: Can view the dataset provider
+  title: Read Only
+SearchRuntimeRestrictionsMaintainer:
+  args:
+    - groupName
+  template:
+    - 'GET /m/${groupName}/search/srr/sendOutsideCluster'
+    - 'GET /m/${groupName}/search/srr/exportToLake'
+  description: Can perform advanced search operator tasks
+  title: Search Runtime Maintainer
+SearchRuntimeRestrictionsAdmin:
+  args:
+    - groupName
+  template:
+    - 'GET /m/${groupName}/search/srr/showAllJobs'
+    - 'GET /m/${groupName}/search/srr/cancelAllJobs'
+    - 'GET /m/${groupName}/search/srr/setGlobalOptions'
+  description: Can execute operators and commands for all resources
+  title: Search Runtime Admin
+SearchBase:
+  args:
+    - groupName
+  template:
+    - GET /system/teams
+    - GET /m/${groupName}/settings/features
+    - GET /m/${groupName}/settings/features/*
+    - GET /m/${groupName}/system/info
+    - GET /system/messages
+    - GET /m/${groupName}/search/dataset-provider-types
+    - GET /m/${groupName}/search/datasets
+    - GET /m/${groupName}/search/docs
+    - GET /m/${groupName}/lib/vars
+    - GET /m/${groupName}/lib/vars/*
+    - '* /m/${groupName}/lib/parsers'
+    - '* /m/${groupName}/lib/parsers/*'
+    - '* /m/${groupName}/lib/breakers/*'
+    - '* /m/${groupName}/lib/breakers'
+    - '* /m/${groupName}/lib/grok'
+    - '* /m/${groupName}/lib/grok/*'
+    - '* /m/${groupName}/lib/regex'
+    - '* /m/${groupName}/lib/regex/*'
+    - GET /m/${groupName}/search/settings
+    - GET /m/${groupName}/functions
+    - GET /m/${groupName}/functions/*
+    - GET /m/${groupName}/search/trust-policies
+    - '* /m/${groupName}/search/jobs/*'
+    - POST|GET /m/${groupName}/search/jobs
+    - '* /m/${groupName}/search/saved/*'
+    - POST|GET /m/${groupName}/search/saved
+    - GET /m/${groupName}/conditions
+    - GET /m/${groupName}/search/dashboard-categories
+    - GET /m/${groupName}/search/dashboard-categories/*
+    - POST|GET /m/${groupName}/search/macros
+    # all users have access to the sample dataset
+    - DatasetRead * cribl_search_sample
+    - '* /m/${groupName}/system/lookups/*'
+    - '* /m/${groupName}/system/lookups'
+    # required by lookups
+    - GET /m/${groupName}/search/srr/exportToLookup
+    - GET /m/${groupName}/pipelines
+    - GET /m/${groupName}/search/dashboards
+    - GET /m/${groupName}/search/query
+    - DatasetRead * $vt_datasets
+    - DatasetRead * $vt_dataset_providers
+    - DatasetRead * $vt_dummy
+    - DatasetRead * $vt_jobs
+    - DatasetRead * $vt_list
+    - DatasetRead * $vt_lookups
+    - DatasetRead * $vt_object_list
+    - DatasetRead * $vt_object_list_summary
+    - DatasetRead * $vt_results
+    - DatasetRead * externaldata
+    # usage groups
+    - GET /m/${groupName}/search/usage-groups
+    - GET /m/${groupName}/system/search-limits
+    # Cribl lake read only access
+    - LakeDatasetAccess default *
+    # UI metrics
+    - POST /m/${groupName}/search/ui-metrics
+    - POST /m/${groupName}/search/dashboards
+  description: Building block for Search Policies
+SearchMaintainer:
+  args:
+    - groupName
+  template:
+    - SearchBase ${groupName}
+    - SearchRuntimeRestrictionsMaintainer ${groupName}
+    - '* /m/${groupName}/search/dashboard-categories'
+    - '* /m/${groupName}/search/dashboard-categories/*'
+    - GET /m/${groupName}/search/dataset-providers
+    - POST /m/${groupName}/search/dataset-providers
+    - POST /m/${groupName}/search/datasets
+  description: Can create, configure, view, and modify datasets, dataset providers, dashboards, and settings like datatypes
+MaintainBase:
+  args:
+    - product
+  template:
+    - GET /products/${product}/users
+    - GET /products/${product}/users/*
+    - GET /system/policies
+    - GET /system/policies/*
+    - GET /system/roles
+    - GET /system/roles/*
+  description: Building block for Maintain Policies. Should not be referenced directly in Roles.
+DashboardMaintain:
+  args:
+    - groupName
+    - dashboardId
+  template:
+    - '* /m/${groupName}/search/dashboards/${dashboardId}'
+    - '* /m/${groupName}/search/dashboards/${dashboardId}/*'
+    - MaintainBase search
+  description: Can own, edit, and delete the dashboard
+  title: Maintainer
+DashboardRead:
+  args:
+    - groupName
+    - dashboardId
+  template:
+    - GET /m/${groupName}/search/dashboards/${dashboardId}
+    - GET /m/${groupName}/search/dashboards/${dashboardId}/*
+  description: Can view and use the dashboard
+  title: Read Only
+MacroMaintain:
+  args:
+    - groupName
+    - macroId
+  template:
+    - '* /m/${groupName}/search/macros/${macroId}'
+    - '* /m/${groupName}/search/macros/${macroId}/*'
+    - MaintainBase search
+  description: Members with this policy own the macro and can freely edit or delete it
+  title: Maintainer
+MacroRead:
+  args:
+    - groupName
+    - macroId
+  template:
+    - GET /m/${groupName}/search/macros/${macroId}
+    - GET /m/${groupName}/search/macros/${macroId}/*
+  description: Members with this policy can view and use the macro
+  title: Read Only
+LakeDatasetAccess:
+  args:
+    - lakeId
+    - datasetId
+  template:
+    - GET /products/lake/lakes/${lakeId}/datasets
+    - GET /products/lake/lakes/${lakeId}/datasets/${datasetId}
+  description: Access to the Lake datasets
+LakeRead:
+  args:
+    - lakeId
+    - datasetId
+    - cacheId
+  template:
+    - GET /ui/*
+    - GET /system/info
+    - GET /products/lake
+    - GET /products/lake/
+    - GET /settings/features
+    - LakeDatasetAccess ${lakeId} ${datasetId}
+    - GET /products/lake/lakes/${lakeId}/caches
+    - GET /products/lake/lakes/${lakeId}/caches/${cacheId}
+  description: Can view and use a Lake Dataset
+  title: Read Only
+LakeEdit:
+  args:
+    - lakeId
+    - datasetId
+  template:
+    - LakeRead * * *
+    - PATCH /ui/*
+    - POST /products/lake/lakes/${lakeId}/datasets
+    - PATCH /products/lake/lakes/${lakeId}/datasets/${datasetId}
+  description: Can create and edit datasets
+  title: Editor
+LakeFull:
+  args:
+    - lakeId
+    - datasetId
+    - cacheId
+  template:
+    - LakeEdit * *
+    - DELETE /products/lake/lakes/${lakeId}/datasets/${datasetId}
+    - POST /products/lake/lakes/${lakeId}/caches/${cacheId}/datasets/{datasetId}/connections
+    - DELETE /products/lake/lakes/${lakeId}/caches/${cacheId}/datasets/{datasetId}/connections
+  description: Can fully manage datasets
+  title: Admin
