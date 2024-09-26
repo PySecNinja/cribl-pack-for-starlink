@@ -1,0 +1,61 @@
+# Governs how many search processes can be running concurrently.
+# If %, the number will be calculated as: Math.max(1, numCPU x maxConcurrentSearches/100)
+# Search will be disabled if this number is set to 0.
+# Format: <number>[%]
+maxConcurrentSearches: 50%
+
+# Maximum number of concurrent executors per (coordinated) search. Capped internally
+# based on the license.
+# Format: <number>
+maxExecutorsPerSearch: 50
+
+# Defines how long the queue of queries can get. 
+# Whenever we exceed the maxConcurrentSearches limit, we start queueing queries. The
+# number of queued queries can be limited via this parameter. If an absolute number
+# is provided, it specifies the max. number of jobs waiting in a queue and any further
+# jobs get rejected. If it is a % specification, it is relative to maxConcurrentSearches.
+# So, if maxConcurrentSearches is 2 and searchQueueLength is 500%, the queue length
+# is actually limited to 10 entries, allowing us to specify the queue length relative
+# to the system's processing capacity.
+# Format: <number>[%]
+searchQueueLength: 500%
+
+# Maximum number of warm search processes to run on a leader or worker/edge node. A value of
+# 'auto' means that there will be 1 process on the leader and 0 on worker/edge nodes.
+# Format: <number>|<'auto'>
+warmPoolSize: auto
+
+# Governs max search duration.
+# Format: <number><s|m|h|d|w>
+maxSearchDuration: 420m
+
+# Maximum number of results to store per search.
+# Format: <number>
+maxResultsPerSearch: 50000
+
+# Amount of time to keep search artifacts around before reaping.
+# Format: <number><s|m|h|d>
+searchHistoryTTL: 7d
+
+# Maximum number of search jobs before reaping the oldest ones.
+# Format: <number>
+searchHistoryMaxJobs: 1000
+
+# Maximum depth supported when building field summaries on nested object values.
+# i.e. "x.y.z" is a depth of 3.  Increase this if you need to go deeper than that.
+# Format: <number>
+fieldSummaryMaxNestedDepth: 3
+
+# Maximum number of fields included in field summaries.  This limit is imposed
+# irrespective of depth as a way of avoiding memory, performance, and UI issues.
+# Format: <number>
+fieldSummaryMaxFields: 200
+
+# Object store cache TTL
+# This controls for how long we keep object cache files
+# Format: <number><s|m|h|d|w>
+objectCacheTTL: 5m
+
+# Compress Object cache artifacts
+# When set to true we'll compress the objects in the cache
+compressObjectCacheArtifact: false

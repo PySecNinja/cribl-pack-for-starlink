@@ -1,0 +1,9 @@
+{
+  "processor": {
+    "ui:widget": "ApiLookupWithLink",
+    "ui:options": {
+      "lookupProvider": "ProjectAwarePipelines",
+      "link": "${group}/${pack}/pipelines/${value}"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "query": {
+    "ui:placeholder": "Enter query expression",
+    "ui:widget": "JsInput",
+    "ui:options": {
+      "multiline": true,
+      "autoheight": true,
+      "maxLines": 20,
+      "popupEditor": "SchemaEditor",
+      "scrollbar": {
+        "vertical": "visible"
+      },
+      "language": "javascript"
+    }
+  },
+  "connectionId": {
+    "ui:widget": "ApiLookup",
+    "ui:options": {
+      "typeName": "database connection",
+      "url": "/lib/database-connections",
+      "valueProp": "id",
+      "createUrl": "/knowledge/database-connections"
+    }
+  },
+  "__scheduling": {
+    "ui:options": {
+      "groups": {
+        "stateTracking": {
+          "title": "State Tracking",
+          "collapsed": true,
+          "order": -1,
+          "properties": ["stateTracking"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "fieldConditions": {
+    "ui:field": "Table",
+    "items": {
+      "leftFieldName": {
+        "ui:placeholder": "Enter field name"
+      },
+      "rightFieldName": {
+        "ui:placeholder": "Enter field name"
+      }
+    }
+  },
+  "hints":{
+    "ui:field": "KeyValue",
+    "key": {
+      "ui:placeholder": "Enter key"
+    },
+    "value": {
+      "ui:placeholder": "Enter value"
+    }
+  }
+}

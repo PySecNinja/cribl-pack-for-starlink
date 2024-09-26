@@ -1,0 +1,113 @@
+{
+  "title": "",
+  "type": "object",
+  "required": ["type"],
+  "properties": {
+    "type":{
+      "title": "Type",
+      "description": "Data output format",
+      "type": "string",
+      "enum": ["csv", "elff", "clf", "kvp", "json", "delim"],
+      "enumNames": ["CSV", "Extended Log File Format", "Common Log Format", "Key=Value Pairs", "JSON Object", "Delimited values"],
+      "default": "csv"
+    },
+    "delimChar": {},
+    "quoteChar": {},
+    "escapeChar": {},
+    "nullValue": {},
+    "fields": {
+      "title": "Fields to serialize",
+      "description": "Required for CSV, ELFF, CLF, and Delimited values. All other formats support wildcard field lists. E.g., host, myField, !source *",
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "srcField": {
+      "title": "Source Field",
+      "description": "Field containing object to serialize. Leave blank to serialize top level event fields.",
+      "type": "string"
+    },
+    "dstField": {
+      "title": "Destination Field",
+      "description": "Field to serialize data to.",
+      "type": "string",
+      "default": "_raw"
+    }
+  },
+  "dependencies": {
+    "type": {
+      "oneOf": [
+        {
+          "properties": {
+            "type": {
+              "enum":["kvp"]
+            },
+            "cleanFields": {
+              "type": "boolean",
+              "default": false,
+              "title": "Clean Fields",
+              "description": "Whether to clean field names by replacing non-[a-zA-Z0-9] characters with _."
+            },
+            "fields": {
+              "title": "Fields to serialize",
+              "description": "Required for CSV, ELFF and CLF. All other formats support wildcard field lists. E.g., host, myField, !source *",
+              "type": "array",
+              "items": {"type": "string"},
+              "default": ["!_*","!cribl_breaker","*"]
+            },
+            "pairDelimiter": {
+              "type": "string",
+              "title": "Pair delimiter",
+              "minLength": 1,
+              "description": "Delimiter used to separate key=value pairs. Defaults to a single space character",
+              "pattern": "^[^=]*$",
+              "errorMessage": {
+                "pattern": "Delimiter should not contain contain a \"=\" symbol"
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum":["delim"]
+            },
+            "delimChar": {
+              "type": "string",
+              "default": ",",
+              "title": "Delimiter",
+              "minLength": 1,
+              "description": "Delimiter character to use to split values. If left blank, will default to ','."
+            },
+            "quoteChar": {
+              "type": "string",
+              "default": "\"",
+              "title": "Quote Char",
+              "minLength": 1,
+              "description": "Character used to quote literal values. If left blank, will default to '\"'."
+            },
+            "escapeChar": {
+              "type": "string",
+              "default": "\\",
+              "title": "Escape Char",
+              "minLength": 1,
+              "description": "Escape character used to escape delimiter or quote character. If left blank, will default to the Quote Char."
+            },
+            "nullValue": {
+              "type": "string",
+              "default": "-",
+              "title": "Null Value",
+              "description": "Field value representing the null value. Null fields will be omitted."
+            }
+          }
+        },
+        {
+          "properties": {
+            "type": {
+              "enum":["csv", "elff", "clf", "json"]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

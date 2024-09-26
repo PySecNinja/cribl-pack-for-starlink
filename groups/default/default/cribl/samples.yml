@@ -1,0 +1,145 @@
+weblog:
+  sampleName: weblog.log
+  created: 1574797148907
+  isTemplate: true
+  size: 44018
+  numEvents: 100
+syslog:
+  sampleName: syslog.log
+  created: 1574797148907
+  isTemplate: true
+  size: 43604
+  numEvents: 100
+apache_common:
+  sampleName: apache_common.log
+  created: 1574797148907
+  isTemplate: true
+  size: 22701
+  numEvents: 100
+apache_error:
+  sampleName: apache_error.log
+  created: 1574797148907
+  isTemplate: true
+  size: 29324
+  numEvents: 100
+snmp-v1:
+   sampleName: snmp-v1.log
+   created: 1579887564000
+   isTemplate: true
+   size: 45215
+   numEvents: 100
+snmp-v2c:
+   sampleName: snmp-v2c.log
+   created: 1579887564000
+   isTemplate: true
+   size: 72654
+   numEvents: 100
+snmp-v3:
+   sampleName: snmp-v3.log
+   created: 1579887564000
+   isTemplate: true
+   size: 100137
+   numEvents: 100
+palo_alto_traffic:
+  sampleName: palo_alto_traffic.log
+  isTemplate: true
+  tsTemplateField: ""
+  created: 1598385385254
+  size: 25256
+  numEvents: 20
+business_event:
+  sampleName: businessevent.log
+  isTemplate: true
+  tsTemplateField: ""
+  created: 1581430057938
+  size: 111644
+  numEvents: 20
+big_json:
+  sampleName: big_json.log
+  isTemplate: true
+  tsTemplateField: ""
+  created: 1598388002256
+  size: 35317
+  numEvents: 10
+sample_metrics:
+  sampleName: sample_metrics.log
+  isTemplate: true
+  created: 1625657445300
+  size: 1570
+  numEvents: 10
+appscope_metrics:
+  sampleName: appscope_metrics.log
+  isTemplate: true
+  created: 1632331421513
+  size: 13797
+  numEvents: 50
+parquet_primitives:
+  sampleName: parquet_primitives.log
+  isTemplate: true
+  created: 1655955552
+  size: 1804
+  numEvents: 10
+parquet_compression:
+  sampleName: parquet_compression.log
+  isTemplate: true
+  created: 1655955552
+  size: 6896
+  numEvents: 10
+parquet_logical:
+  sampleName: parquet_logical.log
+  isTemplate: true
+  created: 1655955552
+  size: 5181
+  numEvents: 10
+parquet_nested:
+  sampleName: parquet_nested.log
+  isTemplate: true
+  created: 1655955552
+  size: 1663
+  numEvents: 10
+parquet_repeated:
+  sampleName: parquet_repeated.log
+  isTemplate: true
+  created: 1655955552
+  size: 296
+  numEvents: 5
+sentinel_syslog:
+  sampleName: sentinel_syslog.log
+  isTemplate: true
+  tsTemplateField: TimeGenerated
+  created: 1687985631
+  size: 475
+  numEvents: 1
+sentinel_securityevents:
+  sampleName: sentinel_securityevents.log
+  isTemplate: true
+  tsTemplateField: TimeGenerated
+  created: 1687985631
+  size: 6738
+  numEvents: 1
+sentinel_windowsevents:
+  sampleName: sentinel_windowsevents.log
+  isTemplate: true
+  tsTemplateField: TimeGenerated
+  created: 1687985631
+  size: 365
+  numEvents: 1
+sentinel_commonsecuritylog:
+  sampleName: sentinel_commonsecuritylog.log
+  isTemplate: true
+  tsTemplateField: TimeGenerated
+  created: 1687985631
+  size: 5553
+  numEvents: 1
+model_driven_telemetry:
+  sampleName: model_driven_telemetry.log
+  isTemplate: true
+  created: 1707287700
+  size: 2562
+  numEvents: 5
+google_secops_udm_zeek_logs:
+  sampleName: google_secops_udm_zeek_logs.log
+  isTemplate: true
+  created: 1715300055
+  size: 3804
+  numEvents: 10

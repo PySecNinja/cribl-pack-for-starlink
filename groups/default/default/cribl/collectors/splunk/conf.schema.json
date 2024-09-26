@@ -1,0 +1,449 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["search","searchHead","endpoint","authentication","outputMode"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["splunk"],
+      "flag": {
+        "prefix": "collector",
+        "modes": ["single", "worker"]
+      }
+    },
+    "searchHead": {
+      "type": "string",
+      "title": "Search head",
+      "default": "https://localhost:8089",
+      "description": "Search Head base URL, can be expression, default is https://localhost:8089."
+    },
+    "search": {
+      "type": "string",
+      "title": "Search",
+      "description": "Enter Splunk search here. For example: 'index=myAppLogs level=error channel=myApp' OR '| mstats avg(myStat) as myStat WHERE index=myStatsIndex.'"
+    },
+    "earliest": {
+      "title": "Earliest",
+      "type": "string",
+      "description": "The earliest time boundary for the search. Can be an exact or relative time. For example: '2022-01-14T12:00:00Z' or '-16m@m'"
+    },
+    "latest": {
+      "title": "Latest",
+      "type": "string",
+      "description": "The latest time boundary for the search. Can be an exact or relative time. For example: '2022-01-14T12:00:00Z' or '-1m@m'"
+    },
+    "endpoint": {
+      "type": "string",
+      "title": "Search endpoint",
+      "default": "/services/search/v2/jobs/export",
+      "description": "REST API used to create a search."
+    },
+    "outputMode": {
+      "type": "string",
+      "title": "Output mode",
+      "description": "Format of the returned output",
+      "enum": ["csv", "json"],
+      "default": "json"
+    },
+    "collectRequestParams": {
+      "title": "Extra parameters",
+      "description": "Optional collect request parameters.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name","value"],
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string",
+            "description": "Parameter name"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string",
+            "description": "JavaScript expression to compute the parameter's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.",
+            "jsExpression": true
+          }
+        }
+      }
+    },
+    "collectRequestHeaders": {
+      "title": "Extra headers",
+      "description": "Optional collect request headers.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name","value"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Header Name"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value",
+            "description": "JavaScript expression to compute the header's value, normally enclosed in backticks (e.g., `${earliest}`). If a constant, use single quotes (e.g., 'earliest'). Values without delimiters (e.g., earliest) are evaluated as strings.",
+            "jsExpression": true,
+            "encrypt": true
+          }
+        }
+      }
+    },
+    "authentication": {
+      "type": "string",
+      "title": "Authentication",
+      "description": "Authentication method for Discover and Collect REST calls.",
+      "enum": ["none", "basic", "basicSecret", "token", "tokenSecret"],
+      "enumNames": ["None", "Basic", "Basic (credentials secret)", "Bearer Token", "Bearer Token (text secret)"],
+      "default": "basic"
+    },
+    "timeout" : {
+      "type": "number",
+      "title": "Request Timeout (secs)",
+      "description": "HTTP request inactivity timeout, use 0 to disable",
+      "minimum": 0,
+      "maximum": 1800,
+      "default": 0
+    },
+    "useRoundRobinDns": {
+      "type":"boolean",
+      "title": "Round-robin DNS",
+      "description": "Enable to use round-robin DNS lookup. Suitable when DNS server returns multiple addresses in sort order.",
+      "default": false
+    },
+    "disableTimeFilter": {
+      "type": "boolean",
+      "title": "Disable time filter",
+      "description": "Used to disable collector event time filtering when a date range is specified.",
+      "default": true
+    },
+    "rejectUnauthorized": {
+      "type": "boolean",
+      "title": "Reject unauthorized certificates",
+      "description":
+      "Whether to reject certificates that cannot be verified against a valid CA (e.g., self-signed certificates).",
+      "default": false,
+      "defaultNew": true
+    },
+    "retryRules": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Retry type",
+          "description": "The algorithm to use when performing HTTP retries",
+          "enum": [
+            "none",
+            "backoff",
+            "static"
+          ],
+          "enumNames": [
+            "Disabled",
+            "Backoff",
+            "Static"
+          ],
+          "default": "backoff"
+        },
+        "interval": {},
+        "limit":{},
+        "multiplier": {},
+        "codes": {},
+        "enableHeader": {},
+        "retryConnectTimeout": {},
+        "retryConnectReset": {}
+      },
+      "dependencies": {
+        "type": {
+          "oneOf": [
+            {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "none"
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "static"
+                  ]
+                },
+                "interval": {
+                  "type": "number",
+                  "title": "Wait (ms)",
+                  "description": "Time interval between retries. Maximum allowed value is 20,000 ms (1/3 minute).",
+                  "minimum": 0,
+                  "maximum": 20000,
+                  "default": 1000
+                },
+                "limit": {
+                  "type": "number",
+                  "title": "Max retries",
+                  "description": "The maximum number of times to retry a failed HTTP request",
+                  "minimum": 0,
+                  "maximum": 20,
+                  "default": 5
+                },
+                "codes": {
+                  "type": "array",
+                  "title": "Retry HTTP codes",
+                  "description": "List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.",
+                  "minItems": 1,
+                  "default": [ 429, 503 ],
+                  "items": {
+                    "type": "number",
+                    "minLength": 1
+                  }
+                },
+                "enableHeader": {
+                  "type": "boolean",
+                  "title": "Honor Retry-After header",
+                  "description": "Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.",
+                  "default": true
+                },
+                "retryConnectTimeout": {
+                  "type": "boolean",
+                  "title": "Retry Connection Timeout",
+                  "description": "When toggled to Yes (the default), there will be a single retry attempt made when a connection timeout (ETIMEDOUT) error occurs",
+                  "default": false
+                },
+                "retryConnectReset": {
+                  "type": "boolean",
+                  "title": "Retry Connection Reset",
+                  "description": "When toggled to Yes (the default), the request will be retried when a connection reset error (ECONNRESET) error occurs",
+                  "default": false
+                }
+              }
+            },
+            {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "backoff"
+                  ]
+                },
+                "interval": {
+                  "type": "number",
+                  "title": "Initial retry interval (ms)",
+                  "description": "Time interval between failed request and first retry (kickoff). Maximum allowed value is 20,000 ms (1/3 minute).",
+                  "minimum": 0,
+                  "maximum": 20000,
+                  "default": 1000
+                },
+                "limit": {
+                  "type": "number",
+                  "title": "Max retries",
+                  "description": "The maximum number of times to retry a failed HTTP request",
+                  "minimum": 0,
+                  "maximum": 20,
+                  "default": 5
+                },
+                "multiplier": {
+                  "type": "number",
+                  "title": "Backoff multiplier",
+                  "description": "Base for exponential backoff, e.g., base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on",
+                  "minimum": 1,
+                  "maximum": 20,
+                  "default": 2
+                },
+                "codes": {
+                  "type": "array",
+                  "title": "Retry HTTP codes",
+                  "description": "List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.",
+                  "minItems": 1,
+                  "default": [ 429, 503 ],
+                  "items": {
+                    "type": "number",
+                    "minLength": 1
+                  }
+                },
+                "enableHeader": {
+                  "type": "boolean",
+                  "title": "Honor Retry-After header",
+                  "description": "Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to 20 seconds, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.",
+                  "default": true
+                },
+                "retryConnectTimeout": {
+                  "type": "boolean",
+                  "title": "Retry Connection Timeout",
+                  "description": "When toggled to Yes (the default), there will be a single retry attempt made when a connection timeout (ETIMEDOUT) error occurs",
+                  "default": false
+                },
+                "retryConnectReset": {
+                  "type": "boolean",
+                  "title": "Retry Connection Reset",
+                  "description": "When toggled to Yes (the default), the request will be retried when a connection reset error (ECONNRESET) error occurs",
+                  "default": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "authentication": {
+      "oneOf": [
+        {
+          "properties": {
+            "authentication": {
+              "enum":["none"]
+            }
+          }
+        },
+        {
+          "required": [ "username","password"],
+          "properties": {
+            "authentication": {
+              "enum":["basic"]
+            },
+            "username": {
+              "type": "string",
+              "title": "Username",
+              "description": "Basic authentication username",
+              "encrypt": true
+            },
+            "password": {
+              "type": "string",
+              "title": "Password",
+              "description": "Basic authentication password",
+              "encrypt": true
+            }
+          }
+        },
+        {
+          "required": ["credentialsSecret"],
+          "properties": {
+            "authentication": { "enum":["basicSecret"] },
+            "credentialsSecret": {
+              "type": "string",
+              "title": "Credentials secret",
+              "secret": { "type": "credentials", "target": ["username", "password"] },
+              "description": "Select (or create) a stored secret that references your credentials"
+            }
+          }
+        },
+        {
+          "required": ["token"],
+          "properties": {
+            "authentication": { "enum":["token"] },
+            "token": {
+              "type": "string",
+              "title": "Bearer Token",
+              "description": "Bearer token",
+              "encrypt": true
+            }
+          }
+        },
+        {
+          "required": ["tokenSecret"],
+          "properties": {
+            "authentication": { "enum":["tokenSecret"] },
+            "tokenSecret": {
+              "type": "string",
+              "title": "Bearer Token secret",
+              "secret": { "type": "text", "target": ["token"] },
+              "description": "Select (or create) a stored secret that references your Bearer token"
+            }
+          }
+        },
+        {
+          "required": [ "loginUrl","username","password","loginBody","tokenRespAttribute","authHeaderExpr"],
+          "properties": {
+            "authentication": {
+              "enum":["login"]
+            },
+            "loginUrl": {
+              "type": "string",
+              "title": "Login URL",
+              "description": "URL to use for login API call. This call is expected to be a POST.",
+              "default": "`https://localhost:9000/api/v1/auth/login`",
+              "jsExpression": true
+            },
+            "username": {
+              "type": "string",
+              "title": "Username",
+              "description": "Login username",
+              "minLength": 1,
+              "encrypt": true
+            },
+            "password": {
+              "type": "string",
+              "title": "Password",
+              "description": "Login password",
+              "minLength": 1,
+              "encrypt": true
+            },
+            "loginBody": {
+              "type": "string",
+              "title": "POST Body",
+              "description": "Template for POST body to send with login request, ${username} and ${password} are used to specify location of these attributes in the message",
+              "default": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+              "jsExpression": true
+            },
+            "tokenRespAttribute": {
+              "type": "string",
+              "title": "Token Attribute",
+              "description": "Path to token attribute in login response body. Nested attributes are OK.",
+              "default": "token"
+            },
+            "authHeaderExpr": {
+              "type": "string",
+              "title": "Authorize Expression",
+              "description": "JavaScript expression to compute the Authorization header to pass in discover and collect calls. The value ${token} is used to reference the token obtained from login.",
+              "default": "`Bearer ${token}`",
+              "jsExpression": true
+            }
+          }
+        },
+        {
+          "required": [ "loginUrl","credentialsSecret","loginBody","tokenRespAttribute","authHeaderExpr"],
+          "properties": {
+            "authentication": { "enum":["loginSecret"] },
+            "loginUrl": {
+              "type": "string",
+              "title": "Login URL",
+              "description": "URL to use for login API call, this call is expected to be a POST.",
+              "default": "`https://localhost:9000/api/v1/auth/login`",
+              "jsExpression": true
+            },
+            "credentialsSecret": {
+              "type": "string",
+              "title": "Credentials secret",
+              "secret": { "type": "credentials", "target": ["username", "password"] },
+              "description": "Select (or create) a stored secret that references your login credentials"
+            },
+            "loginBody": {
+              "type": "string",
+              "title": "POST Body",
+              "description": "Template for POST body to send with login request, ${username} and ${password} are used to specify location of these attributes in the message",
+              "default": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+              "jsExpression": true
+            },
+            "tokenRespAttribute": {
+              "type": "string",
+              "title": "Token Attribute",
+              "description": "Path to token attribute in login response body. Nested attributes are OK.",
+              "default": "token"
+            },
+            "authHeaderExpr": {
+              "type": "string",
+              "title": "Authorize Expression",
+              "description": "JavaScript expression to compute the Authorization header to pass in discover and collect calls. The value ${token} is used to reference the token obtained from login.",
+              "default": "`Bearer ${token}`",
+              "jsExpression": true
+            }
+          }
+        }
+      ]
+    }
+  }
+}

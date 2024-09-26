@@ -1,0 +1,1380 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["collectUrl","collectMethod","authentication"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["rest"],
+      "flag": {
+        "prefix": "collector",
+        "modes": ["single", "worker"]
+      }
+    },
+    "discovery": {
+      "type": "object",
+      "required": [ "discoverType" ],
+      "properties": {
+        "discoverType": {
+          "type": "string",
+          "title": "Discover type",
+          "description": "Defines how task discovery will be performed. Each entry returned by the Discover operation will result in a Collect task.",
+          "enum": [ "http", "json", "list", "none" ],
+          "default": "none"
+        }
+      },
+      "dependencies": {
+        "discoverType": {
+          "oneOf": [
+            {
+              "required": [ "discoverUrl", "discoverMethod" ],
+              "properties": {
+                "discoverType": {
+                  "enum": [ "http" ]
+                },
+                "discoverUrl": {
+                  "type": "string",
+                  "title": "Discover URL",
+                  "description": "URL to use for the Discover operation. Can be a constant URL, or a JavaScript expression to derive the URL.",
+                  "jsExpression": true
+                },
+                "discoverMethod": {
+                  "type": "string",
+                  "title": "Discover method",
+                  "enum": [ "get", "post", "post_with_body", "other" ],
+                  "enumNames": [ "GET", "POST", "POST with Body", "Other" ],
+                  "default": "get"
+                },
+                "discoverVerb": {},
+                "discoverRequestParams": {},
+                "discoverBody": {},
+                "discoverRequestHeaders": {
+                  "title": "Discover headers",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [ "name", "value" ],
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "title": "Name"
+                      },
+                      "value": {
+                        "type": "string",
+                        "title": "Value",
+                        "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                        "jsExpression": true,
+                        "encrypt": true
+                      }
+                    }
+                  }
+                },
+                "discoverDataField": {
+                  "type": "string",
+                  "title": "Discover data field",
+                  "description": "Path to field in the response object that contains discovery results (ex: level1.name). Leave blank if the result is an array."
+                },
+                "enableDiscoverCode": {
+                  "type": "boolean",
+                  "title": "Format discover result with custom code",
+                  "default": false
+                }
+              },
+              "dependencies" : {
+                "enableDiscoverCode" : {
+                  "oneOf" : [
+                    {
+                      "properties": {
+                        "enableDiscoverCode": { "enum": [ false ] }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "enableDiscoverCode": { "enum": [ true ] },
+                        "formatResultCode": {
+                          "type": "string",
+                          "title": "Format discover result",
+                          "description": "Custom JavaScript code to format the discover result through the __e variable which is a JSON object or array containing the original discover results. The object or array passed should be manipulated to contain the desired discover results, i.e.: __e['myResult'] = [{lat: -1.1234, long: 2.345, zip: 11111},{lat: -1.235, long 2.346, zip: 22222}] or ['11111','22222']. Caution: This function is evaluated in an unprotected context, allowing you to execute almost any JavaScript code.",
+                          "jsExpression": true,
+                          "jsExpressionUnprotected": true,
+                          "jsExpressionEvalType": "inplace"
+                        }
+                      }
+                    }
+                  ]
+                },
+                "discoverMethod" : {
+                  "oneOf" : [
+                    {
+                      "properties": {
+                        "discoverMethod": {
+                          "enum": [ "get" ]
+                        },
+                        "discoverRequestParams": {
+                          "title": "Discover parameters",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "name",
+                              "value"
+                            ],
+                            "properties": {
+                              "name": {
+                                "title": "Name",
+                                "type": "string"
+                              },
+                              "value": {
+                                "title": "Value",
+                                "type": "string",
+                                "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                                "jsExpression": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "discoverMethod": {
+                          "enum": [ "post" ]
+                        },
+                        "discoverRequestParams": {
+                          "title": "Discover parameters",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "name",
+                              "value"
+                            ],
+                            "properties": {
+                              "name": {
+                                "title": "Name",
+                                "type": "string"
+                              },
+                              "value": {
+                                "title": "Value",
+                                "type": "string",
+                                "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                                "jsExpression": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "required": ["discoverBody"],
+                      "properties": {
+                        "discoverMethod": {
+                          "enum": [ "post_with_body" ]
+                        },
+                        "discoverBody": {
+                          "type": "string",
+                          "title": "Discover POST body",
+                          "description": "Template for POST body to send with the discover request. To reference global variables or functions, use template parameters: `{ myVar: ${C.vars.myVar}, secret: ${C.Secret('mySecret','text').value} }`",
+                          "jsExpression": true
+                        }
+                      }
+                    },
+                    {
+                      "required": ["discoverVerb"],
+                      "properties": {
+                        "discoverMethod": {
+                          "enum": [ "other" ]
+                        },
+                        "discoverVerb": {
+                          "type": "string",
+                          "title": "Discover verb",
+                          "description": "Custom HTTP method to use for the Discover operation"
+                        },
+                        "discoverBody": {
+                          "type": "string",
+                          "title": "Discover body",
+                          "description": "Template for body to send with the discover request",
+                          "jsExpression": true
+                        },
+                        "discoverRequestParams": {
+                          "title": "Discover parameters",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "name",
+                              "value"
+                            ],
+                            "properties": {
+                              "name": {
+                                "title": "Name",
+                                "type": "string"
+                              },
+                              "value": {
+                                "title": "Value",
+                                "type": "string",
+                                "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                                "jsExpression": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "required": [ "manualDiscoverResult" ],
+              "properties": {
+                "discoverType": {
+                  "enum": [ "json" ]
+                },
+                "manualDiscoverResult": {
+                  "type": "string",
+                  "title": "Discover result",
+                  "description": "Allows hard-coding the Discover result. Must be a JSON object or array. Works with Discover data field."
+                },
+                "discoverDataField": {
+                  "type": "string",
+                  "title": "Discover data field",
+                  "description": "Within the response JSON, the name of the field to pull results from, typically a JSON array. Leave blank if the result itself is an array of values. Sample entry: items, json: { items: [{id: 'first'},{id: 'second'}] }"
+                }
+              }
+            },
+            {
+              "required": [ "itemList" ],
+              "properties": {
+                "discoverType": {
+                  "enum": [ "list" ]
+                },
+                "itemList": {
+                  "type": "array",
+                  "title": "Discover items",
+                  "description": "Comma-separated list of items to return from the Discover task. Each item returned generates a Collect task and can be referenced using `${id}` in the Collect URL, headers, or parameters.",
+                  "minItems": 1,
+                  "default": [],
+                  "items": {
+                    "type": "string",
+                    "title": "Items",
+                    "description": "List of items to return from discovery"
+                  }
+                }
+              }
+            },
+            {
+              "properties": {
+                "discoverType": {
+                  "enum": [ "none" ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "collectUrl": {
+      "type": "string",
+      "title": "Collect URL",
+      "description": "URL (constant or JavaScript expression) to use for the Collect operation",
+      "jsExpression": true
+    },
+    "collectMethod": {
+      "type": "string",
+      "title": "Collect method",
+      "enum": [ "get", "post", "post_with_body","other"],
+      "enumNames": [ "GET", "POST", "POST with Body", "Other"],
+      "default": "get"
+    },
+    "collectVerb": {},
+    "collectRequestParams": {},
+    "collectBody": {},
+    "collectRequestHeaders": {
+      "title": "Collect headers",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name","value"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value",
+            "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+            "jsExpression": true,
+            "encrypt": true
+          }
+        }
+      }
+    },
+    "pagination": {
+      "type": "object",
+      "required": [ "type" ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Pagination",
+          "enum": [ "none", "response_body", "response_header", "response_header_link", "request_offset", "request_page"],
+          "enumNames": [ "None", "Response Body Attribute", "Response Header Attribute", "RFC 5988 - Web Linking", "Offset/Limit", "Page/Size"],
+          "default": "none"
+        }
+      },
+      "dependencies": {
+        "type": {
+          "oneOf": [
+            {
+              "properties": {
+                "type": {
+                  "enum" : ["none"]
+                }
+              }
+            },
+            {
+              "required": ["attribute","maxPages"],
+              "properties": {
+                "type" : { "enum" : ["response_body"] },
+                "attribute": {
+                  "type": ["array", "string"],
+                  "title": "Response attributes",
+                  "description": "Names of attributes within the response that contain next-page information",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "maxPages": {
+                  "type": "number",
+                  "title": "Page limit",
+                  "description": "Maximum number of pages to retrieve per collection task. Defaults to 50 pages. Set to 0 to retrieve all pages.",
+                  "default": 50,
+                  "minimum": 0
+                },
+                "lastPageExpr": {
+                  "type": "string",
+                  "title": "Last-page expression",
+                  "description": "JavaScript expression used to determine when the last page has been reached. The values tested by this expression must be in the Response attributes section.",
+                  "jsExpression": true
+                }
+              }
+            },
+            {
+              "required": ["attribute","maxPages"],
+              "properties": {
+                "type" : { "enum" : ["response_header"] },
+                "attribute": {
+                  "type": ["array", "string"],
+                  "title": "Response attributes",
+                  "description": "Names of attributes within the response that contain next-page information",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "maxPages": {
+                  "type": "number",
+                  "title": "Page limit",
+                  "description": "Maximum number of pages to retrieve per collection task. Defaults to 50 pages. Set to 0 to retrieve all pages.",
+                  "default": 50,
+                  "minimum": 0
+                }
+              }
+            },
+            {
+              "required": ["nextRelationAttribute","maxPages"],
+              "properties": {
+                "type" : { "enum" : ["response_header_link"] },
+                "nextRelationAttribute": {
+                  "type": "string",
+                  "title": "Next page relation name",
+                  "description": "Relation name used in the link header that refers to the next page in the result set. Example: rel=\"next\" refers to the next page of results: <https://myHost/nextPage>; rel=\"next\"",
+                  "default": "next"
+                },
+                "curRelationAttribute": {
+                  "type": "string",
+                  "title": "Current page relation name",
+                  "description": "Relation name used in the link header that refers to the current result set. Example: rel=\"self\" refers to the current page of results: <https://myHost/curPage>; rel=\"self\" "
+                },
+                "maxPages": {
+                  "type": "number",
+                  "title": "Page limit",
+                  "description": "Maximum number of pages to retrieve per collection task. Defaults to 50 pages. Set to 0 to retrieve all pages.",
+                  "default": 50,
+                  "minimum": 0
+                }
+              }
+            },
+            {
+              "required": ["maxPages", "zeroIndexed", "offsetField", "limitField", "limit"],
+              "properties": {
+                "type" : { "enum" : ["request_offset"] },
+                "offsetField": {
+                  "type": "string",
+                  "title": "Offset field name",
+                  "description": "Query string parameter that sets the index from which to begin returning records. Example: /api/v1/query?term=cribl&limit=100&offset=0",
+                  "default": "offset"
+                },
+                "offset": {
+                  "type": "number",
+                  "title": "Starting offset",
+                  "description": "Offset index from which to start request. Defaults to undefined, which will start collection from the first record."
+                },
+                "offsetSpacer": {
+                  "type": "null"
+                },
+                "limitField": {
+                  "type": "string",
+                  "title": "Limit field name",
+                  "description": "Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&limit=100&offset=0",
+                  "default": "limit"
+                },
+                "limit": {
+                  "type": "number",
+                  "title": "Record limit",
+                  "description": "Maximum number of records to collect per request",
+                  "default": 50,
+                  "minimum": 1
+                },
+                "limitSpacer": {
+                  "type": "null"
+                },
+                "totalRecordField": {
+                  "type": "string",
+                  "title": "Total record count field name",
+                  "description": "Name of the attribute in the response that contains the total number of records for the query"
+                },
+                "maxPages": {
+                  "type": "number",
+                  "title": "Page limit",
+                  "description": "Maximum number of pages to retrieve per collection task. Defaults to 50 pages. Set to 0 to retrieve all pages.",
+                  "default": 50,
+                  "minimum": 0
+                },
+                "zeroIndexed": {
+                  "type": "boolean",
+                  "title": "Zero-based index",
+                  "description": "Enable to indicate that the first page in the requested data is at index 0. Disabled by default, which indicates index 1.",
+                  "default": false
+                }
+              }
+            },
+            {
+              "required": ["maxPages", "zeroIndexed", "pageField", "sizeField", "size"],
+              "properties": {
+                "type" : { "enum" : ["request_page"] },
+                "pageField": {
+                  "type": "string",
+                  "title": "Page number field name",
+                  "description": "Query string parameter that sets the page index to be returned. Example: /api/v1/query?term=cribl&page_size=100&page_number=0",
+                  "default": "page"
+                },
+                "page": {
+                  "type": "number",
+                  "title": "Starting page number",
+                  "description": "Page number from which to start request. Defaults to undefined, which will start collection from the first page."
+                },
+                "offsetSpacer": {
+                  "type": "null"
+                },
+                "sizeField": {
+                  "type": "string",
+                  "title": "Page size field name",
+                  "description": "Query string parameter that sets the number of records retrieved per request. Example: /api/v1/query?term=cribl&page_size=100&page_number=0",
+                  "default": "size"
+                },
+                "size": {
+                  "type": "number",
+                  "title": "Record limit",
+                  "description": "Maximum number of records to collect per page",
+                  "default": 50,
+                  "minimum": 1
+                },
+                "limitSpacer": {
+                  "type": "null"
+                },
+                "totalPageField": {
+                  "type": "string",
+                  "title": "Total page count field name",
+                  "description": "Name of the attribute in the response that contains the total number of pages for the query"
+                },
+                "totalRecordField": {
+                  "type": "string",
+                  "title": "Total record count field name",
+                  "description": "Name of the attribute in the response that contains the total number of records for the query"
+                },
+                "maxPages": {
+                  "type": "number",
+                  "title": "Page limit",
+                  "description": "Maximum number of pages to retrieve per collection task. Defaults to 50 pages. Set to 0 to retrieve all pages.",
+                  "default": 50,
+                  "minimum": 0
+                },
+                "zeroIndexed": {
+                  "type": "boolean",
+                  "title": "zero-based index",
+                  "description": "Enable to indicate that the first page in the requested data is at index 0. Disabled by default, which indicates index 1.",
+                  "default": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "authentication": {
+      "type": "string",
+      "title": "Authentication",
+      "description": "Authentication method for Discover and Collect REST calls. You can specify API key–based authentication by adding the appropriate Collect headers.",
+      "enum": ["none", "basic", "basicSecret", "login", "loginSecret", "oauth", "oauthSecret", "google_oauth", "google_oauthSecret", "hmac"],
+      "default": "none"
+    },
+    "timeout" : {
+      "type": "number",
+      "title": "Request timeout (secs)",
+      "description": "HTTP request inactivity timeout. Use 0 to disable.",
+      "minimum": 0,
+      "maximum": 1800,
+      "default": 0
+    },
+    "useRoundRobinDns": {
+      "type":"boolean",
+      "title": "Round-robin DNS",
+      "description": "Use round-robin DNS lookup. Suitable when DNS server returns multiple addresses in sort order.",
+      "default": false
+    },
+    "disableTimeFilter": {
+      "type": "boolean",
+      "title": "Disable time filter",
+      "description": "Disable Collector event time filtering when a date range is specified",
+      "default": false
+    },
+    "decodeUrl": {
+      "type": "boolean",
+      "title": "Decode URL",
+      "description":
+        "Decode the URL before sending requests (including pagination requests)",
+      "default": true,
+      "defaultNew": false
+    },
+    "rejectUnauthorized": {
+      "type": "boolean",
+      "title": "Reject unauthorized certificates",
+      "description":
+        "Reject certificates that cannot be verified against a valid CA (such as self-signed certificates)",
+      "default": false,
+      "defaultNew": true
+    },
+    "captureHeaders": {
+      "type": "boolean",
+      "title": "Capture response headers",
+      "description":
+        "Enable to add response headers to the resHeaders field under the __collectible object",
+      "default": false
+    },
+    "safeHeaders": {
+      "type": "array",
+      "title": "Safe headers",
+      "description": "List of headers that are safe to log in plain text",
+      "default": [],
+      "items": {
+        "type": "string"
+      }
+    },
+    "retryRules": {
+      "type": "object",
+      "required": [ "type" ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "title": "Retry type",
+          "description": "Algorithm to use when performing HTTP retries",
+          "enum": [ "none", "backoff", "static" ],
+          "enumNames": [ "Disabled", "Backoff", "Static" ],
+          "default": "backoff"
+        },
+        "interval": {},
+        "limit": {},
+        "multiplier": {},
+        "maxIntervalMs": {},
+        "codes": {},
+        "enableHeader": {},
+        "retryConnectTimeout": {},
+        "retryConnectReset": {}
+      },
+      "dependencies": {
+        "type": {
+          "oneOf": [
+            {
+              "properties": {
+                "type": {
+                  "enum": [ "none" ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "type": {
+                  "enum": [ "static" ]
+                },
+                "interval": {
+                  "type": "number",
+                  "title": "Wait (ms)",
+                  "description": "Time interval between retries. Maximum allowed value is 20,000 ms (1/3 minute).",
+                  "minimum": 0,
+                  "maximum": 20000,
+                  "default": 1000
+                },
+                "limit": {
+                  "type": "number",
+                  "title": "Retry limit",
+                  "description": "Maximum number of times to retry a failed HTTP request",
+                  "minimum": 0,
+                  "maximum": 20,
+                  "default": 5
+                },
+                "codes": {
+                  "type": "array",
+                  "title": "Retry HTTP codes",
+                  "description": "List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.",
+                  "minItems": 1,
+                  "default": [ 429, 503 ],
+                  "items": {
+                    "type": "number",
+                    "minLength": 1
+                  }
+                },
+                "enableHeader": {
+                  "type": "boolean",
+                  "title": "Honor Retry-After header",
+                  "description": "Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to the `Longest interval between retries (ms)` value, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.",
+                  "default": true
+                },
+                "retryConnectTimeout": {
+                  "type": "boolean",
+                  "title": "Retry Connection Timeout",
+                  "description": "When toggled to Yes, a single retry attempt will be made when a connection timeout (ETIMEDOUT) error occurs",
+                  "default": false
+                },
+                "retryConnectReset": {
+                  "type": "boolean",
+                  "title": "Retry Connection Reset",
+                  "description": "When toggled to Yes, the request will be retried when a connection reset (ECONNRESET) error occurs",
+                  "default": false
+                }
+              },
+              "dependencies": {
+                "enableHeader": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "enableHeader": {
+                          "enum": [ false ]
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "enableHeader": {
+                          "enum": [ true ]
+                        },
+                        "retryHeaderName": {
+                          "type": "string",
+                          "title": "Retry-After header name",
+                          "default": "retry-after"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "properties": {
+                "type": {
+                  "enum": [ "backoff" ]
+                },
+                "interval": {
+                  "type": "number",
+                  "title": "Initial retry interval (ms)",
+                  "description": "Time interval between a failed request and the first retry",
+                  "minimum": 0,
+                  "maximum": 20000,
+                  "default": 1000
+                },
+                "limit": {
+                  "type": "number",
+                  "title": "Max retries",
+                  "description": "Maximum number of times to retry a failed HTTP request",
+                  "minimum": 0,
+                  "maximum": 20,
+                  "default": 5
+                },
+                "multiplier": {
+                  "type": "number",
+                  "title": "Backoff multiplier",
+                  "description": "Base for exponential backoff. Example: base 2 means that retries will occur after 2, then 4, then 8 seconds, and so on.",
+                  "minimum": 1,
+                  "maximum": 20,
+                  "default": 2
+                },
+                "maxIntervalMs": {
+                  "type": "number",
+                  "title": "Longest interval between retries (ms)",
+                  "minimum": 0,
+                  "thresholdWarning": {
+                    "max": {
+                      "threshold": 20000,
+                      "message": "Caution: A long retry interval could result in excessively long job run times"
+                    }
+                  },
+                  "default": 20000
+                },
+                "codes": {
+                  "type": "array",
+                  "title": "Retry HTTP codes",
+                  "description": "List of HTTP codes that trigger a retry. Leave empty to use the default list of 429 and 503.",
+                  "minItems": 1,
+                  "default": [ 429, 503 ],
+                  "items": {
+                    "type": "number",
+                    "minLength": 1
+                  }
+                },
+                "enableHeader": {
+                  "type": "boolean",
+                  "title": "Honor Retry-After header",
+                  "description": "Honor any Retry-After header that specifies a delay (in seconds) or a timestamp after which to retry the request. The delay is limited to the `Longest interval between retries (ms)` value, even if the Retry-After header specifies a longer delay. When disabled, all Retry-After headers are ignored.",
+                  "default": true
+                },
+                "retryConnectTimeout": {
+                  "type": "boolean",
+                  "title": "Retry Connection Timeout",
+                  "description": "When toggled to Yes, a single retry attempt will be made when a connection timeout (ETIMEDOUT) error occurs",
+                  "default": false
+                },
+                "retryConnectReset": {
+                  "type": "boolean",
+                  "title": "Retry Connection Reset",
+                  "description": "When toggled to Yes, the request will be retried when a connection reset (ECONNRESET) error occurs",
+                  "default": false
+                }
+              },
+              "dependencies": {
+                "enableHeader": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "enableHeader": {
+                          "enum": [ false ]
+                        }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "enableHeader": {
+                          "enum": [ true ]
+                        },
+                        "retryHeaderName": {
+                          "type": "string",
+                          "title": "Retry-After header name",
+                          "default": "retry-after"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "__scheduling": {
+      "type": "object",
+      "properties": {
+        "stateTracking": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "title": "Enabled",
+              "description": "Track collection progress between consecutive scheduled executions"
+            }
+          },
+          "dependencies": {
+            "enabled": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "properties": {
+                      "enabled": {
+                        "enum": [ false ]
+                      }
+                    }
+                  }
+                },
+                {
+                  "required": ["stateUpdateExpression", "stateMergeExpression"],
+                  "properties": {
+                    "enabled": {
+                      "enum": [ true ]
+                    },
+                    "stateUpdateExpression": {
+                      "type": "string",
+                      "title": "State update expression",
+                      "description": "JavaScript expression that defines how to update the state from an event. Use the event's data and the current state to compute the new state. See [Understanding State Expression Fields](https://docs.cribl.io/stream/collectors-rest#state-tracking-expression-fields) for more information.",
+                      "default": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+                      "jsExpression": true
+                    },
+                    "stateMergeExpression": {
+                      "type": "string",
+                      "title": "State merge expression",
+                      "description": "JavaScript expression that defines which state to keep when merging a task's newly reported state with previously saved state. Evaluates `prevState` and `newState` variables, resolving to the state to keep.",
+                      "default": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+                      "jsExpression": true
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "dependencies": {
+   "collectMethod": {
+     "oneOf": [
+       {
+         "properties": {
+           "collectMethod" : { "enum" :  ["get"] },
+           "collectRequestParams": {
+             "title": "Collect parameters",
+             "type": "array",
+             "items": {
+               "type": "object",
+               "required": ["name","value"],
+               "properties": {
+                 "name": {
+                   "title": "Name",
+                   "type": "string"
+                 },
+                 "value": {
+                   "title": "Value",
+                   "type": "string",
+                   "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                   "jsExpression": true
+                 }
+               }
+             }
+           }
+         }
+       },
+       {
+         "properties": {
+           "collectMethod" : { "enum" :  ["post"] },
+           "collectRequestParams": {
+             "title": "Collect parameters",
+             "type": "array",
+             "items": {
+               "type": "object",
+               "required": ["name","value"],
+               "properties": {
+                 "name": {
+                   "title": "Name",
+                   "type": "string"
+                 },
+                 "value": {
+                   "title": "Value",
+                   "type": "string",
+                   "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                   "jsExpression": true
+                 }
+               }
+             }
+           }
+         }
+       },
+       {
+         "required": ["collectBody"],
+         "properties": {
+           "collectMethod" : { "enum" :  ["post_with_body"] },
+           "collectBody": {
+             "type": "string",
+             "title": "Collect POST body",
+             "description": "Template for POST body to send with the Collect request. Reference global variables, functions, or parameters from the Discover response using template params: `${C.vars.myVar}`, or `${Date.now()}`, `${param}`",
+             "jsExpression": true
+           }
+         }
+       },
+       {
+         "required": ["collectVerb"],
+         "properties": {
+           "collectMethod" : { "enum" :  ["other"] },
+           "collectVerb": {
+             "type": "string",
+             "title": "Collect verb",
+             "description": "Custom HTTP method to use for the Collect operation"
+           },
+           "collectBody": {
+             "type": "string",
+             "title": "Collect body",
+             "description": "Template for body to send with the Collect request. Reference global variables, functions, or parameters from the Discover response using template parameters: `${C.vars.myVar}`, or `${Date.now()}`, `${param}`",
+             "jsExpression": true
+           },
+           "collectRequestParams": {
+             "title": "Collect parameters",
+             "type": "array",
+             "items": {
+               "type": "object",
+               "required": ["name","value"],
+               "properties": {
+                 "name": {
+                   "title": "Name",
+                   "type": "string"
+                 },
+                 "value": {
+                   "title": "Value",
+                   "type": "string",
+                   "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                   "jsExpression": true
+                 }
+               }
+             }
+           }
+         }
+       }
+     ]
+   },
+    "authentication": {
+      "oneOf": [
+        {
+          "properties": {
+            "authentication": {
+              "enum":["none"]
+            }
+          }
+        },
+        {
+          "required": [ "username","password"],
+          "properties": {
+            "authentication": {
+              "enum":["basic"]
+            },
+            "username": {
+              "type": "string",
+              "title": "Username",
+              "encrypt": true
+            },
+            "password": {
+              "type": "string",
+              "title": "Password",
+              "encrypt": true
+            }
+          }
+        },
+        {
+          "required": ["credentialsSecret"],
+          "properties": {
+            "authentication": { "enum":["basicSecret"] },
+            "credentialsSecret": {
+              "type": "string",
+              "title": "Credentials secret",
+              "secret": { "type": "credentials", "target": ["username", "password"] },
+              "description": "Select (or create) a stored secret that references your credentials"
+            }
+          }
+        },
+        {
+          "required": [ "loginUrl","username","password","loginBody","authHeaderExpr"],
+          "properties": {
+            "authentication": {
+              "enum":["login"]
+            },
+            "loginUrl": {
+              "type": "string",
+              "title": "Login URL",
+              "description": "URL to use for login API call. This call is expected to be a POST.",
+              "default": "`https://localhost:9000/api/v1/auth/login`",
+              "jsExpression": true
+            },
+            "username": {
+              "type": "string",
+              "title": "Login username",
+              "minLength": 1,
+              "encrypt": true
+            },
+            "password": {
+              "type": "string",
+              "title": "Login password",
+              "minLength": 1,
+              "encrypt": true
+            },
+            "loginBody": {
+              "type": "string",
+              "title": "POST body",
+              "description": "Template for POST body to send with login request. ${username} and ${password} are used to specify location of these attributes in the message.",
+              "default": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+              "jsExpression": true
+            },
+            "tokenRespAttribute": {
+              "type": "string",
+              "title": "Token attribute",
+              "description": "Path to token attribute in login response body. Nested attributes are OK. Leave blank if the response content type is text/plain; the entire response body will be used to derive the authorization header."
+            },
+            "authHeaderKey": {
+              "type": "string",
+              "title": "Authorization header",
+              "description": "Authorization header key to pass in Discover and Collect calls. Defaults to the literal name 'Authorization'.",
+              "default": "Authorization"
+            },
+            "authHeaderExpr": {
+              "type": "string",
+              "title": "Authorize expression",
+              "description": "JavaScript expression used to compute the Authorization header to pass in Discover and Collect calls. The value ${token} is used to reference the token obtained from login.",
+              "default": "`Bearer ${token}`",
+              "jsExpression": true
+            },
+            "authRequestHeaders": {
+              "title": "Authentication headers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [ "name", "value" ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Name"
+                  },
+                  "value": {
+                    "type": "string",
+                    "title": "Value",
+                    "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                    "jsExpression": true,
+                    "encrypt": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "required": [ "loginUrl","credentialsSecret","loginBody","authHeaderExpr"],
+          "properties": {
+            "authentication": { "enum":["loginSecret"] },
+            "loginUrl": {
+              "type": "string",
+              "title": "Login URL",
+              "description": "URL to use for login API call. This call is expected to be a POST.",
+              "default": "`https://localhost:9000/api/v1/auth/login`",
+              "jsExpression": true
+            },
+            "credentialsSecret": {
+              "type": "string",
+              "title": "Credentials secret",
+              "secret": { "type": "credentials", "target": ["username", "password"] },
+              "description": "Select (or create) a stored secret that references your login credentials"
+            },
+            "loginBody": {
+              "type": "string",
+              "title": "POST body",
+              "description": "Template for POST body to send with login request. ${username} and ${password} are used to specify location of these attributes in the message.",
+              "default": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+              "jsExpression": true
+            },
+            "tokenRespAttribute": {
+              "type": "string",
+              "title": "Token attribute",
+              "description": "Path to token attribute in login response body. Nested attributes are OK. If left blank, the entire response body will be used to derive the authorization header."
+            },
+            "authHeaderKey": {
+              "type": "string",
+              "title": "Authorization header",
+              "description": "Authorization header key to pass in Discover and Collect calls. Defaults to the literal name 'Authorization'.",
+              "default": "Authorization"
+            },
+            "authHeaderExpr": {
+              "type": "string",
+              "title": "Authorize expression",
+              "description": "JavaScript expression to compute the Authorization header to pass in Discover and Collect calls. The value ${token} is used to reference the token obtained from login.",
+              "default": "`Bearer ${token}`",
+              "jsExpression": true
+            },
+            "authRequestHeaders": {
+              "title": "Authentication headers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [ "name", "value" ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Name"
+                  },
+                  "value": {
+                    "type": "string",
+                    "title": "Value",
+                    "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                    "jsExpression": true,
+                    "encrypt": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "required": [ "loginUrl","clientSecretParamName","clientSecretParamValue","authHeaderExpr"],
+          "properties": {
+            "authentication": {
+              "enum":["oauth"]
+            },
+            "loginUrl": {
+              "type": "string",
+              "title": "Login URL",
+              "description": "URL to use for the OAuth API call. This call is expected to be a POST.",
+              "default": "",
+              "jsExpression": true
+            },
+            "tokenRespAttribute": {
+              "type": "string",
+              "title": "Token attribute",
+              "description": "Path to token attribute in login response body. Nested attributes are OK. Leave blank if the response content type is text/plain; the entire response body will be used to derive the authorization header.",
+              "default": "token"
+            },
+            "authHeaderKey": {
+              "type": "string",
+              "title": "Authorization header",
+              "description": "Authorization header key to pass in Discover and Collect calls. Defaults to the literal name 'Authorization'.",
+              "default": "Authorization"
+            },
+            "authHeaderExpr": {
+              "type": "string",
+              "title": "Authorize expression",
+              "description": "JavaScript expression to compute the Authorization header to pass in Discover and Collect calls. The value ${token} is used to reference the token obtained from login.",
+              "default": "`Bearer ${token}`",
+              "jsExpression": true
+            },
+            "clientSecretParamName": {
+              "type": "string",
+              "title": "Client secret parameter",
+              "description": "Defaults to 'client_secret'. Automatically added to request parameters using the value specified.",
+              "default": "client_secret"
+            },
+            "clientSecretParamValue":{
+              "type": "string",
+              "title": "Client secret value",
+              "description": "Secret value to add to HTTP requests as the 'client secret' parameter. Value is stored encrypted on disk and automatically added to request parameters.",
+              "encrypt": true
+            },
+            "authRequestParams": {
+              "title": "Extra authentication parameters",
+              "description": "OAuth request parameters added to the POST body. The Content-Type header will automatically be set to application/x-www-form-urlencoded.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name","value"],
+                "properties": {
+                  "name": {
+                    "title": "Name",
+                    "type": "string"
+                  },
+                  "value": {
+                    "title": "Value",
+                    "type": "string",
+                    "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                    "jsExpression": true
+                  }
+                }
+              }
+            },
+            "authRequestHeaders": {
+              "title": "Authentication headers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [ "name", "value" ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Name"
+                  },
+                  "value": {
+                    "type": "string",
+                    "title": "Value",
+                    "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                    "jsExpression": true,
+                    "encrypt": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "required": [ "loginUrl","clientSecretParamName","textSecret","authHeaderExpr"],
+          "properties": {
+            "authentication": {
+              "enum":["oauthSecret"]
+            },
+            "loginUrl": {
+              "type": "string",
+              "title": "Login URL",
+              "description": "URL to use for the OAuth API call. This call is expected to be a POST.",
+              "default": "",
+              "jsExpression": true
+            },
+            "tokenRespAttribute": {
+              "type": "string",
+              "title": "Token attribute",
+              "description": "Path to token attribute in login response body. Nested attributes are OK. Leave blank if the response content type is text/plain; the entire response body will be used to derive the authorization header.",
+              "default": "token"
+            },
+            "authHeaderKey": {
+              "type": "string",
+              "title": "Authorization header",
+              "description": "Authorization header key to pass in Discover and Collect calls. Defaults to the literal name 'Authorization'.",
+              "default": "Authorization"
+            },
+            "authHeaderExpr": {
+              "type": "string",
+              "title": "Authorize expression",
+              "description": "JavaScript expression to compute the Authorization header to pass in Discover and Collect calls. The value ${token} is used to reference the token obtained from login.",
+              "default": "`Bearer ${token}`",
+              "jsExpression": true
+            },
+            "clientSecretParamName": {
+              "type": "string",
+              "title": "Client secret parameter",
+              "description": "Defaults to 'client_secret'. Automatically added to request parameters using the value specified.",
+              "default": "client_secret"
+            },
+            "textSecret": {
+              "type": "string",
+              "secret": { "type": "text", "target": "clientSecretParamValue" },
+              "title": "Client secret value (text secret)",
+              "description": "Select (or create) a text secret that contains the client secret's value"
+            },
+            "authRequestParams": {
+              "title": "Extra authentication parameters",
+              "description": "OAuth request parameters added to the POST body. The Content-Type header will automatically be set to application/x-www-form-urlencoded.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name","value"],
+                "properties": {
+                  "name": {
+                    "title": "Name",
+                    "type": "string"
+                  },
+                  "value": {
+                    "title": "Value",
+                    "type": "string",
+                    "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                    "jsExpression": true
+                  }
+                }
+              }
+            },
+            "authRequestHeaders": {
+              "title": "Authentication headers",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [ "name", "value" ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "title": "Name"
+                  },
+                  "value": {
+                    "type": "string",
+                    "title": "Value",
+                    "description": "JavaScript expression to compute parameter value, usually enclosed in backticks (`${earliest}`). If a constant, use single quotes ('earliest'). Values that aren't successfully evaluated as JavaScript expressions will be treated as string constants.",
+                    "jsExpression": true,
+                    "encrypt": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "required": ["scopes","serviceAccountCredentials","subject"],
+          "properties": {
+            "authentication": {
+              "enum":["google_oauth"]
+            },
+            "scopes": {
+              "type": "array",
+              "title": "Scopes",
+              "description": "Scopes to use during authentication. See [Google's docs](https://developers.google.com/identity/protocols/oauth2/scopes) for more information.",
+              "minItems": 1,
+              "default": ["https://www.googleapis.com/auth/admin.reports.audit.readonly"],
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "serviceAccountCredentials": {
+              "type": "string",
+              "title": "Service account credentials",
+              "description": "Contents of Google Cloud service account credentials (JSON keys) file. To upload a file, click the upload icon in this field's upper right.",
+              "minLength": 1,
+              "encrypt": true
+            },
+            "subject": {
+              "type": "string",
+              "title": "Impersonated account's email address",
+              "description": "Email address of a user account with Super Admin permissions to the resources the collector will retrieve"
+            }
+          }
+        },
+        {
+          "required": ["scopes","textSecret","subject"],
+          "properties": {
+            "authentication": {
+              "enum":["google_oauthSecret"]
+            },
+            "scopes": {
+              "type": "array",
+              "title": "Scopes",
+              "description": "Scopes to use during authentication. See [Google's docs](https://developers.google.com/identity/protocols/oauth2/scopes) for more information.",
+              "minItems": 1,
+              "default": ["https://www.googleapis.com/auth/admin.reports.audit.readonly"],
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "textSecret": {
+              "type": "string",
+              "secret": { "type": "text", "target": "serviceAccountCredentials" },
+              "title": "Service account credentials (text secret)",
+              "description": "Select (or create) a text secret that contains the Google service account credentials value"
+            },
+            "subject": {
+              "type": "string",
+              "title": "Impersonated account's email address",
+              "description": "Email address of a user account with Super Admin permissions to the resources the collector will retrieve"
+            }
+          }
+        },
+        {
+          "required": [ "hmacFunctionId"],
+          "properties": {
+            "authentication": {
+              "enum":["hmac"]
+            },
+            "hmacFunctionId": {
+              "type": "string",
+              "title": "HMAC Function",
+              "description": "Select (or create) an HMAC Function to use with authentication"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

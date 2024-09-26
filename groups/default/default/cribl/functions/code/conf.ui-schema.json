@@ -1,0 +1,22 @@
+{
+  "code": {
+    "ui:widget": "JsInput",
+    "ui:options": {
+      "autoheight": true,
+      "numLines": 5,
+      "scrollbar": {
+        "horizontal": "visible"
+      }
+    },
+    "ui:placeholder": "function (__e) {\n  // your code goes here\n}"
+  },
+  "ui:options": {
+    "groups": {
+      "advanced": {
+        "title": "Advanced Settings",
+        "collapsed": true,
+        "properties": ["maxNumOfIterations", "activeLogSampleRate", "useUniqueLogChannel"]
+      }
+    }
+  }
+}

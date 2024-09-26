@@ -1,0 +1,286 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["existingOrNew"],
+  "properties": {
+    "existingOrNew":{
+      "title": "Existing or New?",
+      "description": "Leverage an existing ruleset or create a new one",
+      "type": "string",
+      "enum": ["existing", "new"],
+      "enumNames": ["Use Existing", "Create New"],
+      "default": "existing"
+    },
+    "shouldMarkCriblBreaker": {
+      "type": "boolean",
+      "title": "Add to cribl_breaker",
+      "description": "Add this function name to the cribl_breaker field.",
+      "default": true
+    }
+  },
+  "dependencies": {
+    "existingOrNew": {
+      "oneOf": [
+        {
+          "properties": {
+            "existingOrNew": {
+              "enum":["new"]
+            },
+            "ruleType": {
+              "type": "string",
+              "title": "Event Breaker Type",
+              "enum": ["regex", "json", "json_array", "header", "timestamp", "csv", "aws_cloudtrail", "aws_vpcflow"],
+              "enumNames": ["Regex", "JSON Newline Delimited", "JSON Array", "File Header", "Timestamp", "CSV",  "AWS CloudTrail", "AWS VPC Flow Log"],
+              "description": "Event Breaker Type",
+              "default": "regex"
+            },
+            "maxEventBytes": {
+              "type": "number",
+              "title": "Max Event Bytes",
+              "description": "The maximum number of bytes that an event can be before being flushed to the pipelines",
+              "default": 51200,
+              "minimum": 1,
+              "maximum": 134217728
+            },
+            "timestampAnchorRegex": {
+              "type": "string",
+              "title": "Timestamp Anchor",
+              "description": "Regex to match before attempting timestamp extraction. Use $ (end of string anchor) to not perform extraction.",
+              "default": "/^/",
+              "regexp": true
+            },
+            "timestamp": {
+              "type": "object",
+              "required": ["type"],
+              "title": "Timestamp Format",
+              "description": "Auto, manual format (strptime) or current time.",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "title": "Timestamp Type",
+                  "default": "auto",
+                  "enum": ["auto", "format", "current"]
+                },
+                "length": {
+                  "type": "number",
+                  "title": "Length",
+                  "minimum": 2,
+                  "default": 150,
+                  "uiPattern": "^\\d*$"
+                },
+                "format": {
+                  "type": "string",
+                  "title": "Format"
+                }
+              },
+              "errorMessage": "Please choose one of the timestamp options.",
+              "dependencies": {
+                "type": {
+                  "oneOf": [
+                    {
+                      "required": ["length"],
+                      "properties": {
+                        "type": { "enum": ["auto"] }
+                      }
+                    },
+                    {
+                      "required": ["format"],
+                      "properties": {
+                        "type": { "enum": ["format"] }
+                      }
+                    },
+                    {
+                      "properties": {
+                        "type": { "enum": ["current"] }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "timestampTimezone": {
+              "type": "string",
+              "title": "Default Timezone",
+              "description": "Timezone to assign to timestamps without timezone info.",
+              "default": "local"
+            },
+            "timestampEarliest": {
+              "title": "Earliest timestamp allowed",
+              "description": "The earliest timestamp value allowed relative to now. E.g., -42years. Parsed values prior to this date will be set to current time.",
+              "type": "string",
+              "default": "-420weeks",
+              "absoluteRelativeTime": true,
+              "absoluteRelativeEarliestTime": "timestampLatest"
+            },
+            "timestampLatest": {
+              "title": "Future timestamp allowed",
+              "description": "The latest timestamp value allowed relative to now. E.g., +42days. Parsed values after this date will be set to current time.",
+              "type": "string",
+              "default": "+1week",
+              "absoluteRelativeTime": true
+            }
+          },
+          "dependencies": {
+            "ruleType": {
+              "oneOf": [
+                {
+                  "required": ["eventBreakerRegex"],
+                  "properties": {
+                    "ruleType": {
+                      "enum": ["regex"]
+                    },
+                    "eventBreakerRegex": {
+                      "type": "string",
+                      "title": "Event Breaker",
+                      "description": "The regex used to break the stream into events at the beginning of the match. Matched content will be consumed, unless you use a lookahead regex such as (?=pattern) to keep it. Do NOT use capturing groups in the pattern.",
+                      "default": "/[\\n\\r]+(?!\\s)/",
+                      "regexp": {
+                        "allowCapturingGroups": false,
+                        "capturingGroupErrorMessage": "Capturing groups are not allowed. Use non-capturing groups if needed."
+                      }
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "ruleType": {
+                      "enum": ["json", "timestamp", "aws_cloudtrail", "aws_vpcflow"]
+                    }
+                  }
+                },
+                {
+                  "properties": {
+                    "ruleType": {
+                      "enum": ["json_array"]
+                    },
+                    "jsonArrayField": {
+                      "type": "string",
+                      "title": "Array field",
+                      "description": "The path to an array in a JSON event with records to extract, such as Records or level1.level2.events. Leave blank if result itself is an array, such as [{...},{...}]"
+                    },
+                    "jsonExtractAll": {
+                      "type": "boolean",
+                      "title": "JSON extract fields",
+                      "description": "If toggled on, fields are automatically extracted from JSON events. If off, only _raw and _time are defined on extracted events.",
+                      "default": false
+                    }
+                  },
+                  "dependencies": {
+                    "jsonExtractAll": {
+                      "oneOf": [
+                        {
+                          "properties": {
+                            "jsonExtractAll": { "enum": [true] },
+                            "jsonTimeField": {
+                              "type": "string",
+                              "title": "Timestamp field",
+                              "description": "Optional path to timestamp field in extracted events, such as eventTime or level1.level2.eventTime."
+                            }
+                          }
+                        },
+                        {
+                          "properties": {
+                            "jsonExtractAll": { "enum": [false] }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "required": ["delimiterRegex", "fieldsLineRegex", "headerLineRegex"],
+                  "properties": {
+                    "ruleType": {
+                      "enum": ["header"]
+                    },
+                    "delimiterRegex": {
+                      "type": "string",
+                      "title": "Field delimiter",
+                      "description": "Field delimiter regex",
+                      "regexp": true,
+                      "default": "/\\t/"
+                    },
+                    "fieldsLineRegex": {
+                      "type": "string",
+                      "regexp": true,
+                      "title": "Fields regex",
+                      "description": "Regex with one capturing group that captures all fields (and delimiters) to be broken by field delimiter",
+                      "default": "/^#[Ff]ields[:]?\\s+(.*)/"
+                    },
+                    "headerLineRegex": {
+                      "type": "string",
+                      "regexp": true,
+                      "title": "Header line",
+                      "description": "Regex matching a file header line",
+                      "default": "/^#/"
+                    },
+                    "nullFieldVal": {
+                      "type": "string",
+                      "title": "Null value",
+                      "description": "Representation of a null value. Null fields are not added to events.",
+                      "default": "-"
+                    },
+                    "cleanFields": {
+                      "type": "boolean",
+                      "default": true,
+                      "title": "Clean fields",
+                      "description": "Whether to clean field names by replacing non [a-zA-Z0-9] characters with _"
+                    }
+                  }
+                },
+                {
+                  "required": ["delimiter", "quoteChar", "escapeChar"],
+                  "properties": {
+                    "ruleType": {
+                      "enum": ["csv"]
+                    },
+                    "delimiter": {
+                      "type": "string",
+                      "default": ",",
+                      "title": "Delimiter",
+                      "minLength": 1,
+                      "description": "Delimiter character to use to split values"
+                    },
+                    "quoteChar": {
+                      "type": "string",
+                      "default": "\"",
+                      "title": "Quote char",
+                      "minLength": 1,
+                      "description": "Character used to quote literal values"
+                    },
+                    "escapeChar": {
+                      "type": "string",
+                      "default": "\"",
+                      "title": "Escape char",
+                      "minLength": 1,
+                      "description": "Character used to escape the quote character in field values"
+                    },
+                    "timeField": {
+                      "type": "string",
+                      "title": "Timestamp field",
+                      "description": "Optional timestamp field name in extracted events"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "properties": {
+            "existingOrNew": {
+              "enum":["existing"]
+            },
+            "existingRule": {
+              "type": "string",
+              "default": "",
+              "title": "Existing Ruleset",
+              "minLength": 1,
+              "description": "Select an existing ruleset to use."
+            }
+          }
+        }
+      ]
+    }
+  }
+}

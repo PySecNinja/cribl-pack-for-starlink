@@ -1,0 +1,18 @@
+{
+  "files": [
+    "mdt_dialout/mdt_grpc_dialout.proto",
+    "telemetry/telemetry.proto"
+  ],
+  "lookup": {
+    "mdt_dialout": {
+      "gRPCMdtDialout": 0,
+      "MdtDialoutArgs": 0
+    },
+    "telemetry": {
+      "Telemetry": 1,
+      "TelemetryField": 1,
+      "TelemetryGPBTable": 1,
+      "TelemetryRowGPB": 1
+    }
+  }
+}

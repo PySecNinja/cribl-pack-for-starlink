@@ -1,0 +1,1 @@
+[{"Channel": "HTTP","Computer": "WORKSTATION3","EventData": "Hacking the Matrix","EventID": "10027","EventLevel": "1","EventLevelName": "WARN","EventOriginId": "0x2b","ManagementGroupName": "WORKSPACE","Provider": "MICROSOFT","RawEventData": "Hacking the Matrix","SourceSystem": "WORKSTATION3","Task": "1",  "TimeGenerated":  "${timestamp:%Y-%m-%dT%H:%M:%S.000Z}"}]

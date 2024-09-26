@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "title": "Join Configuration",
+  "additionalProperties": false,
+  "required": ["joinConditions"],
+  "properties": {
+    "kind": {
+      "type": "string",
+      "title": "Kind",
+      "description": "Join kind, e.g. inner"
+    },
+    "hints": {
+      "type": "object",
+      "title": "Hint",
+      "description": "Hints passed to the join function",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "fieldConditions": {
+      "title": "Join Conditions",
+      "description": "Fields to use when joining",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["leftFieldName", "rightFieldName"],
+        "properties": {
+          "leftFieldName": {
+            "title": "Left Field Name",
+            "description": "The field name to join on, on the left side.",
+            "type": "string"
+          },
+          "rightFieldName": {
+            "title": "Right Field Name",
+            "description": "The field name on the right side of the data, i.e. the stage results, that we are joining with",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "searchJobId": {
+      "title": "Search Job Id",
+      "description": "The id for this search job.",
+      "type": "string"
+    },
+    "stageId": {
+      "title": "Stage Id",
+      "description": "The stage we are joining with.",
+      "type": "string"
+    }
+  }
+}

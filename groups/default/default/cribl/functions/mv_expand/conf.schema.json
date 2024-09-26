@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "title": "",
+  "additionalProperties": false,
+  "required": ["sourceFields"],
+  "properties": {
+    "sourceFields": {
+      "title": "Source fields",
+      "description": "Array of property-/field-names to expand",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "targetNames": {
+      "title": "Target field names",
+      "description": "stores the value as new target field name",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "rowLimit": {
+      "title": "Row limit",
+      "description": "max. number of rows generated out of every source events",
+      "type": "number",
+      "default": 9007199254740991
+    }, 
+    "itemIndexName": {
+      "title": "Item index name",
+      "description": "name of an optional index property generated into the output",
+      "type": "string"
+    },
+    "bagExpansionMode": {
+      "title": "Bag expansion mode",
+      "description": "decides if bag-values are expanded to bags or arrays",
+      "type": "string",
+      "default": "bag",
+      "enum": ["bag", "array"],
+      "enumNames": ["Store as object", "Store as array"]
+    }
+  }
+}

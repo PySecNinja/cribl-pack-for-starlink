@@ -1,0 +1,28 @@
+mdt-generic-device:
+  name: Generic MDT device
+  description: Protobuf library for generic MDT device support
+opentelemetry:
+  name: OpenTelemetry
+  description: Protobuf files for OpenTelemetry structured data
+  availableEncodings:
+    - id: otel-metrics
+      name: Metrics
+      eventModel: opentelemetry.proto.metrics.v1.ResourceMetrics
+      wrapping:
+        wrapperModel: opentelemetry.proto.collector.metrics.v1.ExportMetricsServiceRequest
+        wrapperField: resource_metrics
+        wrapperFieldType: array
+    - id: otel-traces
+      name: Traces
+      eventModel: opentelemetry.proto.trace.v1.ResourceSpans
+      wrapping:
+        wrapperModel: opentelemetry.proto.collector.trace.v1.ExportTraceServiceRequest
+        wrapperField: resource_spans
+        wrapperFieldType: array
+    - id: otel-logs
+      name: Logs
+      eventModel: opentelemetry.proto.logs.v1.ResourceLogs
+      wrapping:
+        wrapperModel: opentelemetry.proto.collector.logs.v1.ExportLogsServiceRequest
+        wrapperField: resource_logs
+        wrapperFieldType: array

@@ -1,0 +1,81 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["packages", "authToken"],
+  "properties": {
+    "authToken": {
+      "type": "string",
+      "title": "Auth token",
+      "minLength": 1,
+      "encrypt": true
+    },
+    "packages": {
+      "type":"array",
+      "items": {
+        "type":"object",
+        "required": ["packageUrl", "packageFile", "version", "localPackageUrl", "variant"],
+        "properties": {
+          "packageUrl": {
+            "type": "string",
+            "title": "CDN package URL",
+            "minLength": 1
+          },
+          "packageFile": {
+            "type": "string",
+            "title": "Package destination",
+            "minLength": 1
+          },
+          "hashUrl": {
+            "type": "string",
+            "title": "CDN hash URL",
+            "minLength": 1
+          },
+          "hashFile": {
+            "type": "string",
+            "title": "Hash destination",
+            "minLength": 1
+          },
+          "localPackagePath": {
+            "type": "string",
+            "title": "Leader package URL path",
+            "minLength": 1
+          },
+          "localPackageUrl": {
+            "type": "string",
+            "title": "Leader package URL",
+            "minLength": 1
+          },
+          "hashType": {
+            "type": "string",
+            "title": "Hash type",
+            "minLength": 1
+          },
+          "localHashPath": {
+            "type": "string",
+            "title": "Leader hash URL path",
+            "minLength": 1
+          },
+          "localHashUrl": {
+            "type": "string",
+            "title": "Leader hash URL",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "title": "Cribl version",
+            "minLength": 1
+          },
+          "variant": {
+            "type":"array",
+            "title": "Build variant",
+            "contains": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      }
+    }
+  }
+}

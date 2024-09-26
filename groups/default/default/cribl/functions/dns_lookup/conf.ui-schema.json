@@ -1,0 +1,84 @@
+{
+  "dnsLookupFields": {
+    "ui:field": "Table",
+    "items": {
+      "inFieldName": {
+        "ui:options": {
+          "columnWidth": "50%"
+        },
+        "ui:placeholder": "Enter field name"
+      },
+      "outFieldName": {
+        "ui:options": {
+          "columnWidth": "50%"
+        },
+        "ui:placeholder": "Enter field name"
+      }
+    }
+  },
+  "reverseLookupFields": {
+    "ui:field": "Table",
+    "items": {
+      "inFieldName": {
+        "ui:options": {
+          "columnWidth": "50%"
+        },
+        "ui:placeholder": "Enter field name"
+      },
+      "outFieldName": {
+        "ui:options": {
+          "columnWidth": "50%"
+        },
+        "ui:placeholder": "Enter field name"
+      },
+      "resourceRecordType": {
+        "ui:options": { "inline": true, "width": "50%" }
+      }
+    }
+  },
+  "dnsServers": {
+    "ui:field": "Tags",
+    "ui:placeholder": "DNS IP"
+  },
+  "cacheTTL": {
+    "ui:options": {
+      "width": "50%",
+      "inline": true
+    }
+  },
+  "maxCacheSize": {
+    "ui:options": {
+      "width": "50%",
+      "inline": true
+    }
+  },
+  "domainOverrides": {
+    "ui:options": {
+      "width": "50%"
+    }
+  },
+  "useResolvConf": {
+    "ui:options": {
+      "width": "50%"
+    }
+  },
+  "lookupFallback": {
+    "ui:options": {
+      "width": "50%"
+    }
+  },
+  "ui:options": {
+    "groups": {
+      "shortnameresolution": {
+        "title": "Fallback resolving methods",
+        "collapsed": true,
+        "properties": ["useResolvConf", "domainOverrides", "lookupFallback" ]
+      },
+      "advanced": {
+        "title": "Advanced Settings",
+        "collapsed": true,
+        "properties": ["dnsServers", "cacheTTL", "maxCacheSize", "lookupFailLogLevel" ]
+      }
+    }
+  }
+}

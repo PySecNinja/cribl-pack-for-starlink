@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "title": "",
+  "properties": {
+    "dropNonLogEvents": {
+      "type": "boolean",
+      "title": "Drop non-log events",
+      "description": "Determines whether or not to drop any non-log events.",
+      "default": false
+    },
+    "batchOTLPLogs": {
+      "type": "boolean",
+      "title": "Batch OTLP logs",
+      "description": "Whether to enable the batching of OTLP log records by shared top-level `resource` attributes",
+      "default": false
+    }
+  },
+  "dependencies": {
+    "batchOTLPLogs": {
+      "oneOf": [
+        {
+          "properties": {
+            "batchOTLPLogs": {
+              "enum": [false]
+            }
+          }
+        },
+        {
+          "properties": {
+            "batchOTLPLogs": {
+              "enum": [true]
+            },
+            "sendBatchSize": {
+              "type": "number",
+              "title": "Batch size",
+              "description": "Number of log records after which a batch will be sent regardless of the timeout",
+              "default": 8192
+            },
+            "timeout": {
+              "type": "number",
+              "title": "Batch timeout (ms)",
+              "description": "Time duration after which a batch will be sent regardless of size",
+              "default": 200
+            },
+            "sendBatchMaxSize": {
+              "type": "number",
+              "title": "Batch size limit (kb)",
+              "description": "Maximum batch size. Enter 0 for no maximum.",
+              "default": 0
+            },
+            "metadataKeys": {
+              "type": "array",
+              "title": "Batch log metadata keys",
+              "description": "When set, this processor will create one batcher instance per distinct combination of values in the metadata"
+            },
+            "metadataCardinalityLimit": {
+              "type": "number",
+              "title": "Metadata cardinality limit",
+              "description": "When Metadata keys is not empty, this setting limits the number of unique combinations of metadata key values that will be processed over the lifetime of the process",
+              "default": 1000
+            }
+          }
+        }
+      ]
+    }
+  }
+}

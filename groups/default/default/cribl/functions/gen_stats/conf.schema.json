@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "title": "Gen stats configuration",
+  "additionalProperties": false,
+  "properties": {
+    "fields":{
+      "type":"array",
+      "items": {
+        "type":"string"
+      }
+    }
+  }
+}

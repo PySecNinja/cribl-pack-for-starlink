@@ -1,0 +1,153 @@
+backpressure-dest:
+  subject: "[${status}] Backpressure notification for ${output} Destination"
+  body:
+    "This is an automated notification that backpressure status changed ('${status}') for the ${output} Destination ${__worker_group ? 'in the ' + __worker_group + ' Group' : ''} for ${timewindow}."
+  variables:
+    - name: output
+      description: Destination id.
+      example: splunk:my-splunk
+    - name: status
+      description: Backpressure engagement status (DISENGAGED, BLOCKING or DROPPING).
+      example: BLOCKING
+    - name: timewindow
+      description: Metric evaluation period used for notification.
+      example: 60s
+    - name: __worker_group
+      description: Worker group name.
+      example: default
+high-volume:
+  subject: '[${status}] High volume notification for ${input} Source'
+  body: |
+    This is an automated notification that the ${input} Source ${__worker_group ? 'in the ' + __worker_group + ' Group' : ''} experienced a data volume ${status === 'ALARM' ? 'greater than' : 'within'} ${dataVolume} threshold in ${timewindow}.
+  variables:
+    - name: input
+      description: Source id.
+      example: syslog:in_syslog
+    - name: timewindow
+      description: Metric evaluation period used for notification.
+      example: 60s
+    - name: bytes
+      description: Number of bytes received.
+      example: 100
+    - name: dataVolume
+      description: Data volume threshold above which a notification is triggered. Accepts numerals with units like KB, MB, etc.
+      example: 1G
+    - name: __worker_group
+      description: Worker group name.
+      example: default
+    - name: status
+      description: Status of this notification. (OK or ALARM)
+      example: OK
+license-expiration:
+  subject: License expiration notification
+  body: |
+    ${_raw}.
+  variables:
+    - name: _raw
+      description: System generated message.
+      example: Your Cribl license expires in 3 days on 2019-08-04 18:22:24 UTC. Please update your license to continue processing data after 2019-08-04 18:22:24 UTC.
+low-volume:
+  subject: '[${status}] Low volume notification for ${input} Source'
+  body: |
+    This is an automated notification that the ${input} Source ${__worker_group ? 'in the ' + __worker_group + ' Group' : ''} experienced a data volume ${status === 'OK' ? 'within' : 'lower than'} ${dataVolume} threshold in ${timewindow}.
+  variables:
+    - name: input
+      description: source id.
+      example: syslog:in_syslog
+    - name: timewindow
+      description: Metric evaluation period used for notification.
+      example: 60s
+    - name: bytes
+      description: Number of bytes received.
+      example: 100
+    - name: dataVolume
+      description: Volume of data that triggered this notification.
+      example: 1G
+    - name: __worker_group
+      description: Worker group name.
+      example: default
+    - name: status
+      description: Status of this notification. (OK or ALARM)
+      example: OK
+no-data:
+  subject: '[${status}] No data received for ${input} Source'
+  body: |
+    This is an automated notification that the ${input} Source ${__worker_group ? 'in the ' + __worker_group + ' Group' : ''} ${bytes > 0 ? 'received ' + bytes + ' bytes' : 'had no traffic'} for ${timewindow}.
+  variables:
+    - name: input
+      description: source id.
+      example: syslog:in_syslog
+    - name: timewindow
+      description: Metric evaluation period used for notification.
+      example: 60s
+    - name: bytes
+      description: Number of bytes received.
+      example: 100
+    - name: __worker_group
+      description: Worker group name.
+      example: default
+    - name: status
+      description: Status of this notification. (OK or ALARM)
+      example: OK
+persistent-queue-usage:
+  subject: '[${status}] Persistent queue usage notification for ${output} Destination'
+  body: |
+    This is an automated notification that the ${output} Destination ${__worker_group ? 'in the ' + __worker_group + ' Group' : ''} has a usage threshold ${status === 'ALARM' ? 'greater than' : 'within'} ${usageThreshold}% in ${timewindow}.
+  variables:
+    - name: output
+      description: Destination id.
+      example: splunk:splunk
+    - name: timewindow
+      description: Metric evaluation period used for notification.
+      example: 60s
+    - name: usageThreshold
+      description: The % usage threshold.
+      example: 50
+    - name: usage
+      description: The % usage.
+      example: 50
+    - name: __worker_group
+      description: Worker group name.
+      example: default
+    - name: status
+      description: Status of this notification. (OK or ALARM)
+      example: OK
+unhealthy-dest:
+  subject: '[${status}] Health notification for ${output} Destination'
+  body: |
+    This is an automated notification that the ${output} Destination ${__worker_group ? 'in the ' + __worker_group + ' Group' : ''} is ${status === 'ALARM' ? 'unhealthy' : 'healthy'} in ${timewindow}.
+  variables:
+    - name: output
+      description: Destination id.
+      example: splunk:splunk
+    - name: timewindow
+      description: Metric evaluation period used for notification.
+      example: 60s
+    - name: health
+      description: Health on a 0-2 scale. (0 = Green, 1 = Yellow, 2 = Red)
+      example: 2
+    - name: __worker_group
+      description: Worker group name.
+      example: default
+    - name: status
+      description: Status of this notification. (OK or ALARM)
+      example: OK
+search:
+  subject: Search notification for ${savedQueryId}
+  body: |
+    ${_raw}
+
+    Search results: ${searchResultsUrl}
+  variables:
+    - name: savedQueryId
+    - name: message
+    - name: searchId
+    - name: searchResultsUrl
+    - name: resultSet
+    - name: _raw
+test:
+  subject: ${_raw}
+  body: |
+    ${_raw}
+  variables:
+    - name: _raw

@@ -1,0 +1,14 @@
+sample_parquet:
+  description: A simple example Parquet schema
+syslog_parquet:
+  description: A Parquet schema representing data sent to Stream through a Syslog input
+sample_primitive:
+  description: A Parquet schema with one field for each supported Primitive Type
+sample_compression_encoding:
+  description: A Parquet schema with one field for each supported compression/encoding combination
+sample_repetition_type:
+  description: A Parquet schema with one field for each allowed Repetition Type value
+sample_logical_types:
+  description: A Parquet schema with one field for each supported Converted Type
+sample_nested:
+  description: A Parquet schema with some nested fields

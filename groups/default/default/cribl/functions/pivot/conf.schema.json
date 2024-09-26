@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "title": "Simple Pivot Configuration",
+  "additionalProperties": false,
+  "required": ["labelField", "dataFields", "qualifierFields"],
+  "properties": {
+    "labelField": {
+      "title": "Labeling field",
+      "description": "Fields to be used for the left-most column.",
+      "type": "string"
+    },
+    "dataFields": {
+      "title": "Data fields",
+      "description": "Fields with the cell values (i.e. aggregates)",
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"}
+    },
+    "qualifierFields": {
+      "title": "Qualifier fields",
+      "description": "Fields to qualify or group data fields",
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string"}
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "type": "object",
+  "title": "",
+  "required": ["discoverScript", "collectScript"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["script"],
+      "flag": {
+        "prefix": "collector",
+        "modes": ["single", "worker"]
+      }
+    },
+    "discoverScript": {
+      "type": "string",
+      "title": "Discover Script",
+      "minLength": 1,
+      "description": "Script to discover what to collect. Should output one task per line in stdout."
+    },
+    "collectScript": {
+      "type": "string",
+      "title": "Collect Script",
+      "minLength": 1,
+      "description": "Script to run to perform data collections. Task passed in as $CRIBL_COLLECT_ARG. Should output results to stdout."
+    },
+    "shell": {
+      "type":"string",
+      "title": "Shell",
+      "description": "Shell to use to execute scripts.",
+      "default": "/bin/bash"
+    },
+    "envVars": {
+      "type": "array",
+      "title": "Environment Variables",
+      "description": "Environment variables to expose to the discover and collect scripts.",
+      "additionalProperties": false,
+      "items": {
+        "type": "object",
+        "required": ["name","value"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Environment variable name",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value",
+            "description": "JavaScript expression to compute environment variable's value, enclosed in quotes or backticks. (Can evaluate to a constant.)",
+            "jsExpression": true,
+            "encrypt": true
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+exports.name="join";exports.version="0.0.1";exports.disabled=false;exports.group=C.INTERNAL_FUNCTION_GROUP;exports.sync=true;let joinProvider;exports.init=o=>{const e=o.conf;joinProvider=C.internal.kusto.createJoin(e)};exports.process=o=>joinProvider.process(o);exports.unload=()=>{joinProvider=undefined};

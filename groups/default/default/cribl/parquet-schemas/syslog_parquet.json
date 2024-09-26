@@ -1,0 +1,48 @@
+{
+  "appname": {
+    "optional": true,
+    "type": "STRING"
+  },
+  "facility": {
+    "optional": true,
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true
+  },
+  "facilityName": {
+    "optional": true,
+    "type": "STRING"
+  },
+  "host": {
+    "optional": true,
+    "type": "STRING"
+  },
+  "message": {
+    "optional": true,
+    "type": "STRING"
+  },
+  "procid": {
+    "optional": true,
+    "type": "STRING"
+  },
+  "severity": {
+    "optional": true,
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true
+  },
+  "severityName": {
+    "optional": true,
+    "type": "STRING"
+  },
+  "msgid": {
+    "optional": true,
+    "type": "INT",
+    "bitWidth": 32,
+    "signed": true
+  },
+  "structuredData": {
+    "optional": true,
+    "type": "STRING"
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "files": [
+    "opentelemetry/proto/collector/logs/v1/logs_service.proto",
+    "opentelemetry/proto/collector/metrics/v1/metrics_service.proto",
+    "opentelemetry/proto/collector/trace/v1/trace_service.proto",
+    "opentelemetry/proto/common/v1/common.proto",
+    "opentelemetry/proto/logs/v1/logs.proto",
+    "opentelemetry/proto/metrics/v1/metrics.proto",
+    "opentelemetry/proto/resource/v1/resource.proto",
+    "opentelemetry/proto/trace/v1/trace_config.proto",
+    "opentelemetry/proto/trace/v1/trace.proto"
+  ],
+  "lookup": {
+    "opentelemetry": {
+      "proto": {
+        "collector": {
+          "logs": {
+            "v1": {
+              "LogsService": 0,
+              "ExportLogsServiceRequest": 0,
+              "ExportLogsServiceResponse": 0
+            }
+          },
+          "metrics": {
+            "v1": {
+              "MetricsService": 1,
+              "ExportMetricsServiceRequest": 1,
+              "ExportMetricsServiceResponse": 1
+            }
+          },
+          "trace": {
+            "v1": {
+              "TraceService": 2,
+              "ExportTraceServiceRequest": 2,
+              "ExportTraceServiceResponse": 2
+            }
+          }
+        },
+        "common": {
+          "v1": {
+            "AnyValue": 3,
+            "ArrayValue": 3,
+            "KeyValueList": 3,
+            "KeyValue": 3,
+            "StringKeyValue": 3,
+            "InstrumentationLibrary": 3
+          }
+        },
+        "logs": {
+          "v1": {
+            "ResourceLogs": 4,
+            "InstrumentationLibraryLogs": 4,
+            "SeverityNumber": 4,
+            "LogRecordFlags": 4,
+            "LogRecord": 4
+          }
+        },
+        "metrics": {
+          "v1": {
+            "ResourceMetrics": 5,
+            "InstrumentationLibraryMetrics": 5,
+            "Metric": 5,
+            "Gauge": 5,
+            "Sum": 5,
+            "Histogram": 5,
+            "Summary": 5,
+            "AggregationTemporality": 5,
+            "DataPointFlags": 5,
+            "NumberDataPoint": 5,
+            "HistogramDataPoint": 5,
+            "SummaryDataPoint": 5,
+            "Exemplar": 5,
+            "IntDataPoint": 5,
+            "IntGauge": 5,
+            "IntSum": 5,
+            "IntHistogramDataPoint": 5,
+            "IntHistogram": 5,
+            "IntExemplar": 5
+          }
+        },
+        "resource": {
+          "v1": {
+            "Resource": 6
+          }
+        },
+        "trace": {
+          "v1": {
+            "TraceConfig": 7,
+            "ConstantSampler": 7,
+            "TraceIdRatioBased": 7,
+            "RateLimitingSampler": 7,
+            "ResourceSpans": 8,
+            "InstrumentationLibrarySpans": 8,
+            "Span": 8,
+            "Status": 8
+          }
+        }
+      }
+    },
+    "mdt_dialout": {
+      "gRPCMdtDialout": 0,
+      "MdtDialoutArgs": 0
+    },
+    "telemetry": {
+      "Telemetry": 1,
+      "TelemetryField": 1,
+      "TelemetryGPBTable": 1,
+      "TelemetryRowGPB": 1
+    }
+  }
+}
