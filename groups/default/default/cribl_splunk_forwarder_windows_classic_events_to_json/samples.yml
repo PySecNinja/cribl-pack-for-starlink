@@ -1,0 +1,526 @@
+QP62Xz:
+  sampleName: 6406 - Security
+  isPackOnly: true
+  size: 505
+  numEvents: 1
+MV2Y7M:
+  sampleName: 6801 - Application (Stack Trace)
+  created: 1671479896079
+  size: 3132
+  numEvents: 1
+  modified: 1671479896095
+  isPackOnly: true
+  tags: ""
+SYOOPi:
+  sampleName: 10036 - System
+  created: 1671480401402
+  size: 723
+  numEvents: 1
+  modified: 1671480401416
+  isPackOnly: true
+SSPR3H:
+  sampleName: 1004 - Application
+  created: 1671480539175
+  size: 489
+  numEvents: 1
+  modified: 1671480539190
+  isPackOnly: true
+3fhgpq:
+  sampleName: 1006 - System
+  created: 1671484981270
+  size: 560
+  numEvents: 1
+  modified: 1671484981286
+  isPackOnly: true
+6RwnYR:
+  sampleName: 264 - Application
+  created: 1671543091829
+  size: 984
+  numEvents: 1
+VUzYFe:
+  sampleName: 404 - Security
+  created: 1671550092749
+  size: 883
+  numEvents: 1
+5Zx4e5:
+  sampleName: 1200 - Security
+  created: 1671551134012
+  size: 2732
+  numEvents: 1
+q0kBiO:
+  sampleName: 501 - Security
+  created: 1671551659820
+  size: 1979
+  numEvents: 1
+  modified: 1671551659835
+  isPackOnly: true
+ffhr3N:
+  sampleName: 1023 - Security
+  created: 1671551957922
+  size: 1284
+  numEvents: 1
+YLnsWh:
+  sampleName: 500 - Security
+  created: 1671555777073
+  size: 1146
+  numEvents: 1
+eYpwFZ:
+  sampleName: 510 - Security
+  created: 1671556586180
+  size: 1008
+  numEvents: 1
+7TxGOc:
+  sampleName: 403 - Security
+  isPackOnly: true
+  size: 1242
+  numEvents: 1
+tFKfrA:
+  sampleName: 410 - Security
+  created: 1671558607159
+  size: 886
+  numEvents: 1
+56S9MT:
+  sampleName: 1028 - Security
+  created: 1671559039456
+  size: 1213
+  numEvents: 1
+fburDf:
+  sampleName: 412 - Security
+  created: 1671559379085
+  size: 909
+  numEvents: 1
+jzmTa9:
+  sampleName: 1031 - Security
+  created: 1671560499844
+  size: 1034
+  numEvents: 1
+  modified: 1671560499860
+  isPackOnly: true
+DQg0gA:
+  sampleName: 521 - Security
+  created: 1671562313308
+  size: 518
+  numEvents: 1
+6amSTJ:
+  sampleName: 1007 - System
+  created: 1671562734685
+  size: 1942
+  numEvents: 1
+Zndf3o:
+  sampleName: 1076 - Application
+  created: 1671562937879
+  size: 592
+  numEvents: 1
+CvPhwf:
+  sampleName: 1054 - Application
+  created: 1671564900127
+  size: 540
+  numEvents: 1
+lg0x07:
+  sampleName: 1102 - Application
+  created: 1671565300631
+  size: 717
+  numEvents: 1
+  modified: 1671565300646
+  isPackOnly: true
+ft3cmy:
+  sampleName: 1121 - Application
+  created: 1671566224986
+  size: 701
+  numEvents: 1
+M1FdzM:
+  sampleName: 3036 - Application
+  created: 1671567575445
+  size: 700
+  numEvents: 1
+bipsjj:
+  sampleName: 4627 - Security (Group Membership Array)
+  created: 1671627761638
+  size: 1526
+  numEvents: 1
+6IBrCk:
+  sampleName: 1005 - System
+  created: 1671634136795
+  size: 1988
+  numEvents: 1
+  modified: 1671634136812
+  isPackOnly: true
+OsghPu:
+  sampleName: 4653 - Security (Keying_Module_Port & Network_Address)
+  isPackOnly: true
+  size: 1056
+  numEvents: 1
+6P6h4v:
+  sampleName: 4656 - Security
+  created: 1671634803597
+  size: 1071
+  numEvents: 1
+nRBdVo:
+  sampleName: 10046 - Application
+  isPackOnly: true
+  created: 1671642283828
+  size: 2975
+  numEvents: 1
+  modified: 1671642283845
+abNwrb:
+  sampleName: 10062 - Application
+  isPackOnly: true
+  created: 1671642302098
+  size: 709
+  numEvents: 1
+  modified: 1671642302113
+PrFXa8:
+  sampleName: 105 - Application
+  created: 1671642396801
+  size: 551
+  numEvents: 1
+  modified: 1671642396818
+  isPackOnly: true
+uuvlrV:
+  sampleName: 299 - Security
+  isPackOnly: true
+  size: 1080
+  numEvents: 1
+KGZguh:
+  sampleName: 33205 - Application (SQL Server)
+  isPackOnly: true
+  created: 1671642464420
+  size: 2027
+  numEvents: 1
+  modified: 1671642464435
+UCf52z:
+  sampleName: 4624 - Security
+  isPackOnly: true
+  created: 1671642489405
+  size: 98541
+  numEvents: 40
+kMT1Rv:
+  sampleName: 4625 - Security
+  isPackOnly: true
+  created: 1671642508526
+  size: 2448
+  numEvents: 1
+  modified: 1671642508540
+H4kEk3:
+  sampleName: 4701 - Security (XML Message)
+  isPackOnly: true
+  created: 1671642532950
+  size: 2789
+  numEvents: 1
+eylcCf:
+  sampleName: 6408 - Security
+  isPackOnly: true
+  created: 1671642573432
+  size: 478
+  numEvents: 1
+  modified: 1671642573448
+ooEwdj:
+  sampleName: 4661 - Security
+  created: 1671646546276
+  size: 2917
+  numEvents: 1
+  modified: 1671646546293
+  isPackOnly: true
+4aadk7:
+  sampleName: 4662 - Security (French)
+  created: 1671647848269
+  size: 1086
+  numEvents: 1
+BWz9oo:
+  sampleName: 4663 - Security
+  created: 1671648054585
+  size: 957
+  numEvents: 1
+WZN3sV:
+  sampleName: 4672 - Security (\r\n and \n)
+  created: 1671656207859
+  size: 1668
+  numEvents: 2
+  modified: 1671656207876
+  isPackOnly: true
+VLLSim:
+  sampleName: 4692 - Security
+  created: 1671657600708
+  size: 711
+  numEvents: 1
+ntfU27:
+  sampleName: 4699 - Security (XML Message)
+  created: 1671657783715
+  size: 3200
+  numEvents: 1
+1NYsxM:
+  sampleName: 4720 - Security
+  created: 1671657979056
+  size: 1302
+  numEvents: 1
+lNpFu0:
+  sampleName: 4723 - Security
+  created: 1671658139783
+  size: 707
+  numEvents: 1
+1JigsN:
+  sampleName: 4726 - Security
+  created: 1671658558947
+  size: 713
+  numEvents: 1
+It4BH8:
+  sampleName: 4741 - Security
+  created: 1671715180596
+  size: 1386
+  numEvents: 1
+9jqfIQ:
+  sampleName: 4768 - Security
+  created: 1671715405890
+  size: 1228
+  numEvents: 1
+IyhduI:
+  sampleName: 4703 - Security
+  created: 1671716630780
+  isPackOnly: true
+  size: 1220
+  numEvents: 1
+vlWfZK:
+  sampleName: 4765 - Security
+  isPackOnly: true
+  size: 899
+  numEvents: 1
+  modified: 1671717581895
+  created: 1671717581873
+9yRm5r:
+  sampleName: 4771 - Security
+  created: 1671717904138
+  size: 1235
+  numEvents: 1
+TrlckD:
+  sampleName: 4905 - Security
+  isPackOnly: true
+  size: 714
+  numEvents: 1
+  modified: 1671719929854
+  created: 1671719929830
+Bo5rtY:
+  sampleName: 4944 - Security
+  created: 1671720081918
+  size: 710
+  numEvents: 1
+CertKV:
+  sampleName: 4945 - Security
+  created: 1671721463978
+  size: 665
+  numEvents: 1
+  modified: 1671721463993
+  isPackOnly: true
+Cps4BX:
+  sampleName: 4946 - Security
+  created: 1671721713023
+  size: 611
+  numEvents: 1
+  modified: 1671721713040
+  isPackOnly: true
+c28sUH:
+  sampleName: 4947 - Security
+  created: 1671721834973
+  size: 580
+  numEvents: 1
+  modified: 1671721834989
+  isPackOnly: true
+uvzgaP:
+  sampleName: 4948 - Security
+  created: 1671721917519
+  size: 597
+  numEvents: 1
+  modified: 1671721917535
+  isPackOnly: true
+KTdDTj:
+  sampleName: 4950 - Security
+  created: 1671722030409
+  size: 488
+  numEvents: 1
+  modified: 1671722030425
+  isPackOnly: true
+tAYDe0:
+  sampleName: 4953 - Security
+  created: 1671722246773
+  size: 635
+  numEvents: 1
+l1G2xj:
+  sampleName: 4675 - Security
+  isPackOnly: true
+  size: 741
+  numEvents: 1
+  modified: 1671724416742
+  created: 1671724416717
+u5TnDy:
+  sampleName: 5007 - System
+  created: 1671725429571
+  size: 558
+  numEvents: 1
+  modified: 1671725429584
+  isPackOnly: true
+jDh5U5:
+  sampleName: 5042 - Security
+  created: 1671725667337
+  size: 521
+  numEvents: 1
+  modified: 1671725667356
+  isPackOnly: true
+s2CUFb:
+  sampleName: 5136 - Security
+  created: 1671726942753
+  size: 2060
+  numEvents: 1
+jmSPDV:
+  sampleName: 5137 - Security
+  created: 1671727343657
+  size: 1110
+  numEvents: 1
+anBFoI:
+  sampleName: 5139 - Security
+  created: 1671727752617
+  size: 996
+  numEvents: 1
+g4NuzV:
+  sampleName: 5140 - Security
+  created: 1671728187578
+  size: 874
+  numEvents: 1
+inxqgH:
+  sampleName: 5142 - Security
+  created: 1671731104014
+  size: 613
+  numEvents: 1
+WHTJe3:
+  sampleName: 5143 - Security
+  created: 1671731367288
+  size: 1070
+  numEvents: 1
+kV7JMt:
+  sampleName: 5144 - Security
+  created: 1671731622223
+  size: 617
+  numEvents: 1
+zRxFu3:
+  sampleName: 5145 - Security
+  created: 1671732897072
+  size: 1334
+  numEvents: 1
+15UFBu:
+  sampleName: 1531 - Application
+  created: 1671733244390
+  size: 447
+  numEvents: 1
+Nvu3fF:
+  sampleName: 5440 - Security
+  created: 1671733461698
+  size: 845
+  numEvents: 1
+  modified: 1671733461715
+  isPackOnly: true
+k6CYei:
+  sampleName: 5441 - Security
+  created: 1671734865522
+  size: 1418
+  numEvents: 1
+Lsoo8w:
+  sampleName: 7045 - System
+  isPackOnly: true
+  size: 614
+  numEvents: 1
+  modified: 1671740404182
+  created: 1671740404161
+afftyA:
+  sampleName: 4103 - Microsoft-Windows-PowerShell/Operational
+  created: 1671740620868
+  size: 1703
+  numEvents: 1
+nYwHj7:
+  sampleName: 800 - Windows PowerShell
+  created: 1671741273042
+  size: 18343
+  numEvents: 1
+uMMpr2:
+  sampleName: 5442 - Security
+  created: 1672756782556
+  size: 588
+  numEvents: 1
+X5dsO9:
+  sampleName: 54432 - Application
+  created: 1672756975559
+  size: 399
+  numEvents: 1
+  modified: 1672756975574
+  isPackOnly: true
+yyKOlr:
+  sampleName: 5444 - Security
+  created: 1672757346855
+  size: 671
+  numEvents: 1
+jWOnfH:
+  sampleName: 5446 - Security
+  created: 1672757516901
+  size: 1107
+  numEvents: 1
+RTxCOR:
+  sampleName: 5447 - Security
+  created: 1672759412055
+  size: 1930
+  numEvents: 1
+vNo9D6:
+  sampleName: 5448 - Security
+  created: 1672760460898
+  size: 754
+  numEvents: 1
+ieff1S:
+  sampleName: 5449 - Security
+  created: 1672760580242
+  size: 908
+  numEvents: 1
+5Yqzcm:
+  sampleName: 5450 - Security
+  created: 1672760941623
+  size: 942
+  numEvents: 1
+yK9RBR:
+  sampleName: 5633 - Security
+  created: 1672761129145
+  size: 760
+  numEvents: 1
+cbOrcU:
+  sampleName: 5888 - Security
+  created: 1672761393858
+  size: 674
+  numEvents: 1
+  modified: 1672761393871
+  isPackOnly: true
+3ipMq9:
+  sampleName: 5889 - Security - Nested Arrays
+  isPackOnly: true
+  size: 2364
+  numEvents: 1
+vdQWGg:
+  sampleName: 5890 - Security
+  created: 1673358676696
+  size: 761
+  numEvents: 1
+DeO51B:
+  sampleName: 6145 - Security
+  created: 1673358861836
+  size: 711
+  numEvents: 1
+iYDMXY:
+  sampleName: 502 - Application
+  created: 1673360130242
+  size: 416
+  numEvents: 1
+  modified: 1673360130255
+  isPackOnly: true
+rG7KsX:
+  sampleName: 1102 - Security
+  created: 1677849098310
+  size: 421
+  numEvents: 1
+92m1fF:
+  sampleName: 4739 - Security
+  created: 1677850381750
+  size: 1149
+  numEvents: 1

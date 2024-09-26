@@ -1,0 +1,465 @@
+output: default
+groups:
+  FUd37z:
+    name: Long Key Names
+    description: Default:OFF - long keys add to the size of the event.
+    disabled: true
+    index: 13
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: "IMPORTANT:  Select the three grey bars ||| top left and enable the
+        Description option"
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: This Pipeline is used only for the traditional Windows Classic Event
+        Structure like all of the samples included with the Pack.
+  - id: regex_extract
+    filter: "true"
+    disabled: false
+    conf:
+      source: _raw
+      iterations: 100
+      overwrite: true
+      regex: /EventCode=(?<__EventCode>\d+)/
+      regexList:
+        - regex: /LogName=(?<__LogName>\w+)/
+        - regex: /^(?<__preMessage>[\S\s]+)Message=(?<__topMessage>.+)$([\r\n]+(?<__bottomMessage>[\S\s]+))?/m
+    final: false
+    description: Extract the EventCode to an internal field.
+  - id: drop
+    filter: "!C.Lookup(C.vars.Allow_List,'EventCode').match(__EventCode)"
+    disabled: true
+    conf: {}
+    description: Default:OFF - Drop events that are not listed in the Allow_List
+      Lookup table
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        Extract all Name : Values from the __bottomMessage field to top level
+        fields.  The <_NAME_0> and <_VALUE_0> is a special capture group that
+        dynamically creates the field NAME from the first capture group and
+        inserts the VALUE from the second capture group for N number of matches,
+        configured in the Advanced Settings of the Regex Extract function.
+
+
+        (?<_NAME_0>[\p{L}][0-9-\s'’\p{L}]+):_{1,2}(?<_VALUE_0>[^_\r\n]+)
+
+
+        Regex Flags:
+
+        g: global
+
+        u: unicode
+
+
+        Note:
+
+        \p{L} matches a single code point in the category "letter".
+
+        \p{N} matches any kind of numeric character in any script.
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: kvp
+      srcField: __preMessage
+      cleanFields: false
+      allowedKeyChars: []
+      allowedValueChars: []
+      fields: []
+      remove: []
+      keep:
+        - "*"
+    description: Extract Key Value pairs from the internal __preMessage field
+    final: false
+  - id: comment
+    filter: "true"
+    disabled: false
+    conf:
+      comment: Convert Messages that contain XML to JSON and retain all attributes
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - disabled: false
+          name: __xmlTopMessage
+          value: __bottomMessage.match(/(^[\S\s]+?)\</)[1]
+        - disabled: false
+          name: __bottomMessage
+          value: __bottomMessage.replace(/^([\S\s]+?\<)/,'\<')
+        - value: C.Text.parseXml(__bottomMessage,true,true)
+          name: Message
+    description: Evaluate __Message for XML content and extract fields accordingly
+    final: false
+  - id: flatten
+    filter: "true"
+    disabled: null
+    conf:
+      fields:
+        - Message
+      prefix: ""
+      depth: 6
+      delimiter: _
+    final: false
+    description: Flatten the XML from the Message
+  - id: rename
+    filter: "true"
+    disabled: null
+    conf:
+      wildcardDepth: 5
+      renameExpr: name.replace(/Message_Task/,'Task_Content')
+    description: Clean up
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - disabled: false
+          name: __bottomMessage
+          value: __xmlTopMessage.replace(/\r\n\tTask\sContent:.+/m,'')
+      remove:
+        - XML_*
+    description: Replace __bottomMessage
+    final: false
+  - id: comment
+    filter: "true"
+    disabled: false
+    conf:
+      comment: Create Message key from the internal __topMessage key
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - name: Message
+          value: __topMessage.trim()
+    final: false
+    description: Pull the actual top Message
+  - id: comment
+    filter: "true"
+    disabled: true
+    conf:
+      comment: Create sections from Message and take top key and prepend to all
+        sub-keys to ensure proper key names
+    groupId: FUd37z
+  - id: code
+    filter: "true"
+    disabled: true
+    conf:
+      maxNumOfIterations: 5000
+      code: >-
+        /* Split __bottomMessage into an array of elements */
+
+        __e['__blocks_1'] = __e['__bottomMessage'].replace(/\r\r\n/g,'\r\n').split('\r\n\r\n')
+
+
+        for (let i = 0; i < __e['__blocks_1'].length; i++) {
+            let block = __e['__blocks_1'][i];
+            var block_lines = block.split('\r\n');
+            if (block_lines.length > 1) {
+                var prepend_key = block_lines[0].replace(/[: \r\n]+$/, '');
+                for (let j = 1; j < block_lines.length; j++) {
+                    block_lines[j] = block_lines[j].replace(/^(\W+)/, `$1${prepend_key} `);
+                }
+                __e['__blocks_1'][i] = block_lines.join('\r\n')
+            }  
+        }
+
+
+        __e['__bottomMessage'] = __e['__blocks_1'].join('\r\n\r\n')
+
+        delete __e['__blocks_1']
+    groupId: FUd37z
+  - id: mask
+    filter: "true"
+    disabled: false
+    conf:
+      rules:
+        - matchRegex: /([^\r])\n/
+          replaceExpr: "`${g1}\\r\\n`"
+        - matchRegex: /_/g
+          replaceExpr: "'###UP###'"
+        - matchRegex: /\t\t\t\t/g
+          replaceExpr: "'###SEP###'"
+        - matchRegex: /\r+\n\t\t+/g
+          replaceExpr: "'###SEP###'"
+        - matchRegex: /([^\r])\n/g
+          replaceExpr: "`${g1}\\r\\n`"
+        - matchRegex: /(:)\t\r\n/
+          replaceExpr: "`${g1}\\t-\\r\\n`"
+        - matchRegex: /\s+\r\r\n/g
+          replaceExpr: "'____'"
+        - matchRegex: /\s+\r\n\r\n/g
+          replaceExpr: "'____'"
+        - matchRegex: /\s+\r\n\s+/g
+          replaceExpr: "'___'"
+        - matchRegex: /\r\n\s+/g
+          replaceExpr: "'___'"
+        - matchRegex: "/ : /g"
+          replaceExpr: "':'"
+        - matchRegex: /:\s+/g
+          replaceExpr: "':__'"
+        - matchRegex: /\s+:/g
+          replaceExpr: "':'"
+        - matchRegex: /:###SEP###/g
+          replaceExpr: "':__'"
+        - matchRegex: /\s=\s/g
+          replaceExpr: "'='"
+        - matchRegex: /\t/g
+          replaceExpr: "'###SEP###'"
+        - matchRegex: /^###SEP###\r\n/
+          replaceExpr: "''"
+        - matchRegex: /__\s/g
+          replaceExpr: "'___'"
+      fields:
+        - __bottomMessage
+      depth: 5
+    description: Create a normalized schema for the __bottomMessage.  The Filter
+      excludes events that don't parse using the Mask function below.
+    final: false
+  - id: regex_extract
+    filter: "true"
+    disabled: false
+    conf:
+      source: __bottomMessage
+      iterations: 1000
+      overwrite: false
+      regex: /(?<_NAME_0>[\p{L}][()0-9-\s\/'’\p{L}\/\+\.]+):_{1,2}(?<_VALUE_0>[^_\r\n]+)/gu
+      fieldNameExpression: name.replace(/
+        /g,'_').replace(/[()]([^:])/g,`_$1`).replace(/['’]/g,'').replace(/[\/]/g,'_').replace(/[\+]/g,'').replace(/[\.]/g,'').replace(/__/g,'_').replace(/\)/,'')
+      regexList: []
+    description: Regular expression to handle all languages for the Key names
+      extracting the Keys to the top level.
+    final: false
+  - id: mask
+    filter: "true"
+    disabled: false
+    conf:
+      rules:
+        - matchRegex: /###UP###/g
+          replaceExpr: "'_'"
+      fields:
+        - "!__*"
+        - _raw
+      depth: 5
+    description: "Replace ###UP###"
+    final: false
+  - id: serialize
+    filter: "true"
+    disabled: false
+    conf:
+      type: json
+      dstField: _raw
+      fields:
+        - "!_*"
+        - "!cribl_*"
+        - "!index"
+        - "!host"
+        - "!source"
+        - "!sourcetype"
+        - "!hf"
+        - "!punct"
+        - "!date_*"
+        - "!time*pos*"
+        - "!before*"
+        - "*"
+      cleanFields: false
+    description: Create _raw JSON STRING (NOT Object) from the field results from
+      __bottomMessage && __topMessage
+    final: false
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: reserialize
+      type: json
+      srcField: _raw
+      cleanFields: false
+      allowedKeyChars: []
+      allowedValueChars: []
+      fieldFilterExpr: value!= '-'
+    description: Remove any - values
+    final: false
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add: []
+      keep:
+        - _*
+        - cribl_*
+        - index
+        - source
+        - sourcetype
+        - host
+        - hf
+        - punct
+        - date_*
+        - time*pos
+        - before*
+      remove:
+        - "*"
+    description: Drop all unnecessary fields
+    final: false
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: json
+      srcField: _raw
+      cleanFields: false
+      allowedKeyChars: []
+      allowedValueChars: []
+    description: Parse all fields to top level
+    final: false
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      remove:
+        - "*"
+      keep:
+        - _raw*
+        - _time*
+        - cribl_pipe*
+        - cribl_breaker*
+        - index
+        - source
+        - sourcetype
+        - host
+        - hf*
+        - punct*
+        - date_*
+        - time*pos*
+        - before*
+        - Account_Domain*
+        - Account_Name*
+        - Caller_Computer_Name*
+        - Caller_Domain*
+        - Caller_Logon_ID*
+        - Caller_Machine_Name*
+        - Caller_User_Name*
+        - Change_Type*
+        - Client_Address*
+        - Client_Domain*
+        - Client_Logon_ID*
+        - Client_Machine_Name*
+        - Client_User_Name*
+        - ComputerName*
+        - Creator_Process_Name*
+        - Description*
+        - Domain*
+        - EventData_Xml*
+        - EventID*
+        - EventRecordID*
+        - FileName*
+        - File_Name*
+        - File_Path*
+        - Group_Domain*
+        - Group_Type_Change*
+        - Image_File_Name*
+        - IpAddress*
+        - IpPort*
+        - KeyFilePath*
+        - LogFileCleared_Xml*
+        - LogonType*
+        - Logon_Account*
+        - Logon_ID*
+        - Logon_account*
+        - MemberName*
+        - Member_ID*
+        - Member_Name*
+        - New_Account_Name*
+        - New_Domain*
+        - New_Process_Name*
+        - ObjectName*
+        - Object_Name*
+        - Primary_Domain*
+        - Primary_User_Name*
+        - PrivilegeList*
+        - Process_Command_Line*
+        - RenderingInfo_Xml*
+        - Security_ID*
+        - Source_Network_Address*
+        - Source_Workstation*
+        - SubStatus*
+        - SubjectDomainName*
+        - SubjectLogonId*
+        - SubjectUserName*
+        - Supplied_Realm_Name*
+        - System_Props_Xml*
+        - TargetDomainName*
+        - TargetProcessName*
+        - TargetServerName*
+        - TargetUserName*
+        - Target_Account_ID*
+        - Target_Account_Name*
+        - Target_Domain*
+        - Target_Process_Name*
+        - Target_Server_Name*
+        - Target_User_Name*
+        - TokenElevationType*
+        - Token_Elevation_Type*
+        - User*
+        - UserData_Xml*
+        - User_ID*
+        - User_Name*
+        - Workstation*
+        - WorkstationName*
+        - Workstation_Name*
+        - new_process*
+        - nt_host*
+        - param1*
+        - parent_process*
+        - service_path*
+        - signature*
+        - signature_message*
+        - vendor_privilege*
+        - Privileges*
+        - EventCode
+        - SourceName
+    description: Keep field needed by transforms at top level
+    final: false
+  - id: code
+    filter: "true"
+    disabled: false
+    conf:
+      maxNumOfIterations: 5000
+      code: >-
+        // Try to parse the value stored in __e._raw as JSON and assign it to
+        the 'raw' variable.
+
+        try {
+          var raw = JSON.parse(__e._raw);
+
+          // Iterate over each key-value pair in the __e object.
+          for (let [key, value] of Object.entries(__e)) {
+            // Check if the key does not start with an underscore (_) and the corresponding property exists in the 'raw' object.
+            if (!key.startsWith('_') && raw[key]) {
+              // Set the value of the property to undefined, effectively removing it from 'raw'.
+              raw[key] = undefined;
+            }
+          }
+
+          // Convert the 'raw' object back to a JSON string and update the __e['_raw'] with the new value.
+          __e['_raw'] = JSON.stringify(raw);
+        } catch (error) {
+          // If an error occurs during the process, catch it and save the error message as a string in __e['cribl_code_error'].
+          __e['cribl_code_error'] = String(error);
+        }
+    description: Remove any duplicate keys that exist in _raw when they are also in
+      top level fields.
+streamtags: []
+description: Converts  Splunk Forwarder Microsoft-Windows Classic events where
+  Message also contains XML to JSON

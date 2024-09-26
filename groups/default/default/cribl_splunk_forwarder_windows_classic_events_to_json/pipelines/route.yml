@@ -1,0 +1,43 @@
+id: default
+groups: {}
+comments:
+  - id: sANVq0
+    comment: "IMPORTANT:  Select the three grey bars ||| top left and enable the
+      Description option.  Please review the Pack Settings/README."
+    index: 0
+routes:
+  - id: wfhLf0
+    name: Minimal Conversion
+    final: true
+    disabled: false
+    pipeline: PowerShell
+    description: "Perform minimal conversion and processing for events with complex
+      Messages such as PowerShell or stack traces in events "
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: /SourceName=.+?PowerShell|stack trace/im.test(_raw) ||
+      /EventCode=4898/.test(_raw)
+    output: default
+  - id: hmp8o6
+    name: XML in Message
+    final: true
+    disabled: false
+    pipeline: XML_Messages
+    description: Special handling for XML in the Message Field
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: /\<\?xml version/.test(_raw)
+    output: default
+  - id: dwRyMe
+    name: Splunk Forwarder Windows Classic Events to JSON
+    final: true
+    disabled: false
+    pipeline: Classic_to_JSON
+    description: Converts  Splunk Forwarder Microsoft Windows Classic events to JSON
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: "true"
+    output: default

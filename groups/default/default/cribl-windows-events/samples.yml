@@ -1,0 +1,53 @@
+2FiJff:
+  sampleName: 5-Windows_XML_Events
+  created: 1620943415156
+  size: 6682
+  numEvents: 5
+  modified: 1620948213159
+UChiMU:
+  sampleName: 5-Windows_Classic_XML_Message_Events
+  created: 1620943431798
+  size: 12078
+  numEvents: 5
+  modified: 1620948652434
+XNPzEl:
+  sampleName: 5-Windows_Classic_Events
+  created: 1620943469167
+  size: 10690
+  numEvents: 5
+  modified: 1620948288457
+5rMBYv:
+  sampleName: 50-WinNetMon.log
+  created: 1621425760688
+  size: 23208
+  numEvents: 50
+  modified: 1621425760691.15
+g9Eeo4:
+  sampleName: 50-WinHostMon.log
+  created: 1621427205345
+  size: 31253
+  numEvents: 50
+  modified: 1621427205343.5725
+VCHrav:
+  sampleName: 10-WinRegistry.log
+  created: 1621427853584
+  size: 4862
+  numEvents: 10
+  modified: 1621427853582.2275
+ie80CU:
+  sampleName: 5-Windows_DNS
+  created: 1643221438920
+  size: 1131
+  numEvents: 5
+  modified: 1643221438918.203
+Jtmfrq:
+  sampleName: 5-NXLog.json
+  created: 1646665007243
+  size: 6376
+  numEvents: 5
+dw9xld:
+  sampleName: 487-PerfmonMk.json
+  created: 1646680489688
+  size: 2096109
+  numEvents: 487
+  modified: 1646680489694.2256
