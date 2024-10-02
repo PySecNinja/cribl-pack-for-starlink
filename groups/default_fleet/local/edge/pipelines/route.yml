@@ -3,7 +3,7 @@ groups: {}
 comments: []
 routes:
   - id: TOKuRY
-    name: __inputId.includes('file:in_file')
+    name: "linux "
     final: true
     disabled: false
     pipeline: passthru
@@ -11,7 +11,7 @@ routes:
     clones: []
     enableOutputExpression: false
     outputExpression: null
-    filter: "true"
+    filter: __inputId.includes('file:in_file')
     output: stream_output
   - id: default
     name: default
