@@ -2,6 +2,17 @@ id: default
 groups: {}
 comments: []
 routes:
+  - id: ji2R32
+    name: internal from edge
+    final: true
+    disabled: false
+    pipeline: passthru
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: __inputId=='cribl_http:in_cribl_http'
+    output: hec_internal_logs
   - id: DkU56e
     name: cribl internal
     final: true
