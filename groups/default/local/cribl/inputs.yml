@@ -1,4 +1,19 @@
 inputs:
+  CriblLogs:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    type: cribl
+  CriblMetrics:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    prefix: cribl.logstream.
+    fullFidelity: true
+    type: criblmetrics
+    pipeline: cribl_metrics_rollup
   in_cribl_http:
     disabled: false
     sendToRoutes: true
