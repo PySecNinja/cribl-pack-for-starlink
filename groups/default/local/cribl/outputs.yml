@@ -24,7 +24,7 @@ outputs:
     onBackpressure: block
     excludeSelf: false
     urls:
-      - url: http://splunk.pysecninja.com/:8088/services/collector/event
+      - url: https://splunk.pysecninja.com/:8088/services/collector/event
         weight: 1
     dnsResolvePeriodSec: 600
     loadBalanceStatsPeriodSec: 300
