@@ -1,0 +1,34 @@
+outputs:
+  stream_output:
+    systemFields:
+      - cribl_pipe
+    streamtags: []
+    loadBalanced: true
+    tls:
+      disabled: true
+    tokenTTLMinutes: 60
+    excludeFields:
+      - __kube_*
+      - __metadata
+      - __winEvent
+    compression: gzip
+    concurrency: 5
+    maxPayloadSizeKB: 4096
+    maxPayloadEvents: 0
+    rejectUnauthorized: true
+    timeoutSec: 30
+    flushPeriodSec: 1
+    failedRequestLoggingMode: none
+    safeHeaders: []
+    responseRetrySettings: []
+    timeoutRetrySettings:
+      timeoutRetry: false
+    responseHonorRetryAfterHeader: false
+    onBackpressure: block
+    excludeSelf: false
+    urls:
+      - weight: 1
+        url: http://cribl.pysecninja:10200
+    dnsResolvePeriodSec: 600
+    loadBalanceStatsPeriodSec: 300
+    type: cribl_http
