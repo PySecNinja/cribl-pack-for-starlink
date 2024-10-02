@@ -1,0 +1,26 @@
+id: default
+groups: {}
+comments: []
+routes:
+  - id: TOKuRY
+    name: __inputId.includes('file:in_file')
+    final: true
+    disabled: false
+    pipeline: passthru
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: "true"
+    output: stream_output
+  - id: default
+    name: default
+    final: true
+    disabled: false
+    pipeline: main
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: "true"
+    output: default
