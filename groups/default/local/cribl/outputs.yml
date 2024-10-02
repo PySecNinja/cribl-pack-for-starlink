@@ -33,3 +33,37 @@ outputs:
     type: splunk_hec
     token: "#42:BfbauxnsVLvOWlinwMjGH7fSWAmGtoyLLCwNG96sB9ly1kUVkGExYhQQ9ZbEBvtYmBw\
       DZXXfdWqg32nic1ZIPw=="
+  splunk_output:
+    systemFields:
+      - cribl_pipe
+    streamtags: []
+    loadBalanced: false
+    nextQueue: indexQueue
+    tcpRouting: nowhere
+    concurrency: 5
+    maxPayloadSizeKB: 4096
+    maxPayloadEvents: 0
+    compress: true
+    rejectUnauthorized: true
+    timeoutSec: 30
+    flushPeriodSec: 1
+    failedRequestLoggingMode: none
+    safeHeaders: []
+    enableMultiMetrics: false
+    authType: manual
+    responseRetrySettings: []
+    timeoutRetrySettings:
+      timeoutRetry: false
+    responseHonorRetryAfterHeader: false
+    onBackpressure: block
+    url: http://localhost:8088/services/collector/event
+    useRoundRobinDns: false
+    excludeSelf: false
+    urls:
+      - url: http://splunk.pysecninja:8088/services/collector/event
+        weight: 1
+    dnsResolvePeriodSec: 600
+    loadBalanceStatsPeriodSec: 300
+    type: splunk_hec
+    token: "#42:aGqIAB3VV8afUEnM+ghoRKUbpLeQR8TtfPdUQCH189Vt4Yny7/uRbRWGNbL0+Hag00N\
+      agq7amgQbjH5W9pHcmA=="
