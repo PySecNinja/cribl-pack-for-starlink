@@ -1,0 +1,22 @@
+inputs:
+  in_file_auto:
+    type: file
+    disabled: false
+    sendToRoutes: false
+    mode: auto
+    includeUnidentifiableBinary: false
+    connections:
+      - output: devnull
+  in_file_varlog:
+    type: file
+    disabled: false
+    sendToRoutes: false
+    mode: manual
+    interval: 10
+    path: /var/log/
+    includeUnidentifiableBinary: false
+    filenames:
+      - "!*.journal*"
+      - "*"
+    connections:
+      - output: devnull
