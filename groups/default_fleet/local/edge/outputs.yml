@@ -28,7 +28,8 @@ outputs:
     excludeSelf: false
     urls:
       - weight: 1
-        url: http://cribl.pysecninja.com:10200
+        url: https://cribl.pysecninja.com:10200
     dnsResolvePeriodSec: 600
     loadBalanceStatsPeriodSec: 300
+    useRoundRobinDns: false
     type: cribl_http
