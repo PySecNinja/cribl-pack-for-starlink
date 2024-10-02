@@ -56,7 +56,7 @@ outputs:
       timeoutRetry: false
     responseHonorRetryAfterHeader: false
     onBackpressure: block
-    url: http://splunk.pysecninja:8088/services/collector/event
+    url: http://splunk.pysecninja.com:8088/services/collector/event
     useRoundRobinDns: false
     excludeSelf: false
     urls:
