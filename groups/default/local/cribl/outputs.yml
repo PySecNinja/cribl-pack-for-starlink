@@ -1,0 +1,33 @@
+outputs:
+  hec_internal_logs:
+    systemFields:
+      - cribl_pipe
+    streamtags: []
+    loadBalanced: true
+    nextQueue: indexQueue
+    tcpRouting: nowhere
+    concurrency: 5
+    maxPayloadSizeKB: 4096
+    maxPayloadEvents: 0
+    compress: true
+    rejectUnauthorized: true
+    timeoutSec: 30
+    flushPeriodSec: 1
+    failedRequestLoggingMode: none
+    safeHeaders: []
+    enableMultiMetrics: false
+    authType: manual
+    responseRetrySettings: []
+    timeoutRetrySettings:
+      timeoutRetry: false
+    responseHonorRetryAfterHeader: false
+    onBackpressure: block
+    excludeSelf: false
+    urls:
+      - url: https://splunk.pysecninja.com/:8088/services/collector/event
+        weight: 1
+    dnsResolvePeriodSec: 600
+    loadBalanceStatsPeriodSec: 300
+    type: splunk_hec
+    token: "#42:BfbauxnsVLvOWlinwMjGH7fSWAmGtoyLLCwNG96sB9ly1kUVkGExYhQQ9ZbEBvtYmBw\
+      DZXXfdWqg32nic1ZIPw=="
