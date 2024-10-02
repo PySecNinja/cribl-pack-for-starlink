@@ -1,4 +1,24 @@
 inputs:
+  in_windows_metrics:
+    disabled: true
+    sendToRoutes: false
+    pqEnabled: false
+    streamtags: []
+    interval: 10
+    host:
+      mode: basic
+    process: {}
+    persistence:
+      enable: true
+      timeWindow: 10m
+      maxDataSize: 100MB
+      maxDataTime: 24h
+      compress: gzip
+      destPath: $CRIBL_HOME/state/windows_metrics
+    type: windows_metrics
+    connections:
+      - output: devnull
+    notifications: []
   in_file_auto:
     type: file
     disabled: false
