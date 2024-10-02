@@ -1,0 +1,26 @@
+id: default
+groups: {}
+comments: []
+routes:
+  - id: DkU56e
+    name: cribl internal
+    final: true
+    disabled: false
+    pipeline: cribl_metrics_rollup
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: __inputId.includes('cribl:Cribl')
+    output: hec_internal_logs
+  - id: default
+    name: default
+    final: true
+    disabled: false
+    pipeline: main
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: "true"
+    output: default
