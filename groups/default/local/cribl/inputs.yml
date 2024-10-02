@@ -1,0 +1,23 @@
+inputs:
+  in_cribl_http:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    host: 0.0.0.0
+    tls:
+      disabled: true
+      requestCert: false
+    maxActiveReq: 256
+    maxRequestsPerSocket: 0
+    enableProxyHeader: false
+    captureHeaders: false
+    activityLogSampleRate: 100
+    requestTimeout: 0
+    socketTimeout: 0
+    keepAliveTimeout: 5
+    enableHealthCheck: false
+    ipAllowlistRegex: /.*/
+    ipDenylistRegex: /^$/
+    type: cribl_http
+    port: 10200
