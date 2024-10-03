@@ -3,7 +3,7 @@ outputs:
     systemFields:
       - cribl_pipe
     streamtags: []
-    loadBalanced: true
+    loadBalanced: false
     tls:
       disabled: true
     tokenTTLMinutes: 60
@@ -25,11 +25,12 @@ outputs:
       timeoutRetry: false
     responseHonorRetryAfterHeader: false
     onBackpressure: block
+    useRoundRobinDns: false
     excludeSelf: false
     urls:
       - weight: 1
         url: http://cribl.pysecninja.com:10200
     dnsResolvePeriodSec: 600
     loadBalanceStatsPeriodSec: 300
-    useRoundRobinDns: false
     type: cribl_http
+    url: http://cribl.pysecninja.com:10200
