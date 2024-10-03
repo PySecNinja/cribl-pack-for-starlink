@@ -33,4 +33,4 @@ outputs:
     dnsResolvePeriodSec: 600
     loadBalanceStatsPeriodSec: 300
     type: cribl_http
-    url: http://cribl.pysecninja.com:10200
+    url: http://pi5:10200
