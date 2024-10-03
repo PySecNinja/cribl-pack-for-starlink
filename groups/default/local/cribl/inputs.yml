@@ -36,3 +36,14 @@ inputs:
     ipDenylistRegex: /^$/
     type: cribl_http
     port: 10200
+  Starlink-Power:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    retries: 10
+    scheduleType: interval
+    staleChannelFlushMs: 10000
+    interval: 3600
+    type: exec
+    command: /opt/starlink-grpc-tools/venv/bin/python dish_grpc_text.py power
