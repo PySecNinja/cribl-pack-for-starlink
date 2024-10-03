@@ -44,6 +44,6 @@ inputs:
     retries: 10
     scheduleType: interval
     staleChannelFlushMs: 10000
-    interval: 3600
+    interval: 10
     type: exec
     command: /opt/starlink-grpc-tools/venv/bin/python dish_grpc_text.py power
