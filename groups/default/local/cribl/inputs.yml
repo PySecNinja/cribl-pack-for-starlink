@@ -37,7 +37,7 @@ inputs:
     type: cribl_http
     port: 10200
   Starlink-Power:
-    disabled: false
+    disabled: true
     sendToRoutes: true
     pqEnabled: false
     streamtags: []
