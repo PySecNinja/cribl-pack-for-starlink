@@ -33,4 +33,5 @@ outputs:
     dnsResolvePeriodSec: 600
     loadBalanceStatsPeriodSec: 300
     type: cribl_http
-    url: http://pi5:10200
+    url: http://192.168.1.215:10200
+    notifications: []
