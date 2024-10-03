@@ -1,0 +1,22 @@
+Starlink-Power:
+  type: collection
+  ttl: 4h
+  removeFields: []
+  resumeOnBoot: false
+  schedule: {}
+  streamtags: []
+  workerAffinity: false
+  collector:
+    conf:
+      shell: /opt/starlink-grpc-tools/venv/bin/python3
+      discoverScript: python3 dish_grpc_text.py power
+      collectScript: python3 dish_grpc_text.py power
+    destructive: false
+    type: script
+  input:
+    type: collection
+    staleChannelFlushMs: 10000
+    sendToRoutes: true
+    preprocess:
+      disabled: true
+    throttleRatePerSec: "0"
