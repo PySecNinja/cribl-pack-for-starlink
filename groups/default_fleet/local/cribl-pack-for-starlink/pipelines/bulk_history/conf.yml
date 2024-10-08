@@ -1,0 +1,42 @@
+output: default
+streamtags:
+  - starlink
+  - power
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: sourcetype
+          value: "'starlink:bulk:history'"
+        - disabled: false
+          name: index
+          value: C.vars.index
+    description: Define sourcetype and index
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      delimChar: ","
+      quoteChar: '"'
+      escapeChar: \
+      nullValue: "-"
+      fields:
+        - datetimestamp_utc
+        - pop_ping_drop_rate
+        - pop_ping_latency_ms
+        - downlink_throughput_bps
+        - uplink_throughput_bps
+        - snr
+        - scheduled
+        - obstructed
+        - power_w
+      remove: []
+      dstField: _raw

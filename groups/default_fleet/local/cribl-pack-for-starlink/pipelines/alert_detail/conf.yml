@@ -1,0 +1,52 @@
+output: default
+streamtags:
+  - starlink
+  - power
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: sourcetype
+          value: "'starlink:alert:detail'"
+        - disabled: false
+          name: index
+          value: C.vars.index
+    description: Define sourcetype and index
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      delimChar: ","
+      quoteChar: '"'
+      escapeChar: \
+      nullValue: "-"
+      fields:
+        - datetimestamp_utc
+        - alert_motors_stuck
+        - alert_thermal_throttle
+        - alert_thermal_shutdown
+        - alert_mast_not_near_vertical
+        - alert_unexpected_location
+        - alert_slow_ethernet_speeds
+        - alert_slow_ethernet_speeds_100
+        - alert_roaming
+        - alert_install_pending
+        - alert_is_heating
+        - alert_power_supply_thermal_throttle
+        - alert_is_power_save_idle
+        - alert_moving_while_not_mobile
+        - alert_moving_too_fast_for_policy
+        - alert_dbf_telem_stale
+        - alert_low_motor_current
+        - alert_lower_signal_than_predicted
+        - alert_obstruction_map_reset
+      remove: []
+      dstField: _raw

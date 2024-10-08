@@ -1,0 +1,44 @@
+output: default
+streamtags:
+  - starlink
+  - power
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: sourcetype
+          value: "'starlink:ping_drop'"
+        - disabled: false
+          name: index
+          value: C.vars.index
+    description: Define sourcetype and index
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      delimChar: ","
+      quoteChar: '"'
+      escapeChar: \
+      nullValue: "-"
+      fields:
+        - datetimestamp_utc
+        - samples
+        - end_counter
+        - total_ping_drop
+        - count_full_ping_drop
+        - count_obstructed
+        - total_obstructed_ping_drop
+        - count_full_obstructed_ping_drop
+        - count_unscheduled
+        - total_unscheduled_ping_drop
+        - count_full_unscheduled_ping_drop
+      remove: []
+      dstField: _raw
