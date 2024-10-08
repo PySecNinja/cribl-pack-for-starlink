@@ -1,0 +1,43 @@
+output: default
+streamtags:
+  - starlink
+  - power
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: sourcetype
+          value: "'starlink:power'"
+        - disabled: false
+          name: index
+          value: C.vars.index
+    description: Define sourcetype and index
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      delimChar: ","
+      quoteChar: '"'
+      escapeChar: \
+      nullValue: "-"
+      fields:
+        - datetimestamp_utc
+        - samples
+        - end_counter
+        - latest_power
+        - mean_power
+        - min_power
+        - max_power
+        - total_energy
+        - index
+        - sourcetype
+      remove: []
+      dstField: _raw

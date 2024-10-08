@@ -1,0 +1,30 @@
+output: default
+streamtags: []
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          value: "'starlink:usage'"
+          name: sourcetype
+        - disabled: false
+          name: index
+          value: C.vars.index
+  - id: serde
+    filter: "true"
+    disabled: null
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      fields:
+        - datetimestamp_utc
+        - samples
+        - end_counter
+        - download_usage
+        - upload_usage
+      dstField: _raw

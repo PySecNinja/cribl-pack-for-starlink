@@ -1,0 +1,1 @@
+{"name":"cribl-add-on-for-starlink","version":"0.0.1","minLogStreamVersion":"4.8.1","author":"Andrew Hendrix","description":"This pack is designed handle starlink data.","displayName":"Cribl Pack for Starlink","tags":{"streamtags":["starlink"],"dataType":["metrics","logs"],"useCase":["routing","filtering","enrichment"]}}
