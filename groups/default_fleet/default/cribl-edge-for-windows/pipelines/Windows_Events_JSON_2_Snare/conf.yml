@@ -1,0 +1,201 @@
+output: default
+streamtags: []
+groups:
+  rQC6xi:
+    description: Remove unneeded events prior to further processing
+    name: Optional Event Optimization
+    index: 3
+    disabled: true
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        This pipeline transforms Edge Windows Events from JSON to Snare format,
+        and can be used to integrate Cribl Edge with destinations where Snare
+        format is required.  Light testing has been performed with Securonix
+        with success, however further testing is recommended for your
+        environment/use case.
+
+
+        When sending to Securonix, it's recommended you use syslog, which takes advantage of the internal field, __syslogout, which is included an eval below.  Should you not be sending syslog or don't require a syslog header, you can disable the __syslogout eval field.
+
+
+        An included optional function group can be enabled below where event level optimization is required.  You will need to modify the knowledge object WEL_EventIDs_2_Optimize.csv, ensuring the event IDs along with how you'd like them handled (this supports drop, sample, or suppress OOTB).
+
+
+        Use the corresponding JSON labeled sample files included in this pack for testing this pipeline.
+  - id: serde
+    filter: "true"
+    disabled: null
+    conf:
+      mode: extract
+      type: json
+      srcField: _raw
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Use the below optional function group to optimize events, off by default
+  - id: lookup
+    filter: "true"
+    disabled: true
+    conf:
+      matchMode: exact
+      reloadPeriodSec: -1
+      addToEvent: false
+      inFields:
+        - lookupField: EventID
+          eventField: Id
+      ignoreCase: false
+      matchType: first
+      file: WEL_EventIDs_2_Optimize.csv
+      outFields:
+        - lookupField: Action
+          eventField: __optimize_action
+    groupId: rQC6xi
+    description: Modify the associated lookup file to drive drop, sample, or
+      suppress an event
+  - id: drop
+    filter: __optimize_action=='drop'
+    disabled: true
+    conf: {}
+    groupId: rQC6xi
+  - id: sampling
+    filter: __optimize_action=='sample'
+    disabled: true
+    conf:
+      rules:
+        - filter: "true"
+          rate: 4
+    groupId: rQC6xi
+  - id: suppress
+    filter: __optimize_action=='suppress'
+    disabled: true
+    conf:
+      allow: 1
+      suppressPeriodSec: 30
+      dropEventsMode: true
+      maxCacheSize: 50000
+      cacheIdleTimeoutPeriods: 2
+      numEventsIdleTimeoutTrigger: 10000
+      keyExpr: Id
+    groupId: rQC6xi
+  - id: regex_extract
+    filter: "true"
+    disabled: false
+    conf:
+      source: Message
+      iterations: 100
+      overwrite: false
+      regex: /Account Name:\s+(?<__AccountName>\S+)/
+      regexList:
+        - regex: /Process ID:\s+(?<__ProcessID>\S+)/
+    description: Pull out account name if it exists
+  - id: mask
+    filter: "true"
+    disabled: false
+    conf:
+      rules:
+        - disabled: false
+          matchRegex: /[\r\n]/
+          replaceExpr: "' '"
+        - disabled: false
+          matchRegex: /[\r\n]/gm
+          replaceExpr: "''"
+        - disabled: false
+          matchRegex: /\t/gm
+          replaceExpr: "' '"
+        - disabled: false
+          matchRegex: /  /gm
+          replaceExpr: "' '"
+      fields:
+        - Message
+      depth: 5
+    description: Convert Message field to Snare format
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: keywords
+          value: KeywordsDisplayNames[0]
+    description: pull single value from keyword display name
+  - id: mask
+    filter: "true"
+    disabled: false
+    conf:
+      rules:
+        - disabled: false
+          matchRegex: /(Audit)\s+([\S]+)/
+          replaceExpr: "`${g2} ${g1}`"
+      fields:
+        - keywords
+      depth: 5
+    description: "snare expects this field to be transposed for some reason :shrug:
+      - need to verify things work when field is empty"
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - disabled: false
+          name: __NumericalCriticality
+          value: LevelDisplayName=='Critical' && 4 || LevelDisplayName=='Priority' && 3 ||
+            LevelDisplayName=='Warning' && 2 || LevelDisplayName=='Information'
+            && 1 || LevelDisplayName=='Clear' && 0 || 1
+        - disabled: false
+          name: __SnareTime
+          value: C.Time.strftime(_time, "%a %b %d %H:%M:%S %Y")
+        - disabled: false
+          name: _raw
+          value: "`${host} MSWinEventLog ${__NumericalCriticality} ${LogName} ${RecordId}
+            ${__SnareTime} ${Id} Microsoft-Windows-Security-Auditing
+            ${__AccountName || 'N/A'} ${__ProcessID || 'N/A'} ${keywords ||
+            'N/A'} ${MachineName} ${TaskDisplayName || 'N/A'} ${Message}`"
+    description: Convert classic into Snare
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      add:
+        - disabled: false
+          name: facility
+          value: "3"
+        - disabled: false
+          name: severity
+          value: "1"
+        - disabled: false
+          name: priority
+          value: (8*facility)+severity
+        - disabled: false
+          name: syslogtime
+          value: C.Time.strftime(_time, "%b %d %H:%M:%S")
+        - disabled: false
+          name: __syslogout
+          value: "`<${priority}>${syslogtime} ${_raw}`"
+        - disabled: false
+          name: _raw
+          value: "`<${priority}>${syslogtime} ${_raw}`"
+    description: "Build syslog header and append _raw into __syslogOut needed for
+      syslog destinations, turn this off if header isn't needed.  "
+  - id: eval
+    filter: "true"
+    disabled: false
+    conf:
+      keep:
+        - _raw
+        - _time
+        - __syslogout
+      remove:
+        - "*"
+    description: Clean up fields
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf: {}
+    description: Debugger - move this up to create a breakpoint
+    final: true

@@ -1,0 +1,363 @@
+output: default
+streamtags: []
+groups:
+  M3UldA:
+    name: Optional Event Optimization
+    description: Toggle this group on in order to drop, sample, or suppress low
+      value events by event ID
+    disabled: true
+    index: 3
+  PUBZTE:
+    name: Create Classic Message Field
+    description: Builds the classic "Message" field from the associated template
+    index: 6
+asyncFuncTimeout: 1000
+functions:
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: >-
+        This pipeline is considered to be in beta status, and transforms Edge
+        Windows Events from XML to NXLog format which can be used to integrate
+        Cribl Edge with destinations where NXLog format is required.  Because
+        not all data required for NXLog is in the XML format, some concessions
+        are made (i.e. some fields are left null) - it's recommended you test
+        any destination that has strict parsing (i.e. like a SIEM).  You'd use
+        this pipeline over the JSON version included in this pack if you need
+        the high performance of XML based collection.
+
+
+        An included optional function group can be enabled below where event level optimization is required.  You will need to modify the knowledge object WEL_EventIDs_2_Optimize.csv, ensuring the event IDs along with how you'd like them handled (this supports drop, sample, or suppress OOTB).
+
+
+        Use the corresponding XML labeled sample files included in this pack for testing this pipeline.
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          value: C.Text.parseWinEvent(_raw,[])
+          name: raw_json
+        - disabled: false
+          name: __provider
+          value: "'Microsoft-Windows-Security-Auditing'"
+        - disabled: false
+          name: raw_json.Event.System.Version
+          value: Number(raw_json.Event.System.Version)
+    description: parse JSON, set provider, and numerify version for later lookup
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Toggle the below function group to optimize windows events by ID
+  - id: lookup
+    filter: "true"
+    disabled: true
+    conf:
+      matchMode: exact
+      reloadPeriodSec: -1
+      addToEvent: false
+      inFields:
+        - eventField: raw_json.Event.System.EventID
+          lookupField: EventID
+      ignoreCase: false
+      file: WEL_EventIDs_2_Optimize.csv
+      outFields:
+        - lookupField: Action
+          eventField: __optimize_action
+    groupId: M3UldA
+    description: Update the below lookup to manage which events to drop, sample, or suppress
+  - id: drop
+    filter: __optimize_action=='drop'
+    disabled: true
+    conf: {}
+    groupId: M3UldA
+  - id: sampling
+    filter: __optimize_action=='sample'
+    disabled: true
+    conf:
+      rules:
+        - filter: "true"
+          rate: 4
+    groupId: M3UldA
+  - id: suppress
+    filter: __optimize_action=='suppress'
+    disabled: true
+    conf:
+      allow: 1
+      suppressPeriodSec: 30
+      dropEventsMode: true
+      maxCacheSize: 50000
+      cacheIdleTimeoutPeriods: 2
+      numEventsIdleTimeoutTrigger: 10000
+      keyExpr: raw_json.Event.System.EventID
+    groupId: M3UldA
+  - id: code
+    filter: "true"
+    disabled: null
+    conf:
+      maxNumOfIterations: 5000
+      activeLogSampleRate: 1
+      useUniqueLogChannel: false
+      code: >-
+        // Function to flatten nested objects and clean up whitespace
+
+        function flattenAndClean(obj) {
+          // Resulting flattened object
+          const result = {};
+
+          // Recursive function to process nested objects
+          function processObject(current, prop) {
+            // If the current element is not an object (leaf node)
+            if (Object(current) !== current) {
+              // Extract the last part of the property path as the new key
+              const newKey = prop.split('.').pop();
+
+              // Assign the trimmed value to the new key in the result object
+              result[newKey] = typeof current === 'string' ?
+                (current.includes('\n') ? current.replace(/\n\s\s+/g, '\n').split('\n') : current.trim()) :
+                current;
+            } else if (Array.isArray(current)) {
+              // If the current element is an array, process its elements
+              for (let i = 0, l = current.length; i < l; i++) {
+                // Recursively process each element in the array
+                processObject(current[i], prop + '[' + i + ']');
+              }
+
+              // If the array is empty, create an empty array at the specified property
+              if (l === 0) {
+                const newKey = prop.split('.').pop();
+                result[newKey] = [];
+              }
+            } else {
+              // If the current element is an object, process its properties
+              let isEmpty = true;
+              for (let p in current) {
+                // Recursively process each property in the object
+                isEmpty = false;
+                processObject(current[p], prop ? prop + '.' + p : p);
+              }
+
+              // If the object is empty, create an empty object at the specified property
+              if (isEmpty && prop) {
+                const newKey = prop.split('.').pop();
+                result[newKey] = {};
+              }
+            }
+          }
+
+          // Start the recursion with the initial object and an empty property path
+          processObject(obj, '');
+
+          // Return the flattened result object
+          return result;
+        }
+
+
+        // Initialize error field
+
+        __e['cribl_code_error'] = [];
+
+
+        try {
+          // Assuming __e['_raw'] contains nested JSON data
+          const nestedJson = __e['raw_json'];
+
+          // Flatten and clean the provided nested JSON
+          const flattenedData = flattenAndClean(nestedJson);
+
+          // Deduplicate keys and convert them to arrays if needed
+          const deduplicatedData = {};
+          for (const key in flattenedData) {
+            if (deduplicatedData[key] === undefined) {
+              deduplicatedData[key] = flattenedData[key];
+            } else {
+              if (!Array.isArray(deduplicatedData[key])) {
+                deduplicatedData[key] = [deduplicatedData[key]];
+              }
+              deduplicatedData[key].push(flattenedData[key]);
+            }
+          }
+
+          // Update __e['_raw'] with the processed data
+          __e['raw_json'] = deduplicatedData;
+        } catch (error) {
+          // Log errors
+          __e['cribl_code_error'].push(String(error));
+        }
+
+
+        // Display error field if there are errors
+
+        if (__e['cribl_code_error'].length > 0) {
+          __e['cribl_code_error'];
+        } else {
+          delete __e['cribl_code_error'];
+        }
+  - id: lookup
+    filter: "true"
+    disabled: null
+    conf:
+      matchMode: exact
+      reloadPeriodSec: -1
+      addToEvent: false
+      inFields:
+        - eventField: raw_json.EventID
+          lookupField: event_code
+        - eventField: __provider
+          lookupField: provider
+        - eventField: raw_json.Version
+          lookupField: version
+      ignoreCase: false
+      file: win_template.csv
+      outFields:
+        - lookupField: template
+          eventField: raw_json.message
+        - lookupField: fields
+          eventField: __fields
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: __fields
+          value: __fields.split(',')
+    groupId: PUBZTE
+  - id: serde
+    filter: "true"
+    disabled: true
+    conf:
+      mode: extract
+      type: json
+      srcField: raw_json
+    groupId: PUBZTE
+  - id: mask
+    filter: "true"
+    disabled: false
+    conf:
+      rules:
+        - disabled: false
+          matchRegex: /\\r/g
+          replaceExpr: '""'
+        - disabled: false
+          matchRegex: /\\n/g
+          replaceExpr: '"\n"'
+        - disabled: false
+          matchRegex: /\\t/g
+          replaceExpr: '"	"'
+      fields:
+        - raw_json.message
+      depth: 5
+    groupId: PUBZTE
+  - id: code
+    filter: "true"
+    disabled: false
+    conf:
+      maxNumOfIterations: 5000
+      activeLogSampleRate: 1
+      useUniqueLogChannel: false
+      code: >-
+        var msg = __e['raw_json']['message']
+
+        var fields = __e['__fields']
+
+        //loop through all the fields, and replace the values in the message template
+
+        fields.forEach((field, index) => {msg = msg.replace(RegExp(`%${index+1}`), __e['raw_json'][field])})
+
+        __e['raw_json']['message'] = msg
+    groupId: PUBZTE
+    description: Create classic style message field
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: raw_json.Category
+          value: "'-'"
+        - disabled: false
+          name: raw_json.Severity
+          value: "'INFO'"
+        - disabled: false
+          name: raw_json.OpcodeValue
+          value: raw_json.Opcode
+        - disabled: false
+          name: raw_json.Opcode
+          value: raw_json.Opcode==0 && 'Info' || '-'
+        - disabled: false
+          name: raw_json.EventTime
+          value: raw_json.SystemTime
+        - disabled: false
+          name: raw_json.EventType
+          value: "raw_json.Status && raw_json.Status!='0x0' ? 'AUDIT_FAILURE' :
+            raw_json.Status=='0x0' && 'AUDIT_SUCCESS' || undefined"
+        - disabled: false
+          name: raw_json.SourceModule
+          value: "'eventlog'"
+        - disabled: false
+          name: raw_json.SourceModuleType
+          value: "'im_msvistalog'"
+        - disabled: false
+          name: raw_json.ThreadID
+          value: Number(raw_json.ThreadID)
+        - disabled: false
+          name: raw_json.Task
+          value: Number(raw_json.Task)
+        - disabled: false
+          name: raw_json.OpcodeValue
+          value: Number(raw_json.OpcodeValue)
+        - disabled: false
+          name: raw_json.EventID
+          value: Number(raw_json.EventID)
+        - disabled: false
+          value: "-9214364837600035000"
+          name: raw_json.Keywords
+        - disabled: false
+          name: raw_json.ProcessID
+          value: Number(raw_json.ProcessID)
+        - disabled: false
+          name: raw_json.EventRecordID
+          value: Number(raw_json.EventRecordID)
+  - id: rename
+    filter: "true"
+    disabled: null
+    conf:
+      wildcardDepth: 5
+      rename:
+        - currentName: raw_json.Computer
+          newName: raw_json.Hostname
+        - currentName: raw_json.Level
+          newName: raw_json.SeverityValue
+        - currentName: raw_json.EventRecordID
+          newName: raw_json.RecordNumber
+        - currentName: raw_json.SystemTime
+          newName: raw_json.EventReceivedTime
+        - currentName: raw_json.Guid
+          newName: raw_json.PoviderGuid
+        - currentName: raw_json.Name
+          newName: raw_json.SourceName
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: _raw
+          value: raw_json
+      remove:
+        - raw_json
+    description: Cleanup
+  - id: eval
+    filter: "true"
+    disabled: true
+    conf:
+      add:
+        - disabled: true
+          name: fields
+          value: __fields
+    description: Debugger - move this up to set a breakpoint^^
+    final: true

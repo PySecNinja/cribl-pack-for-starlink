@@ -1,0 +1,27 @@
+id: default
+groups: {}
+comments: []
+routes:
+  - id: C9ODdR
+    name: WEL_XML_2_Simplified_JSON
+    final: true
+    disabled: false
+    pipeline: Windows_Events_XML_2_Simplified_JSON
+    description: Transforms XML formatted Windows Event Logs into a simplified/flat
+      JSON structure
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: _raw.startsWith('<Event xml')
+    output: default
+  - id: default
+    name: default
+    final: true
+    disabled: false
+    pipeline: main
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: "true"
+    output: default
