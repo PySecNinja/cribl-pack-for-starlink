@@ -2,6 +2,17 @@ id: default
 groups: {}
 comments: []
 routes:
+  - id: CpVBuK
+    name: starlink_logs
+    final: true
+    disabled: false
+    pipeline: pack:cribl-pack-for-starlink
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: __inputId=='file:starlink_logs_monitor'
+    output: devnull
   - id: TOKuRY
     name: "linux "
     final: true

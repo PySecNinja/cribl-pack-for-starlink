@@ -40,3 +40,24 @@ inputs:
       - "*"
     connections:
       - output: devnull
+  starlink_logs_monitor:
+    disabled: true
+    sendToRoutes: false
+    pqEnabled: false
+    streamtags: []
+    mode: manual
+    interval: 10
+    filenames:
+      - "*/log/*"
+      - "*log"
+      - "*.csv"
+    tailOnly: false
+    idleTimeout: 300
+    checkFileModTime: false
+    forceText: false
+    hashLen: 256
+    staleChannelFlushMs: 10000
+    includeUnidentifiableBinary: false
+    type: file
+    breakerRulesets: []
+    path: /opt/cribl/default/cribl-pack-for-starlink/bin/logs/
