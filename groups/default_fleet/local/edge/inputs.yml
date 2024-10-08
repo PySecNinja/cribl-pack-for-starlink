@@ -60,6 +60,7 @@ inputs:
     includeUnidentifiableBinary: false
     type: file
     breakerRulesets: []
-    path: /opt/cribl/default/cribl-pack-for-starlink/bin/logs/
+    path: /opt/cribl/default/cribl-pack-for-starlink/bin/logs/*/
     connections:
       - output: devnull
+    notifications: []
