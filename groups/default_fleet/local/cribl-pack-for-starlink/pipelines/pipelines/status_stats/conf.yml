@@ -1,0 +1,46 @@
+output: default
+streamtags: []
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          value: "'starlink:status'"
+          name: sourcetype
+        - disabled: false
+          name: index
+          value: C.vars.index
+  - id: serde
+    filter: "true"
+    disabled: null
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      fields:
+        - datetimestamp_utc
+        - id
+        - hardware_version
+        - software_version
+        - state
+        - uptime
+        - snr
+        - seconds_to_first_nonempty_slot
+        - pop_ping_drop_rate
+        - downlink_throughput_bps
+        - uplink_throughput_bps
+        - pop_ping_latency_ms
+        - alerts
+        - fraction_obstructed
+        - currently_obstructed
+        - seconds_obstructed
+        - obstruction_duration
+        - obstruction_interval
+        - direction_azimuth
+        - direction_elevation
+        - is_snr_above_noise_floor
+      dstField: _raw
