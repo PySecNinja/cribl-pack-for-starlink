@@ -64,3 +64,24 @@ inputs:
     connections:
       - output: devnull
     notifications: []
+  alert:
+    disabled: false
+    sendToRoutes: false
+    pqEnabled: false
+    streamtags: []
+    mode: manual
+    interval: 10
+    filenames:
+      - "*/log/*"
+      - "*log"
+    tailOnly: false
+    idleTimeout: 300
+    checkFileModTime: false
+    forceText: false
+    hashLen: 256
+    staleChannelFlushMs: 10000
+    includeUnidentifiableBinary: false
+    type: file
+    path: /opt/cribl/default/cribl-pack-for-starlink/bin/logs/alert_detail/*.csv
+    connections:
+      - output: devnull
