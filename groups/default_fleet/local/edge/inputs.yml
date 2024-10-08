@@ -41,7 +41,7 @@ inputs:
     connections:
       - output: devnull
   starlink_logs_monitor:
-    disabled: true
+    disabled: false
     sendToRoutes: false
     pqEnabled: false
     streamtags: []
@@ -61,3 +61,5 @@ inputs:
     type: file
     breakerRulesets: []
     path: /opt/cribl/default/cribl-pack-for-starlink/bin/logs/
+    connections:
+      - output: devnull
