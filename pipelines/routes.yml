@@ -1,0 +1,129 @@
+id: default
+groups: {}
+comments:
+  - id: J2Vsd4
+    comment: Filter expression is based on the number of commas present in the .csv
+    index: 0
+routes:
+  - id: default
+    name: alert
+    final: true
+    disabled: false
+    pipeline: alert_detail
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 18
+    output: default
+  - id: aCgnho
+    name: bulk_history
+    final: true
+    disabled: false
+    pipeline: bulk_history
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 8
+    output: default
+  - id: sFCmr0
+    name: location
+    final: true
+    disabled: false
+    pipeline: location
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 3
+    output: default
+  - id: SdsuV5
+    name: obstruction_detail
+    final: true
+    disabled: false
+    pipeline: obstruction_detail
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 25
+    output: default
+  - id: dfkn56
+    name: ping_drop
+    final: true
+    disabled: false
+    pipeline: ping_drop
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 10
+    output: default
+  - id: 44qeQi
+    name: ping_latency
+    final: true
+    disabled: false
+    pipeline: ping_latency
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 27
+    output: default
+  - id: 3gHSOt
+    name: ping_loaded_latency
+    final: true
+    disabled: false
+    pipeline: ping_loaded_latency
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 62
+    output: default
+  - id: BU3PI9
+    name: ping_run_length
+    final: true
+    disabled: false
+    pipeline: ping_run_length
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 124
+    output: default
+  - id: pyd4AG
+    name: power
+    final: true
+    disabled: false
+    pipeline: power_stats
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 7
+    output: default
+  - id: edO7iy
+    name: status
+    final: true
+    disabled: false
+    pipeline: status_stats
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 20
+    output: default
+  - id: IBVp1B
+    name: usage
+    final: true
+    disabled: false
+    pipeline: usage_stats
+    description: ""
+    clones: []
+    enableOutputExpression: false
+    outputExpression: null
+    filter: (_raw.match(/,/g) || []).length === 4
+    output: default
+
