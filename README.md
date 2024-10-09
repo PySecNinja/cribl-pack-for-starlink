@@ -29,12 +29,15 @@ To set up the environment, follow these steps:
    ```
    This script will create log directories for each mode and start the data collection process.
 
-## 📨 File Monitor Setup
+## 📨 Configure Source
 1. Go to **More > Sources > Add Source > File Monitor**.
 2. Set **Discovery Mode** to **Auto**.
 3. Add a file pattern, e.g., `*.csv`.
 
-## 🔀 Configure Routes
+## 📍 Configure Destination
+1. Go to **More > Destination > Add Destination**
+   
+## 🔀 Configure Route
 1. Navigate to **More > Data Routes**.
 2. Add a filter for the file monitor input.
    - Example: `__inputId == 'file:starlink_logs'`.
