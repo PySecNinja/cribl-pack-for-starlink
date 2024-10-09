@@ -1,1 +1,0 @@
-{"version":"0.0.1","tags":{"streamtags":["windows","splunkuf","winevents"],"dataType":["logs"],"useCase":["reduction","routing","filtering"]},"displayName":"Windows Turn Key Pack for splunk","description":"For Windows Event coming from a UF/HF","author":"Andrew Hendrix","minLogStreamVersion":"4.8.1","name":"Windows_Turn_Key_Pack_for_splunk"}

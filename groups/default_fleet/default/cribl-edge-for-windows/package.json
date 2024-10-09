@@ -1,1 +1,0 @@
-{"name":"cribl-edge-for-windows","version":"1.0.0","minLogStreamVersion":"4.4.3","author":"Tom Sigler - Cribl","description":"Transform Windows log sources collected by Cribl Edge with various destinations","displayName":"Cribl Edge for Windows","tags":{"streamtags":[],"dataType":["logs"],"useCase":["routing","reduction"]}}

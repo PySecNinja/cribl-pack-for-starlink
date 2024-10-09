@@ -1,9 +1,0 @@
-{
-  "tags": ["functions-serde"],
-  "exports": [
-    {
-      "modules": "*",
-      "accessibleTo": "shared"
-    }
-  ]
-}

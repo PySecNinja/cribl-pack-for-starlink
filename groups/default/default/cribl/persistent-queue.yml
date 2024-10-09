@@ -1,4 +1,0 @@
-maxBufferSize: 1000
-maxFileSize: "10MB"
-maxSize: "1GB"
-mode: "always"

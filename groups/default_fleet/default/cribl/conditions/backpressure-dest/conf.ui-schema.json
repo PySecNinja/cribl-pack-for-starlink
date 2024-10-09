@@ -1,8 +1,0 @@
-{
-  "name": {
-    "type": "string",
-    "description": "Destination ID",
-    "default": "${IO_ID}",
-    "ui:disabled": true
-  }
-}

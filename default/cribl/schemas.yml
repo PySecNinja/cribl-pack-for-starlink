@@ -1,4 +1,0 @@
-cribl_internal:
-  description: Schema for Cribl internal logs
-sample_schema:
-  description: A Simple sample schema
