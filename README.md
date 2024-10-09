@@ -68,7 +68,7 @@ This directory contains scripts for collecting and managing data from Starlink d
   ```
 - To **check the status** of background processes:
   ```bash
-  ./check_scripts_in_background_process.sh
+  ./check_scripts_background_process.sh
   ```
 
 ## 🚦 Supported Modes
