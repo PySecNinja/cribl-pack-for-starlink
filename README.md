@@ -97,6 +97,16 @@ Data collected by these scripts is stored in CSV format in the `~/cribl-pack-for
 - gRPC libraries for Python
 - See `requirements.txt`
 
+## 📸 Screenshots
+### Top-Level Routing
+![Screenshot 2024-10-09 at 17 08 19](https://github.com/user-attachments/assets/1cd9f6e8-c159-4285-aa25-a5d966f84153)
+
+### Pack-Level Routing 
+![Screenshot 2024-10-09 at 17 05 24](https://github.com/user-attachments/assets/4719f145-1ade-403e-bd69-002a3ce7c5a9)
+
+### Pipeline Example
+![Screenshot 2024-10-09 at 17 06 19](https://github.com/user-attachments/assets/a81b2bd8-b606-4554-b9db-d3b8bfd9e617)
+
 ## ⚠️ Note
 
 Ensure you have the necessary permissions to run these scripts and access the Starlink dish data.
