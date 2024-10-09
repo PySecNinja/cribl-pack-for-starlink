@@ -7,7 +7,7 @@ This Pack is designed to be installed on a Cribl Edge Node within your Starlink 
 To set up the environment, follow these steps:
 1. **Create a subfleet**, install this pack, commit, and deploy.
 
-2. SSH into the node and navigate to the following directory:
+2. **SSH into the node and navigate to the following directory:**
    ```bash
    ~/cribl-pack-for-starlink/bin
    ```
@@ -23,7 +23,7 @@ To set up the environment, follow these steps:
    ```bash
    pip install -r requirements.txt
    ```
-6. Run the startup script:
+6. **Run the startup script:**
    ```bash
    ./start_all_modes.sh
    ```
