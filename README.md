@@ -15,11 +15,21 @@ This Pack is designed to be installed on a Cribl Edge Node within your Starlink 
    ```
    This script will create log directories for each mode and start the data collection process.
 
+## 📨 File Monitor Setup
+1. Go to **More > Sources > Add Source > File Monitor**.
+2. Set **Discovery Mode** to **Auto**.
+3. Add a file pattern, e.g., `*.csv`.
+
+## 🔀 Configure Routes
+1. Navigate to **More > Data Routes**.
+2. Add a filter for the file monitor input.
+   - Example: `__inputId == 'file:starlink_logs'`.
+
 ## 📂 Collection Scripts
 
 This directory contains scripts for collecting and managing data from Starlink dishes using gRPC.
 
-### 📝 Files
+### 📝 Scripts
 
 - `dish_common.py`: Common functions and utilities for Starlink dish communication.
 - `dish_grpc_text.py`: Main script for collecting data from Starlink dishes using gRPC.
