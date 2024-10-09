@@ -1,0 +1,96 @@
+output: default
+streamtags:
+  - starlink
+  - power
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: eval
+    filter: "true"
+    disabled: null
+    conf:
+      add:
+        - disabled: false
+          name: sourcetype
+          value: "'starlink:ping_loaded_latency'"
+        - disabled: false
+          name: index
+          value: C.vars.index
+    description: Define sourcetype and index
+  - id: serde
+    filter: "true"
+    disabled: false
+    conf:
+      mode: extract
+      type: csv
+      srcField: _raw
+      delimChar: ","
+      quoteChar: '"'
+      escapeChar: \
+      nullValue: "-"
+      fields:
+        - datetimestamp_utc
+        - samples
+        - end_counter
+        - load_bucket_samples_0
+        - load_bucket_samples_1
+        - load_bucket_samples_2
+        - load_bucket_samples_3
+        - load_bucket_samples_4
+        - load_bucket_samples_5
+        - load_bucket_samples_6
+        - load_bucket_samples_7
+        - load_bucket_samples_8
+        - load_bucket_samples_9
+        - load_bucket_samples_10
+        - load_bucket_samples_11
+        - load_bucket_samples_12
+        - load_bucket_samples_13
+        - load_bucket_samples_14
+        - load_bucket_min_latency_0
+        - load_bucket_min_latency_1
+        - load_bucket_min_latency_2
+        - load_bucket_min_latency_3
+        - load_bucket_min_latency_4
+        - load_bucket_min_latency_5
+        - load_bucket_min_latency_6
+        - load_bucket_min_latency_7
+        - load_bucket_min_latency_8
+        - load_bucket_min_latency_9
+        - load_bucket_min_latency_10
+        - load_bucket_min_latency_11
+        - load_bucket_min_latency_12
+        - load_bucket_min_latency_13
+        - load_bucket_min_latency_14
+        - load_bucket_median_latency_0
+        - load_bucket_median_latency_1
+        - load_bucket_median_latency_2
+        - load_bucket_median_latency_3
+        - load_bucket_median_latency_4
+        - load_bucket_median_latency_5
+        - load_bucket_median_latency_6
+        - load_bucket_median_latency_7
+        - load_bucket_median_latency_8
+        - load_bucket_median_latency_9
+        - load_bucket_median_latency_10
+        - load_bucket_median_latency_11
+        - load_bucket_median_latency_12
+        - load_bucket_median_latency_13
+        - load_bucket_median_latency_14
+        - load_bucket_max_latency_0
+        - load_bucket_max_latency_1
+        - load_bucket_max_latency_2
+        - load_bucket_max_latency_3
+        - load_bucket_max_latency_4
+        - load_bucket_max_latency_5
+        - load_bucket_max_latency_6
+        - load_bucket_max_latency_7
+        - load_bucket_max_latency_8
+        - load_bucket_max_latency_9
+        - load_bucket_max_latency_10
+        - load_bucket_max_latency_11
+        - load_bucket_max_latency_12
+        - load_bucket_max_latency_13
+        - load_bucket_max_latency_14
+      remove: []
+      dstField: _raw
