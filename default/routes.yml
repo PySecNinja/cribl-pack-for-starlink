@@ -1,0 +1,187 @@
+{
+  "id": "default",
+  "routes": [
+    {
+      "id": "sto5Ha",
+      "name": "Starlink *",
+      "final": true,
+      "disabled": true,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId.includes('starlink')",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "yNjWsp",
+      "name": "starlink-alert",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-alert'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "TWDLUm",
+      "name": "starlink-bulk_history",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='starlink-bulk_history'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "TPGB5o",
+      "name": "starlink-location",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-location'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "cElesB",
+      "name": "starlink-obstruction_detail",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-obstruction_detail'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "t2XnKU",
+      "name": "starlink-ping_drop",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-ping_drop'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "prCzxY",
+      "name": "starlink-ping_latency",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-ping_latency'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "27juq5",
+      "name": "starlink-ping_loaded_latency",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-ping_loaded_latency'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "z5cSLU",
+      "name": "starlink-ping_loaded_length",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-ping_loaded_length'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "qYo46C",
+      "name": "starlink-power",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-power'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "6UIj2s",
+      "name": "starlink-status",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-status'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "sel7YA",
+      "name": "starlink-usage",
+      "final": true,
+      "disabled": false,
+      "pipeline": "pack:cribl-pack-for-starlink",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "__inputId=='exec:starlink-usage'",
+      "output": "devnull",
+      "groupId": "g73FO1"
+    },
+    {
+      "id": "default",
+      "name": "default",
+      "final": true,
+      "disabled": false,
+      "pipeline": "main",
+      "description": "",
+      "clones": [],
+      "enableOutputExpression": false,
+      "filter": "true",
+      "output": "default"
+    }
+  ],
+  "comments": [
+    {
+      "id": "ngCrjy",
+      "comment": "A wildcard * works but I like the monitoring graph on the right so I separated it.",
+      "index": 1,
+      "groupId": "g73FO1"
+    }
+  ],
+  "groups": {
+    "g73FO1": {
+      "name": "Starlink-Network",
+      "index": 0
+    }
+  }
+}
