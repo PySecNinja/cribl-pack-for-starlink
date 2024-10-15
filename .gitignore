@@ -7,7 +7,7 @@ default/ui
 default/data/ui
 /bin/
 /lib/
-/log/
+#/log/
 /pid/
 data/uploads
 /diag/
