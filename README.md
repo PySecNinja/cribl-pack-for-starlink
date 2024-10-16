@@ -35,11 +35,12 @@ To set up the environment, follow these steps:
 
 1. Go to **More > Destination > Add Destination > Cribl HTTP > Add Cribl Endpoint**
 2. How to find Endpoint IP/Ingress IP If on cribl.cloud > click on Access Details
-<img width="408" alt="Screenshot 2024-10-15 at 22 34 41" src="https://github.com/user-attachments/assets/ef402603-54b9-4447-a317-bb3ac5c341d8">
+   
+![Screenshot](https://github.com/user-attachments/assets/ef402603-54b9-4447-a317-bb3ac5c341d8)
 
 3. Ingress IP 
 
-<img width="341" alt="Screenshot 2024-10-15 at 22 38 23" src="https://github.com/user-attachments/assets/1683a9bf-2f6c-42d5-bead-1e03d858efc3">
+![Screenshot](https://github.com/user-attachments/assets/1683a9bf-2f6c-42d5-bead-1e03d858efc3)
 
 ## 🔀 Configure Route - Edge
 
