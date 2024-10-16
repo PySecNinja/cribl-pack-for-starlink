@@ -43,11 +43,10 @@ To set up the environment, follow these steps:
 2. Add a filter for the exec input.
    - Example: `__inputId.includes('starlink')`.
 
-BEAST MODE(Reccomended): Manage routes as json. 
+BEAST MODE(Reccomended): Manage routes as json. Import [json](https://github.com/PySecNinja/cribl-pack-for-starlink/blob/main/default/routes.yml)
+
 
 ![Screenshot 2024-10-15 at 22 51 43](https://github.com/user-attachments/assets/c352c296-ec96-46a1-af50-cfc757d40f09)
-
-Import [json](https://github.com/PySecNinja/cribl-pack-for-starlink/blob/main/default/routes.yml)
 
 ### 📝 Scripts
 
