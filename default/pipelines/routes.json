@@ -11,7 +11,7 @@
   "routes": [
     {
       "id": "default",
-      "name": "alert",
+      "name": "alert_alert",
       "final": true,
       "disabled": false,
       "pipeline": "alert_detail",
