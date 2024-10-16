@@ -2,7 +2,11 @@
 ----
 This Pack is designed to be installed on a Cribl Edge Node within your Starlink network. It enables the collection of data from the Starlink API, which can then be sent to any Cribl-supported output.
 
-## 🌟 Usage - Collect Data
+## 🔭 Architecture 
+
+![Cribl_Ref_Architecture-Copy of Stream - Replay (1)](https://github.com/user-attachments/assets/14531803-c7ea-4533-b684-68072fdaca29)
+
+## 📡 Usage - Collect Data
 
 To set up the environment, follow these steps:
 1. **Create a [subfleet](https://docs.cribl.io/edge/fleets/)**, install this [pack](https://docs.cribl.io/stream/packs/#import), commit, and deploy.
@@ -23,7 +27,7 @@ To set up the environment, follow these steps:
    ```bash
    pip install -r requirements.txt
    ```
-## 📨 Configure Source - Edge
+## 🛰️ Configure Source - Edge
 
 1. Go to **More > Sources > Add Source > Exec > Add Source > Manage as JSON > import [.json](https://github.com/PySecNinja/cribl-pack-for-starlink/tree/main/bin/inputs) files one at a time.**
 
@@ -55,19 +59,32 @@ BEAST MODE(Reccomended): Manage routes as json. Import [json](https://github.com
 
 ![Screenshot 2024-10-15 at 23 08 26](https://github.com/user-attachments/assets/f37ceb05-0c8b-4869-974a-dfd48775e23f)
 
-## 📨 Configure Source - Stream
+## 🛰️ Configure Source - Stream
+
+1. Go to **More > Sources > Add Source > Cribl HTTP > Disable ```in_cribl_http``` > Manage as json > import [json](https://github.com/PySecNinja/cribl-pack-for-starlink/blob/main/bin/inputs/starlink-in_cribl_http.json)**
+
+![Screenshot 2024-10-15 at 23 28 21](https://github.com/user-attachments/assets/afd4ed00-a5b1-4bd4-b3aa-7396c0427bb7)
+
+## 🐟 Configure Lake - Create Dataset 
+[How to Create a Dataset in Cribl Lake](https://docs.cribl.io/lake/managing-datasets/#create-a-new-dataset)
+
+I named mine starlink. A 30 Day Rention Period is should be sufficient.
+
+![Screenshot 2024-10-15 at 23 33 23](https://github.com/user-attachments/assets/a7f9bece-c806-473d-9839-8e3b3d1f35b3)
 
 ## 📍 Configure Destination - Stream
+1. Go to **More > Destination > Add Destination > Cribl Lake > Create output ID**
+
+![Screenshot 2024-10-15 at 23 36 03](https://github.com/user-attachments/assets/9be9e19c-65b5-4f30-8f39-50a3c7b9e900)
 
 ## 🔀 Configure Route - Steam
 
-### Top-Level Routing - Stream
+1. Navigate to **More > Data Routes**.
+2. Add a filter for the exec input.
+   - Example: `__inputId=='cribl_http:starlink-in_cribl_http'`.
+   - Output: ```cribl_lake:starlink```
 
 ![Screenshot 2024-10-15 at 23 13 16](https://github.com/user-attachments/assets/df684e37-5f8b-4c6c-bdbe-d029d3f1f5c7)
-
-### Pack-Level Routing - Stream
-
-Same as Edge.
 
 
 ### 📝 Scripts
@@ -98,11 +115,11 @@ The following 11 data collection modes are supported:
 - gRPC libraries for Python
 - See `requirements.txt`
 
-### Pipeline Example - Coming into Cribl
+### Pipeline Example - IN
 
 ![Screenshot 2024-10-15 at 23 16 26](https://github.com/user-attachments/assets/daa2fe62-1b9b-4677-bde9-8eb9d0aecec3)
 
-### Pipeline Example - Proccessed by Cribl
+### Pipeline Example - OUT
 
 ![Screenshot 2024-10-15 at 23 15 50](https://github.com/user-attachments/assets/ee1504da-73da-41af-82ad-64fd275cc2f9)
 
