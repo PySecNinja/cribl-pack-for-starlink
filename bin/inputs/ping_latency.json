@@ -1,0 +1,20 @@
+{
+  "id": "starlink-ping_latency",
+  "disabled": false,
+  "sendToRoutes": true,
+  "pqEnabled": false,
+  "streamtags": [],
+  "retries": 10,
+  "scheduleType": "interval",
+  "staleChannelFlushMs": 10000,
+  "interval": 60,
+  "cronSchedule": "* * * * *",
+  "type": "exec",
+  "command": "/opt/cribl/default/cribl-pack-for-starlink/bin/venv/bin/python /opt/cribl/default/cribl-pack-for-starlink/bin/dish_grpc_text.py ping_latency",
+  "metadata": [
+    {
+      "name": "sourcetype",
+      "value": "'starlink:ping_latency'"
+    }
+  ]
+}
