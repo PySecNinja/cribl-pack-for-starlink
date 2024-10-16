@@ -6,7 +6,7 @@ comments:
     index: 0
 routes:
   - id: default
-    name: alert
+    name: alert_detail
     final: true
     disabled: false
     pipeline: alert_detail
