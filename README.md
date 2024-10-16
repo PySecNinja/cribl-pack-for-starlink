@@ -45,8 +45,16 @@ To set up the environment, follow these steps:
 
 BEAST MODE(Reccomended): Manage routes as json. Import [json](https://github.com/PySecNinja/cribl-pack-for-starlink/blob/main/default/routes.yml)
 
-
 ![Screenshot 2024-10-15 at 22 51 43](https://github.com/user-attachments/assets/c352c296-ec96-46a1-af50-cfc757d40f09)
+
+### Top-Level Routing - Edge
+
+![Screenshot 2024-10-15 at 23 07 09](https://github.com/user-attachments/assets/721b03ae-dfd4-498b-a121-1de96bcd204d)
+
+### Pack-Level Routing - Edge
+
+![Screenshot 2024-10-15 at 23 08 26](https://github.com/user-attachments/assets/f37ceb05-0c8b-4869-974a-dfd48775e23f)
+
 
 ### 📝 Scripts
 
@@ -77,8 +85,6 @@ The following 11 data collection modes are supported:
 - See `requirements.txt`
 
 ## 📸 Screenshots
-
-### Top-Level Routing
 
 
 ### Pack-Level Routing 
