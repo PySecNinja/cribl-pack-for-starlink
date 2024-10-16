@@ -25,7 +25,7 @@ To set up the environment, follow these steps:
    ```
 ## 📨 Configure Source - Edge
 
-1. Go to **More > Sources > Add Source > Exec > Add Source > Manage as JSON > import [.json](https://github.com/PySecNinja/cribl-pack-for-starlink/tree/main/bin/inputs) files one at a time.**.
+1. Go to **More > Sources > Add Source > Exec > Add Source > Manage as JSON > import [.json](https://github.com/PySecNinja/cribl-pack-for-starlink/tree/main/bin/inputs) files one at a time.**
 
 ## 📍 Configure Destination - Edge
 
@@ -54,6 +54,20 @@ BEAST MODE(Reccomended): Manage routes as json. Import [json](https://github.com
 ### Pack-Level Routing - Edge
 
 ![Screenshot 2024-10-15 at 23 08 26](https://github.com/user-attachments/assets/f37ceb05-0c8b-4869-974a-dfd48775e23f)
+
+## 📨 Configure Source - Stream
+
+## 📍 Configure Destination - Stream
+
+## 🔀 Configure Route - Steam
+
+### Top-Level Routing - Stream
+
+![Screenshot 2024-10-15 at 23 13 16](https://github.com/user-attachments/assets/df684e37-5f8b-4c6c-bdbe-d029d3f1f5c7)
+
+### Pack-Level Routing - Stream
+
+Same as Edge.
 
 
 ### 📝 Scripts
@@ -84,25 +98,25 @@ The following 11 data collection modes are supported:
 - gRPC libraries for Python
 - See `requirements.txt`
 
-## 📸 Screenshots
+### Pipeline Example - Coming into Cribl
 
+![Screenshot 2024-10-15 at 23 16 26](https://github.com/user-attachments/assets/daa2fe62-1b9b-4677-bde9-8eb9d0aecec3)
 
-### Pack-Level Routing 
+### Pipeline Example - Proccessed by Cribl
 
+![Screenshot 2024-10-15 at 23 15 50](https://github.com/user-attachments/assets/ee1504da-73da-41af-82ad-64fd275cc2f9)
 
-### Pipeline Example
-
-## ⚠️ Note
+## ⚠️ Troubleshooting
 
 Ensure you have the necessary permissions to run these scripts and access the Starlink dish data.
 
 ## 📝 Release Notes
 
-### Version 1.1
+### Version 0.0.2
 
 - Archived Bash Scripts replaced with exec source to control python scripts, routing into cribl lake
    
-### Version 1.0
+### Version 0.0.1
 
 - Initial Release
 
