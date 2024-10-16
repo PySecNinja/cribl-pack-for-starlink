@@ -15,16 +15,16 @@
       "groupId": "g73FO1"
     },
     {
-      "id": "yNjWsp",
-      "name": "starlink-alert",
+      "filter": "__inputId=='exec:starlink-alert_detail'",
+      "enableOutputExpression": false,
+      "output": "devnull",
       "final": true,
+      "id": "yNjWsp",
+      "name": "starlink-alert_detail",
       "disabled": false,
       "pipeline": "pack:cribl-pack-for-starlink",
       "description": "",
       "clones": [],
-      "enableOutputExpression": false,
-      "filter": "__inputId=='exec:starlink-alert'",
-      "output": "devnull",
       "groupId": "g73FO1"
     },
     {
@@ -106,16 +106,16 @@
       "groupId": "g73FO1"
     },
     {
-      "id": "z5cSLU",
-      "name": "starlink-ping_loaded_length",
+      "filter": "__inputId=='exec:starlink-ping_run_length'",
+      "enableOutputExpression": false,
+      "output": "devnull",
       "final": true,
+      "id": "z5cSLU",
+      "name": "starlink-ping_run_length",
       "disabled": false,
       "pipeline": "pack:cribl-pack-for-starlink",
       "description": "",
       "clones": [],
-      "enableOutputExpression": false,
-      "filter": "__inputId=='exec:starlink-ping_loaded_length'",
-      "output": "devnull",
       "groupId": "g73FO1"
     },
     {
