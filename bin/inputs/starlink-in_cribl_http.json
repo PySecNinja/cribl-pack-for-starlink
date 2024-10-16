@@ -1,0 +1,28 @@
+{
+  "disabled": false,
+  "sendToRoutes": true,
+  "pqEnabled": false,
+  "streamtags": [],
+  "host": "0.0.0.0",
+  "tls": {
+    "disabled": true,
+    "requestCert": false,
+    "certPath": "$CRIBL_CLOUD_CRT",
+    "minVersion": "TLSv1.2",
+    "privKeyPath": "$CRIBL_CLOUD_KEY"
+  },
+  "maxActiveReq": 256,
+  "maxRequestsPerSocket": 0,
+  "enableProxyHeader": false,
+  "captureHeaders": false,
+  "activityLogSampleRate": 100,
+  "requestTimeout": 0,
+  "socketTimeout": 0,
+  "keepAliveTimeout": 5,
+  "enableHealthCheck": false,
+  "ipAllowlistRegex": "/.*/",
+  "ipDenylistRegex": "/^$/",
+  "id": "starlink-in_cribl_http",
+  "port": 10200,
+  "type": "cribl_http"
+}
