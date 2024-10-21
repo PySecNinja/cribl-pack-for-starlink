@@ -1,7 +1,3 @@
-output: default
-streamtags: []
-groups: {}
-asyncFuncTimeout: 1000
 functions:
   - id: eval
     filter: "true"
@@ -44,3 +40,16 @@ functions:
         - direction_elevation
         - is_snr_above_noise_floor
       dstField: _raw
+  - id: auto_timestamp
+    filter: "true"
+    disabled: false
+    conf:
+      srcField: datetimestamp_utc
+      dstField: _time
+      defaultTimezone: UTC
+      timeExpression: time.getTime() / 1000
+      offset: 0
+      maxLen: 150
+      defaultTime: now
+      latestDateAllowed: +1week
+      earliestDateAllowed: -420weeks
