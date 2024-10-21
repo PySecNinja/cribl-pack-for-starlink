@@ -6,7 +6,7 @@ functions:
       add:
         - disabled: false
           name: sourcetype
-          value: "'starlink:obstruction_detail'"
+          value: "'starlink:location'"
         - disabled: false
           name: index
           value: C.vars.index
@@ -24,31 +24,9 @@ functions:
       nullValue: "-"
       fields:
         - datetimestamp_utc
-        - wedges_fraction_obstructed_0
-        - wedges_fraction_obstructed_1
-        - wedges_fraction_obstructed_2
-        - wedges_fraction_obstructed_3
-        - wedges_fraction_obstructed_4
-        - wedges_fraction_obstructed_5
-        - wedges_fraction_obstructed_6
-        - wedges_fraction_obstructed_7
-        - wedges_fraction_obstructed_8
-        - wedges_fraction_obstructed_9
-        - wedges_fraction_obstructed_10
-        - wedges_fraction_obstructed_11
-        - raw_wedges_fraction_obstructed_0
-        - raw_wedges_fraction_obstructed_1
-        - raw_wedges_fraction_obstructed_2
-        - raw_wedges_fraction_obstructed_3
-        - raw_wedges_fraction_obstructed_4
-        - raw_wedges_fraction_obstructed_5
-        - raw_wedges_fraction_obstructed_6
-        - raw_wedges_fraction_obstructed_7
-        - raw_wedges_fraction_obstructed_8
-        - raw_wedges_fraction_obstructed_9
-        - raw_wedges_fraction_obstructed_10
-        - raw_wedges_fraction_obstructed_11
-        - valid_s
+        - latitude
+        - longitude
+        - altitude
       remove: []
       dstField: _raw
   - id: auto_timestamp
