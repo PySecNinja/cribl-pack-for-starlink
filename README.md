@@ -130,6 +130,10 @@ Ensure you have the necessary permissions to run these scripts and access the St
 
 ## 📝 Release Notes
 
+### Version 0.0.3
+
+- Fixed timestamping issue, events were showing up 3-4hrs behind, autotimestamp function added.
+
 ### Version 0.0.2
 
 - Archived Bash Scripts replaced with exec source to control python scripts, routing into cribl lake
