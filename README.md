@@ -2,11 +2,27 @@
 ----
 This Pack is designed to be installed on a Cribl Edge Node within your Starlink network. It enables the collection of data from the Starlink API, which can then be sent to any Cribl-supported output.
 
+## About This Pack
+
+### **Objective**  
+
+Recreate the default dashboard from the Starlink app using Cribl's full-stack capabilities. This approach enables:  
+
+- **Real-Time Alerts:** Monitor key metrics and trigger alerts promptly.  
+- **Data Retention:** Store data for historical analysis and trend tracking.  
+- **Enhanced Insights:** Gain deeper visibility into system performance and operational efficiency.
+
+![stats-mini](https://github.com/user-attachments/assets/e88c3cd6-1cdc-434e-bce2-012b5698414f)
+
+## Dashboard in Cribl 
+
+![Starlink Statistics cribl dashboard](https://github.com/user-attachments/assets/ff24fed2-1e56-4008-a74c-1c6e88154a03)
+
 ## 🔭 Architecture 
 
 ![Cribl_Ref_Architecture-Copy of Stream - Replay (1)](https://github.com/user-attachments/assets/14531803-c7ea-4533-b684-68072fdaca29)
 
-## 📡 Usage - Collect Data
+## 📡 Deployment - Collect Data
 
 To set up the environment, follow these steps:
 1. **Create a [subfleet](https://docs.cribl.io/edge/fleets/)**, install this [pack](https://docs.cribl.io/stream/packs/#import), commit, and deploy.
@@ -130,15 +146,19 @@ Ensure you have the necessary permissions to run these scripts and access the St
 
 ## 📝 Release Notes
 
-### Version 0.0.3
+### Version 0.4.0
+
+- Added Dashboard
+
+### Version 0.3.0
 
 - Fixed timestamping issue, events were showing up 3-4hrs behind, autotimestamp function added.
 
-### Version 0.0.2
+### Version 0.2.0
 
 - Archived Bash Scripts replaced with exec source to control python scripts, routing into cribl lake
    
-### Version 0.0.1
+### Version 0.1.0
 
 - Initial Release
 
